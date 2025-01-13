@@ -584,16 +584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc610fa04ae5743b0a57d0587784fca4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mediatorDropdown: {fileID: 0}
-  automaticCMPCheckbox: {fileID: 0}
-  fakeEEACheckbox: {fileID: 0}
-  initButton: {fileID: 0}
-  showInterstitialButton: {fileID: 0}
-  showRewardedButton: {fileID: 0}
-  showBannerButton: {fileID: 0}
-  debuggingSuiteButton: {fileID: 0}
-  showFormButton: {fileID: 0}
-  resetButton: {fileID: 0}
 --- !u!1 &277234114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1151,7 +1141,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3714,7 +3704,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &1737060013
 GameObject:
   m_ObjectHideFlags: 0

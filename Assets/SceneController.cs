@@ -65,6 +65,11 @@ public class UIInitHandler : MonoBehaviour
 
         // Initialize UI states
         fakeEEACheckbox.interactable = automaticCMPCheckbox.isOn; // Disable Fake EEA checkbox initially if Automatic CMP is off
+        showInterstitialButton.interactable = false;
+        showRewardedButton.interactable = false;
+        showBannerButton.interactable = false;
+        showFormButton.interactable = false;
+        resetButton.interactable = false;
     }
 
     // Cleanup event subscriptions to avoid memory leaks
@@ -90,7 +95,11 @@ public class UIInitHandler : MonoBehaviour
 
     private void OnAutomaticCMPChanged(bool isOn)
     {
-        fakeEEACheckbox.interactable = isOn; // Enable or disable Fake EEA checkbox
+        fakeEEACheckbox.interactable = isOn;
+        if (!isOn)
+        {
+            fakeEEACheckbox.isOn = false;
+        }
     }
 
     private void OnFakeEEAChanged(bool isOn)
