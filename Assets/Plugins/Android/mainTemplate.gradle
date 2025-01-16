@@ -4,8 +4,12 @@ apply plugin: 'com.android.library'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'com.x3mads.android.xmediator.mediation:renderer:2.1.1.6.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:21
-    implementation 'com.x3mads.android.xmediator:core:1.86.1' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
+    implementation 'com.applovin:applovin-sdk:13.0.1' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:24
+    implementation 'com.google.android.gms:play-services-ads:23.6.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:26
+    implementation 'com.x3mads.android.xmediator.mediation:applovin:13.0.1.4' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
+    implementation 'com.x3mads.android.xmediator.mediation:google-ads:23.6.0.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
+    implementation 'com.x3mads.android.xmediator.mediation:renderer:2.1.1.6.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:23
+    implementation 'com.x3mads.android.xmediator:core:1.86.1' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:22
     implementation 'com.x3mads.android.xmediator:unity-proxy:1.86.1.0' // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:11
 // Android Resolver Dependencies End
 **DEPS**}

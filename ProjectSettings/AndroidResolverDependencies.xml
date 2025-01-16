@@ -1,5 +1,9 @@
 <dependencies>
   <packages>
+    <package>com.applovin:applovin-sdk:13.0.1</package>
+    <package>com.google.android.gms:play-services-ads:23.6.0</package>
+    <package>com.x3mads.android.xmediator.mediation:applovin:13.0.1.4</package>
+    <package>com.x3mads.android.xmediator.mediation:google-ads:23.6.0.0</package>
     <package>com.x3mads.android.xmediator.mediation:renderer:2.1.1.6.0</package>
     <package>com.x3mads.android.xmediator:core:1.86.1</package>
     <package>com.x3mads.android.xmediator:unity-proxy:1.86.1.0</package>
@@ -17,7 +21,7 @@
     <setting name="packageDir" value="Assets/Plugins/Android" />
     <setting name="patchAndroidManifest" value="True" />
     <setting name="patchMainTemplateGradle" value="True" />
-    <setting name="projectExportEnabled" value="False" />
+    <setting name="projectExportEnabled" value="True" />
     <setting name="useFullCustomMavenRepoPathWhenExport" value="True" />
     <setting name="useFullCustomMavenRepoPathWhenNotExport" value="True" />
     <setting name="useJetifier" value="True" />

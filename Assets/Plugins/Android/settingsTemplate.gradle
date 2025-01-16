@@ -18,7 +18,13 @@ dependencyResolutionManagement {
         mavenCentral()
 // Android Resolver Repos Start
         maven {
-            url "https://android-artifact-registry.x3mads.com/maven" // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:14, Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:18
+            url "https://android-artifact-registry.x3mads.com/maven" // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:14, Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
+        }
+        maven {
+            url "https://repo1.maven.org/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
+        }
+        maven {
+            url "https://dl.google.com/dl/android/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
         }
         mavenLocal()
 // Android Resolver Repos End

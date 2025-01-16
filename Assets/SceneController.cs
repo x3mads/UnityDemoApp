@@ -4,101 +4,95 @@ using UnityEngine.UI;
 
 public class UIInitHandler : MonoBehaviour
 {
-    private TMP_Dropdown mediatorDropdown;
-    private Toggle automaticCMPCheckbox;
-    private Toggle fakeEEACheckbox;
-    private Button initButton;
-    private Button showInterstitialButton;
-    private Button showRewardedButton;
-    private Button showBannerButton;
-    private Button debuggingSuiteButton;
-    private Button showFormButton;
+    private TMP_Dropdown _mediatorDropdown;
+    private Toggle _automaticCmpCheckbox;
+    private Toggle _fakeEeaCheckbox;
+    private Button _initButton;
+    private Button _showInterstitialButton;
+    private Button _showRewardedButton;
+    private Button _showBannerButton;
+    private Button _debuggingSuiteButton;
+    private Button _showFormButton;
 
-    private Button resetButton;
+    private Button _resetButton;
 
     // Start is called before the first frame update
-    private UIControllerViewModel viewModel;
+    private UIControllerViewModel _viewModel;
 
     void Awake()
     {
         // Initialize the ViewModel
-        viewModel = new UIControllerViewModel();
+        _viewModel = new UIControllerViewModel();
 
         // Subscribe ViewModel events to handle UI logic
-        viewModel.MediatorChanged += OnMediatorChanged;
-        viewModel.AutomaticCMPToggled += OnAutomaticCMPChanged;
-        viewModel.FakeEEAToggled += OnFakeEEAChanged;
-        viewModel.InitSDKClicked += OnInitSDK;
-        viewModel.ShowInterstitialClicked += OnShowInterstitial;
-        viewModel.ShowRewardedClicked += OnShowRewarded;
-        viewModel.ShowBannerClicked += OnShowBanner;
-        viewModel.DebuggingSuiteClicked += OnDebuggingSuite;
-        viewModel.ShowFormClicked += OnShowForm;
-        viewModel.ResetClicked += OnReset;
+        _viewModel.MediatorChanged += OnMediatorChanged;
+        _viewModel.AutomaticCmpToggled += OnAutomaticCMPChanged;
+        _viewModel.FakeEeaToggled += OnFakeEEAChanged;
+        _viewModel.OnInitSDK += OnInitSDK;
+        _viewModel.InterstitialLoaded += OnLoadInterstitial;
+        _viewModel.RewardedLoaded += OnLoadRewarded;
+        _viewModel.BannerLoaded += OnLoadBanner;
     }
 
     void Start()
     {
         // Find UI elements by name
-        mediatorDropdown = GameObject.Find("MediatorDropdown").GetComponent<TMP_Dropdown>();
-        automaticCMPCheckbox = GameObject.Find("AutoCmpToggle").GetComponent<Toggle>();
-        fakeEEACheckbox = GameObject.Find("FakeRegionToggle").GetComponent<Toggle>();
-        initButton = GameObject.Find("InitButton").GetComponent<Button>();
-        showInterstitialButton = GameObject.Find("ShowIttButton").GetComponent<Button>();
-        showRewardedButton = GameObject.Find("ShowRewButton").GetComponent<Button>();
-        showBannerButton = GameObject.Find("ShowBannerButton").GetComponent<Button>();
-        debuggingSuiteButton = GameObject.Find("DebuggingSuiteButton").GetComponent<Button>();
-        showFormButton = GameObject.Find("ShowCmpFormButton").GetComponent<Button>();
-        resetButton = GameObject.Find("ResetCmpButton").GetComponent<Button>();
+        _mediatorDropdown = GameObject.Find("MediatorDropdown").GetComponent<TMP_Dropdown>();
+        _automaticCmpCheckbox = GameObject.Find("AutoCmpToggle").GetComponent<Toggle>();
+        _fakeEeaCheckbox = GameObject.Find("FakeRegionToggle").GetComponent<Toggle>();
+        _initButton = GameObject.Find("InitButton").GetComponent<Button>();
+        _showInterstitialButton = GameObject.Find("ShowIttButton").GetComponent<Button>();
+        _showRewardedButton = GameObject.Find("ShowRewButton").GetComponent<Button>();
+        _showBannerButton = GameObject.Find("ShowBannerButton").GetComponent<Button>();
+        _debuggingSuiteButton = GameObject.Find("DebuggingSuiteButton").GetComponent<Button>();
+        _showFormButton = GameObject.Find("ShowCmpFormButton").GetComponent<Button>();
+        _resetButton = GameObject.Find("ResetCmpButton").GetComponent<Button>();
 
         // Hook up UI events to the ViewModel
-        mediatorDropdown.onValueChanged.AddListener(viewModel.ChangeMediator);
-        automaticCMPCheckbox.onValueChanged.AddListener(viewModel.ToggleAutomaticCMP);
-        fakeEEACheckbox.onValueChanged.AddListener(viewModel.ToggleFakeEEA);
-        initButton.onClick.AddListener(viewModel.InitSDK);
-        showInterstitialButton.onClick.AddListener(viewModel.ShowInterstitial);
-        showRewardedButton.onClick.AddListener(viewModel.ShowRewarded);
-        showBannerButton.onClick.AddListener(viewModel.ShowBanner);
-        debuggingSuiteButton.onClick.AddListener(viewModel.DebuggingSuite);
-        showFormButton.onClick.AddListener(viewModel.ShowForm);
-        resetButton.onClick.AddListener(viewModel.Reset);
+        _mediatorDropdown.onValueChanged.AddListener(_viewModel.ChangeMediator);
+        _automaticCmpCheckbox.onValueChanged.AddListener(_viewModel.ToggleAutomaticCmp);
+        _fakeEeaCheckbox.onValueChanged.AddListener(_viewModel.ToggleFakeEea);
+        _initButton.onClick.AddListener(_viewModel.InitSDK);
+        _showInterstitialButton.onClick.AddListener(_viewModel.ShowInterstitial);
+        _showRewardedButton.onClick.AddListener(_viewModel.ShowRewarded);
+        _showBannerButton.onClick.AddListener(_viewModel.ShowBanner);
+        _debuggingSuiteButton.onClick.AddListener(UIControllerViewModel.DebuggingSuite);
+        _showFormButton.onClick.AddListener(UIControllerViewModel.ShowForm);
+        _resetButton.onClick.AddListener(UIControllerViewModel.Reset);
 
         // Initialize UI states
-        fakeEEACheckbox.interactable = automaticCMPCheckbox.isOn; // Disable Fake EEA checkbox initially if Automatic CMP is off
-        showInterstitialButton.interactable = false;
-        showRewardedButton.interactable = false;
-        showBannerButton.interactable = false;
-        showFormButton.interactable = false;
-        resetButton.interactable = false;
+        _fakeEeaCheckbox.interactable = _automaticCmpCheckbox.isOn; // Disable Fake EEA checkbox initially if Automatic CMP is off
+        _showInterstitialButton.interactable = false;
+        _showRewardedButton.interactable = false;
+        _showBannerButton.interactable = false;
+        _showFormButton.interactable = false;
+        _resetButton.interactable = false;
     }
 
     // Cleanup event subscriptions to avoid memory leaks
     void OnDestroy()
     {
-        viewModel.MediatorChanged -= OnMediatorChanged;
-        viewModel.AutomaticCMPToggled -= OnAutomaticCMPChanged;
-        viewModel.FakeEEAToggled -= OnFakeEEAChanged;
-        viewModel.InitSDKClicked -= OnInitSDK;
-        viewModel.ShowInterstitialClicked -= OnShowInterstitial;
-        viewModel.ShowRewardedClicked -= OnShowRewarded;
-        viewModel.ShowBannerClicked -= OnShowBanner;
-        viewModel.DebuggingSuiteClicked -= OnDebuggingSuite;
-        viewModel.ShowFormClicked -= OnShowForm;
-        viewModel.ResetClicked -= OnReset;
+        _viewModel.MediatorChanged -= OnMediatorChanged;
+        _viewModel.AutomaticCmpToggled -= OnAutomaticCMPChanged;
+        _viewModel.FakeEeaToggled -= OnFakeEEAChanged;
+        _viewModel.OnInitSDK -= OnInitSDK;
+        _viewModel.InterstitialLoaded -= OnLoadInterstitial;
+        _viewModel.RewardedLoaded -= OnLoadRewarded;
+        _viewModel.BannerLoaded -= OnLoadBanner;
     }
 
     // ViewModel event handlers
     private void OnMediatorChanged(int selectedIndex)
     {
-        Debug.Log($"Mediator dropdown updated in UI: {mediatorDropdown.options[selectedIndex].text}");
+        Debug.Log($"Mediator dropdown updated in UI: {_mediatorDropdown.options[selectedIndex].text}");
     }
 
     private void OnAutomaticCMPChanged(bool isOn)
     {
-        fakeEEACheckbox.interactable = isOn;
+        _fakeEeaCheckbox.interactable = isOn;
         if (!isOn)
         {
-            fakeEEACheckbox.isOn = false;
+            _fakeEeaCheckbox.isOn = false;
         }
     }
 
@@ -109,38 +103,37 @@ public class UIInitHandler : MonoBehaviour
 
     private void OnInitSDK()
     {
+        _initButton.interactable = false;
+        _automaticCmpCheckbox.interactable = false;
+        _fakeEeaCheckbox.interactable = false;
+        _mediatorDropdown.interactable = false;
+        if (_viewModel.IsPrivacyFormAvailable())
+        {
+            _showFormButton.interactable = true;
+            _resetButton.interactable = true;
+        }
+
         Debug.Log("INIT SDK logic executed.");
     }
 
-    private void OnShowInterstitial()
+    private void OnLoadInterstitial()
     {
+        _showInterstitialButton.interactable = true;
         Debug.Log("SHOW INTERSTITIAL logic executed.");
     }
 
-    private void OnShowRewarded()
+    private void OnLoadRewarded()
     {
+        _showRewardedButton.interactable = true;
         Debug.Log("SHOW REWARDED logic executed.");
     }
 
-    private void OnShowBanner()
+    private void OnLoadBanner()
     {
+        _showBannerButton.interactable = true;
         Debug.Log("SHOW BANNER logic executed.");
     }
 
-    private void OnDebuggingSuite()
-    {
-        Debug.Log("DEBUGGING SUITE logic executed.");
-    }
-
-    private void OnShowForm()
-    {
-        Debug.Log("SHOW FORM logic executed.");
-    }
-
-    private void OnReset()
-    {
-        Debug.Log("RESET logic executed.");
-    }
 
     // Update is called once per frame
     void Update()

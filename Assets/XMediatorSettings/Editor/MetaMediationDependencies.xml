@@ -8,21 +8,31 @@
     <iOSVersion>1.0.0</iOSVersion>
     <androidDependencies />
     <iOSDependencies />
-    <installedAt>638726253531210350</installedAt>
+    <installedAt>638726385671338050</installedAt>
   </details>
   <androidPackages>
     <repositories>
       <repositories>
         <repository>https://android-artifact-registry.x3mads.com/maven</repository>
+        <repository>https://repo1.maven.org/maven2</repository>
+        <repository>https://dl.google.com/dl/android/maven2</repository>
       </repositories>
     </repositories>
     <!--Mediation Libraries-->
     <androidPackage spec="com.x3mads.android.xmediator:core:1.86.1" />
     <androidPackage spec="com.x3mads.android.xmediator.mediation:renderer:2.1.1.6.0" />
+    <androidPackage spec="com.applovin:applovin-sdk:13.0.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:applovin:13.0.1.4" />
+    <androidPackage spec="com.google.android.gms:play-services-ads:23.6.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:google-ads:23.6.0.0" />
   </androidPackages>
   <iosPods>
     <!--Mediation Libraries-->
     <iosPod name="XMediator" version="1.86.0" />
     <iosPod name="XMediatorRenderer" version="2.1.0.8" />
+    <iosPod name="AppLovinSDK" version="13.0.1" />
+    <iosPod name="XMediatorAppLovin" version="13.0.1.3" />
+    <iosPod name="Google-Mobile-Ads-SDK" version="11.13.0" />
+    <iosPod name="XMediatorGoogleAds" version="11.13.0.0" />
   </iosPods>
 </dependencies>
