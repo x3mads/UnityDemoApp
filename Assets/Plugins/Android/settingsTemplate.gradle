@@ -18,13 +18,28 @@ dependencyResolutionManagement {
         mavenCentral()
 // Android Resolver Repos Start
         maven {
-            url "https://android-artifact-registry.x3mads.com/maven" // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:14, Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
+            url "https://android-artifact-registry.x3mads.com/maven" // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:14, Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
         }
         maven {
-            url "https://repo1.maven.org/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
+            url "https://repo1.maven.org/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
         }
         maven {
-            url "https://dl.google.com/dl/android/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:20
+            url "https://android-sdk.is.com" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
+        }
+        maven {
+            url "https://cboost.jfrog.io/artifactory/chartboost-ads" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
+        }
+        maven {
+            url "https://dl.google.com/dl/android/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
+        }
+        maven {
+            url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
+        }
+        maven {
+            url "https://maven.ogury.co" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
+        }
+        maven {
+            url "https://artifact.bytedance.com/repository/pangle" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:25
         }
         mavenLocal()
 // Android Resolver Repos End

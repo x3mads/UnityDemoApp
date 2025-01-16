@@ -104,6 +104,7 @@ internal class UIControllerViewModel
             appKey: _appKey,
             initSettings: new InitSettings(
                 verbose: true, // Enable verbose logging
+                test: true, // Enable test mode, do not use in production  
                 userProperties: new UserProperties(
                     userId: "test_user"
                 ),
