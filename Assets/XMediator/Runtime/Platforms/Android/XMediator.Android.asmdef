@@ -1,0 +1,9 @@
+﻿{
+	"name": "XMediator.Android",
+	"references": [
+		"XMediator"
+	],
+	"includePlatforms": [
+		"Android", "Editor"
+	]
+}

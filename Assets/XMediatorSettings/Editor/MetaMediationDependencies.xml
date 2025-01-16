@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<dependencies>
+  <details>
+    <name>Metamediation</name>
+    <version>1.0.0</version>
+    <description>Metamediation Adapter for XMediator Unity.</description>
+    <androidVersion>1.0.0</androidVersion>
+    <iOSVersion>1.0.0</iOSVersion>
+    <androidDependencies />
+    <iOSDependencies />
+    <installedAt>638726253531210350</installedAt>
+  </details>
+  <androidPackages>
+    <repositories>
+      <repositories>
+        <repository>https://android-artifact-registry.x3mads.com/maven</repository>
+      </repositories>
+    </repositories>
+    <!--Mediation Libraries-->
+    <androidPackage spec="com.x3mads.android.xmediator:core:1.86.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:renderer:2.1.1.6.0" />
+  </androidPackages>
+  <iosPods>
+    <!--Mediation Libraries-->
+    <iosPod name="XMediator" version="1.86.0" />
+    <iosPod name="XMediatorRenderer" version="2.1.0.8" />
+  </iosPods>
+</dependencies>

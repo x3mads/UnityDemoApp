@@ -1,0 +1,9 @@
+﻿{
+	"name": "XMediator.iOS",
+	"references": [
+		"XMediator"
+	],
+	"includePlatforms": [
+		"iOS", "Editor"
+	]
+}
