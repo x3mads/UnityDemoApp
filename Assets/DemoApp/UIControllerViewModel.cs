@@ -110,6 +110,7 @@ namespace DemoApp
                     {
                         result.TryGetFailure(out var failure);
                         Debug.Log("Initialization failed: " + failure.ErrorDescription);
+                        OnWarning?.Invoke("Initialization failed: " + failure.ErrorDescription);
                     }
                 }
             );
@@ -144,12 +145,13 @@ namespace DemoApp
             XMediatorAds.OpenDebuggingSuite();
         }
 
-        public static void ShowForm()
+        public void ShowForm()
         {
             XMediatorAds.CMPProvider.ShowPrivacyForm((error) =>
             {
                 if (error != null)
                 {
+                    OnWarning?.Invoke(($"CMP Error: {error.Message}"));
                     Debug.Log($"Error: {error}");
                 }
 

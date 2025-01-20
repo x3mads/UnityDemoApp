@@ -61,7 +61,7 @@ namespace DemoApp
             _showRewardedButton.onClick.AddListener(_viewModel.ShowRewarded);
             _showBannerButton.onClick.AddListener(_viewModel.ShowBanner);
             _debuggingSuiteButton.onClick.AddListener(UIControllerViewModel.DebuggingSuite);
-            _showFormButton.onClick.AddListener(UIControllerViewModel.ShowForm);
+            _showFormButton.onClick.AddListener(_viewModel.ShowForm);
             _resetButton.onClick.AddListener(UIControllerViewModel.Reset);
 
             // Initialize UI states
