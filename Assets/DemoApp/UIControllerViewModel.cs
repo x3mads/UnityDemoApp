@@ -12,6 +12,8 @@ internal class UIControllerViewModel
     public event Action InterstitialLoaded;
     public event Action RewardedLoaded;
     public event Action BannerLoaded;
+    public event Action<string> OnWarning;
+    public event Action OnResumeGame;
 
     private bool _isAutomaticCmp;
     private bool _isFakeEea;
@@ -83,6 +85,11 @@ internal class UIControllerViewModel
 
     public void InitSDK()
     {
+        if (_appKey == null)
+        {
+            OnWarning?.Invoke("Select a Mediator first");
+            return;
+        }
         Debug.Log("Initializing SDK...");
         CMPDebugSettings cmpDebugSettings = null;
         if (_isFakeEea)
@@ -218,6 +225,7 @@ internal class UIControllerViewModel
         XMediatorAds.Rewarded.OnFailedToShow += (placementId, error) =>
         {
             // If you need to resume your app's flow, make sure to do it here and in the OnDismissed callback
+            OnResumeGame?.Invoke();
             Debug.Log($"Rewarded failed to show. placementId: {placementId}, Reason: {error.Message}");
         };
 
@@ -225,6 +233,7 @@ internal class UIControllerViewModel
         XMediatorAds.Rewarded.OnDismissed += placementId =>
         {
             // If you need to resume your app's flow, make sure to do it here and in the OnFailedToShow callback
+            OnResumeGame?.Invoke();
             Debug.Log($"Rewarded dismissed! placementId: {placementId}, Resume gameplay");
         };
         XMediatorAds.Rewarded.Load(placementId: _rewardedPlacementId);
@@ -252,6 +261,7 @@ internal class UIControllerViewModel
         XMediatorAds.Interstitial.OnFailedToShow += (placementId, error) =>
         {
             // If you need to resume your app's flow, make sure to do it here and in the OnDismissed callback
+            OnResumeGame?.Invoke();
             Debug.Log($"Interstitial failed to show. placementId: {placementId}, Reason: {error.Message}");
         };
 
@@ -259,6 +269,7 @@ internal class UIControllerViewModel
         XMediatorAds.Interstitial.OnDismissed += placementId =>
         {
             // If you need to resume your app's flow, make sure to do it here and in the OnFailedToShow callback
+            OnResumeGame?.Invoke();
             Debug.Log($"Interstitial dismissed! placementId: {placementId}, Resume gameplay");
         };
 

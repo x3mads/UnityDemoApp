@@ -1,3 +1,4 @@
+using DemoApp;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,8 @@ public class UIInitHandler : MonoBehaviour
         _viewModel.InterstitialLoaded += OnLoadInterstitial;
         _viewModel.RewardedLoaded += OnLoadRewarded;
         _viewModel.BannerLoaded += OnLoadBanner;
+        _viewModel.OnResumeGame += OnResumeGame;
+        _viewModel.OnWarning += OnWarning;
     }
 
     void Start()
@@ -79,6 +82,16 @@ public class UIInitHandler : MonoBehaviour
         _viewModel.InterstitialLoaded -= OnLoadInterstitial;
         _viewModel.RewardedLoaded -= OnLoadRewarded;
         _viewModel.BannerLoaded -= OnLoadBanner;
+    }
+    
+    private void OnResumeGame()
+    {
+        ToastManager.Instance.ShowToast("Game resume!");
+    }
+    
+    private void OnWarning(string message)
+    {
+        ToastManager.Instance.ShowToast(message);
     }
 
     // ViewModel event handlers
