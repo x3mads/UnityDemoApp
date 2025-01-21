@@ -1,12 +1,11 @@
 <buildSettings>
   <skipSwiftConfiguration>False</skipSwiftConfiguration>
   <disableGoogleAdsAndroidAppId>False</disableGoogleAdsAndroidAppId>
-  <googleAdsAndroidAppId>ca-app-pub-3940256099942544~3347511713</googleAdsAndroidAppId>
-  <googleAdsIOSAppId>a-app-pub-3940256099942544~1458002511</googleAdsIOSAppId>
-  <androidMavenRepoToken>MAVENREPO_TOKEN_PLACEHOLDER</androidMavenRepoToken>
-  <dependencyManagerToken>4b0a8fb28b176dba5f6504e81e13720e</dependencyManagerToken>
+  <googleAdsAndroidAppId>GOOGLE_ADS_ANDROID_APP_ID_PLACEHOLDER</googleAdsAndroidAppId>
+  <googleAdsIOSAppId>GOOGLE_ADS_IOS_APP_ID_PLACEHOLDER</googleAdsIOSAppId>
+  <dependencyManagerToken>DEPENDENCY_MANAGER_TOKEN_PLACEHOLDER</dependencyManagerToken>
   <skipSkAdNetworkIdsConfiguration>False</skipSkAdNetworkIdsConfiguration>
-  <publisher>default</publisher>
+  <publisher>PUBLISHER_PLACEHOLDER</publisher>
   <gmaPropertiesTagFixEnabled>True</gmaPropertiesTagFixEnabled>
   <isMetamediation>True</isMetamediation>
   <mm_mediations>X3M,MAX,LevelPlay</mm_mediations>

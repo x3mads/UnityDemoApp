@@ -15,6 +15,8 @@ namespace DemoApp
         private Button _showBannerButton;
         private Button _debuggingSuiteButton;
         private Button _showFormButton;
+        private GameObject _reopenWarningLabel;
+        private GameObject _mediatorsPanel;
 
         private Button _resetButton;
 
@@ -51,6 +53,8 @@ namespace DemoApp
             _debuggingSuiteButton = GameObject.Find("DebuggingSuiteButton").GetComponent<Button>();
             _showFormButton = GameObject.Find("ShowCmpFormButton").GetComponent<Button>();
             _resetButton = GameObject.Find("ResetCmpButton").GetComponent<Button>();
+            _reopenWarningLabel = GameObject.Find("ReopenWarningLabel");
+            _mediatorsPanel = GameObject.Find("MediatorsPanel");
 
             // Hook up UI events to the ViewModel
             _mediatorDropdown.onValueChanged.AddListener(_viewModel.ChangeMediator);
@@ -71,6 +75,7 @@ namespace DemoApp
             _showBannerButton.interactable = false;
             _showFormButton.interactable = false;
             _resetButton.interactable = false;
+            _reopenWarningLabel.SetActive(false);
         }
 
         // Cleanup event subscriptions to avoid memory leaks
@@ -121,11 +126,11 @@ namespace DemoApp
             _automaticCmpCheckbox.interactable = false;
             _fakeEeaCheckbox.interactable = false;
             _mediatorDropdown.interactable = false;
-            if (_viewModel.IsPrivacyFormAvailable())
-            {
-                _showFormButton.interactable = true;
-                _resetButton.interactable = true;
-            }
+            _mediatorsPanel.SetActive(false);
+            _reopenWarningLabel.SetActive(true);
+            if (!_viewModel.IsPrivacyFormAvailable()) return;
+            _showFormButton.interactable = true;
+            _resetButton.interactable = true;
         }
 
         private void OnLoadInterstitial()
