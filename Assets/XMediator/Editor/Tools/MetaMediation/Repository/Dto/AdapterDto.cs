@@ -5,11 +5,10 @@ using UnityEngine;
 namespace XMediator.Editor.Tools.MetaMediation.Repository.Dto
 {
     [Serializable]
-    internal class NetworkDto<TDependencyDto>
+    internal class AdapterDto<TDependencyDto>
     {
-        [SerializeField] internal string network;
-        [SerializeField] internal string display_name;
+        [SerializeField] internal string mediator;
+        [SerializeField] internal string metamediation_adapter_for;
         [SerializeField] internal List<TDependencyDto> dependencies;
-        [SerializeField] internal List<AdapterDto<TDependencyDto>> adapters;
     }
 }

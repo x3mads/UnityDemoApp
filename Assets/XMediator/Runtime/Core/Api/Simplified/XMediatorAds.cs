@@ -69,6 +69,16 @@ namespace XMediator.Api
         }
 
         /// <summary>
+        /// Gets the current user properties.
+        /// </summary>
+        /// <returns>A <see cref="UserProperties"/> object containing the current user properties.</returns>
+        public static UserProperties GetUserProperties()
+        {
+            var xMediatorAdsProxy = ProxyFactory.CreateInstance<XMediatorAdsProxy>("XMediatorAdsProxy");
+            return xMediatorAdsProxy.GetUserProperties();
+        }
+
+        /// <summary>
         /// Sets or updates user properties.
         /// This will replace all of the properties previously set.
         /// </summary>

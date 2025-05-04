@@ -15,11 +15,11 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
             DependenciesPreProcessor = preProcessor;
         }
         
-        public void Invoke(Dependencies dependencies, Action<XDocument> onSuccess, Action<Exception> onError)
+        public void Invoke(SelectedDependencies selectableDependencies, Action<XDocument> onSuccess, Action<Exception> onError)
         {
             try
             {
-                var processedDependencies = DependenciesPreProcessor.Invoke(dependencies: dependencies);
+                var processedDependencies = DependenciesPreProcessor.Invoke(selectableDependencies: selectableDependencies);
                 onSuccess.Invoke(UnityXMLGenerator.BuildUnityXMLSnippet(processedDependencies));
             }
             catch (Exception e)

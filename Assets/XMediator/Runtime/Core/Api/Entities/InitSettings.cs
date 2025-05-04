@@ -14,8 +14,8 @@ namespace XMediator.Api
         public bool Verbose { get; }
         [CanBeNull] public string ClientVersion { get; }
         [CanBeNull] public IEnumerable<string> PlacementIds { get; }
-        public UserProperties UserProperties { get; }
-        public ConsentInformation ConsentInformation { get; }
+        [CanBeNull] public UserProperties UserProperties { get; }
+        [CanBeNull] public ConsentInformation ConsentInformation { get; }
 
         /// <summary>
         /// Creates a new <see cref="InitSettings"/> instance.
@@ -31,15 +31,15 @@ namespace XMediator.Api
             bool verbose = false,
             [CanBeNull] string clientVersion = null,
             [CanBeNull] IEnumerable<string> placementIds = null,
-            UserProperties userProperties = null,
-            ConsentInformation consentInformation = null
+            [CanBeNull] UserProperties userProperties = null,
+            [CanBeNull] ConsentInformation consentInformation = null
         )
         {
             Test = test;
             Verbose = verbose;
             ClientVersion = clientVersion;
             PlacementIds = placementIds;
-            UserProperties = userProperties ?? new UserProperties();
+            UserProperties = userProperties;
             ConsentInformation = consentInformation;
         }
 

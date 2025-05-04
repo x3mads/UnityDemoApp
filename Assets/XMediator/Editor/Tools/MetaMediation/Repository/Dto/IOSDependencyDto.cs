@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace XMediator.Editor.Tools.MetaMediation.Repository.Dto
 {
     [Serializable]
-    public class IOSDependencyDto
+    internal class IOSDependencyDto
     {
-        public string pod;
-        public string suggested_version;
-        public List<AvailableVersionDto> available_versions;
+        [SerializeField] internal string pod;
+        [SerializeField] internal string suggested_version;
     }
 }

@@ -17,7 +17,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
             _repository = repository;
         }
 
-        public void Invoke(Action<Dependencies> onSuccess, Action<Exception> onError)
+        public void Invoke(Action<SelectableDependencies> onSuccess, Action<Exception> onError)
         {
             _repository.DownloadAndParseJson(
                 onSuccess: platformsDependency => { processOnSuccess(onSuccess, onError, platformsDependency); },
@@ -25,19 +25,19 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
             );
         }
 
-        private static void processOnSuccess(Action<Dependencies> onSuccess, Action<Exception> onError,
+        private static void processOnSuccess(Action<SelectableDependencies> onSuccess, Action<Exception> onError,
             DependencyRepository.PlatformsDependency platformsDependency)
         {
             var networks = new HashSet<string>();
             var mediations = new HashSet<string>();
             if (platformsDependency != null)
             {
-                var androidManifest = platformsDependency.AndroidManifest;
-                ExtractMediationAndNetworksAndroid(androidManifest, mediations, networks);
                 var iosManifest = platformsDependency.IOSManifest;
-                ExtractMediationAndNetworksIOS(iosManifest, mediations, networks);
+                ExtractMediationAndNetworks(iosManifest, mediations, networks);
+                var androidManifest = platformsDependency.AndroidManifest;
+                ExtractMediationAndNetworks(androidManifest, mediations, networks);
 
-                onSuccess.Invoke(new Dependencies(networks: networks, mediations: mediations, iosManifest: iosManifest,
+                onSuccess.Invoke(new SelectableDependencies(networks: networks, mediations: mediations, iosManifest: iosManifest,
                     androidManifest: androidManifest
                 ));
             }
@@ -48,35 +48,19 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
             }
         }
 
-        private static void ExtractMediationAndNetworksAndroid(AndroidManifestDto androidManifest,
+        private static void ExtractMediationAndNetworks<T>(FlavoredManifestDto<T> flavoredManifest,
             ISet<string> mediations,
             ISet<string> networks)
         {
-            foreach (var standaloneAdapter in androidManifest.standalone_metamediation_adapters)
+            var manifest = flavoredManifest.GetDefaultManifest();
+            
+            mediations.Add(SelectableDependencies.X3MMediationName);
+            foreach (var standaloneAdapter in manifest.standalone_metamediation_adapters)
             {
                 mediations.Add(standaloneAdapter.metamediation_adapter_for);
             }
 
-            foreach (var network in androidManifest.networks)
-            {
-                networks.Add(network.display_name);
-                foreach (var mediationAdapter in network.adapters.Where(mediationAdapter =>
-                             mediationAdapter.metamediation_adapter_for != null))
-                {
-                    mediations.Add(mediationAdapter.metamediation_adapter_for);
-                }
-            }
-        }
-
-        private static void ExtractMediationAndNetworksIOS(IOSManifestDto iosManifest, ISet<string> mediations,
-            ISet<string> networks)
-        {
-            foreach (var standaloneAdapter in iosManifest.standalone_metamediation_adapters)
-            {
-                mediations.Add(standaloneAdapter.metamediation_adapter_for);
-            }
-
-            foreach (var network in iosManifest.networks)
+            foreach (var network in manifest.networks)
             {
                 networks.Add(network.display_name);
                 foreach (var mediationAdapter in network.adapters.Where(mediationAdapter =>

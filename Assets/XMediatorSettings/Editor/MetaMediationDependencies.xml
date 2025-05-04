@@ -8,159 +8,166 @@
     <iOSVersion>1.0.0</iOSVersion>
     <androidDependencies />
     <iOSDependencies />
-    <installedAt>638730561885496410</installedAt>
+    <installedAt>638819836084154590</installedAt>
   </details>
   <androidPackages>
     <repositories>
       <repositories>
         <repository>https://android-artifact-registry.x3mads.com/maven</repository>
         <repository>https://repo1.maven.org/maven2</repository>
-        <repository>https://android-sdk.is.com</repository>
+        <repository>https://repo.maven.apache.org/maven2</repository>
         <repository>https://cboost.jfrog.io/artifactory/chartboost-ads</repository>
         <repository>https://dl.google.com/dl/android/maven2</repository>
         <repository>https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea</repository>
         <repository>https://maven.ogury.co</repository>
         <repository>https://artifact.bytedance.com/repository/pangle</repository>
+        <repository>https://artifactory.bidmachine.io/bidmachine</repository>
       </repositories>
     </repositories>
     <!--Mediation Libraries-->
-    <androidPackage spec="com.x3mads.android.xmediator:core:1.86.1" />
+    <androidPackage spec="com.x3mads.android.xmediator:core:1.104.1" />
     <androidPackage spec="com.x3mads.android.xmediator.mediation:renderer:2.1.1.6.0" />
-    <androidPackage spec="com.amazon.android:aps-sdk:9.10.4" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:aps:9.10.3.0" />
-    <androidPackage spec="com.applovin:applovin-sdk:13.0.1" />
-    <androidPackage spec="com.ironsource.adapters:applovinadapter:4.3.49" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:applovin:13.0.1.4" />
-    <androidPackage spec="com.chartboost:chartboost-sdk:9.8.2" />
-    <androidPackage spec="com.ironsource.adapters:chartboostadapter:4.3.18" />
-    <androidPackage spec="com.applovin.mediation:chartboost-adapter:9.8.2.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:chartboost:9.8.1.0" />
-    <androidPackage spec="com.facebook.android:audience-network-sdk:6.18.0" />
-    <androidPackage spec="com.ironsource.adapters:facebookadapter:4.3.48" />
-    <androidPackage spec="com.applovin.mediation:facebook-adapter:6.18.0.1" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:facebook:6.18.0.0" />
-    <androidPackage spec="com.fyber:marketplace-sdk:8.3.5" />
-    <androidPackage spec="com.ironsource.adapters:fyberadapter:4.3.36" />
-    <androidPackage spec="com.applovin.mediation:fyber-adapter:8.3.5.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:fyber:8.3.5.0" />
-    <androidPackage spec="com.google.android.gms:play-services-ads:23.6.0" />
-    <androidPackage spec="com.ironsource.adapters:admobadapter:4.3.48" />
-    <androidPackage spec="com.applovin.mediation:google-ad-manager-adapter:23.6.0.2" />
-    <androidPackage spec="com.applovin.mediation:google-adapter:23.6.0.2" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:google-ads:23.6.0.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:applovin:13.2.0.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:ironsource:8.8.0.0" />
+    <androidPackage spec="com.amazon.android:aps-sdk:10.0.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:aps-adapter:4.3.16" />
+    <androidPackage spec="com.applovin.mediation:amazon-tam-adapter:10.0.0.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:aps:10.0.0.0" />
+    <androidPackage spec="com.applovin:applovin-sdk:13.2.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:applovin-adapter:4.3.53" />
+    <androidPackage spec="com.chartboost:chartboost-sdk:9.8.3" />
+    <androidPackage spec="com.unity3d.ads-mediation:chartboost-adapter:4.3.19" />
+    <androidPackage spec="com.applovin.mediation:chartboost-adapter:9.8.3.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:chartboost:9.8.3.0" />
+    <androidPackage spec="com.facebook.android:audience-network-sdk:6.19.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:facebook-adapter:4.3.49" />
+    <androidPackage spec="com.applovin.mediation:facebook-adapter:6.19.0.2" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:facebook:6.19.0.0" />
+    <androidPackage spec="com.fyber:marketplace-sdk:8.3.7" />
+    <androidPackage spec="com.unity3d.ads-mediation:fyber-adapter:4.3.38" />
+    <androidPackage spec="com.applovin.mediation:fyber-adapter:8.3.7.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:fyber:8.3.7.0" />
+    <androidPackage spec="com.google.android.gms:play-services-ads:24.2.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:admob-adapter:4.3.50" />
+    <androidPackage spec="com.applovin.mediation:google-ad-manager-adapter:24.2.0.0" />
+    <androidPackage spec="com.applovin.mediation:google-adapter:24.2.0.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:google-ads:24.2.0.0" />
     <androidPackage spec="com.hyprmx.android:HyprMX-SDK:6.4.2" />
-    <androidPackage spec="com.ironsource.adapters:hyprmxadapter:4.3.10" />
-    <androidPackage spec="com.applovin.mediation:hyprmx-adapter:6.4.2.2" />
+    <androidPackage spec="com.unity3d.ads-mediation:hyprmx-adapter:4.3.12" />
+    <androidPackage spec="com.applovin.mediation:hyprmx-adapter:6.4.2.3" />
     <androidPackage spec="com.x3mads.android.xmediator.mediation:hyprmx:6.4.2.0" />
-    <androidPackage spec="com.inmobi.monetization:inmobi-ads-kotlin:10.8.0" />
-    <androidPackage spec="com.ironsource.adapters:inmobiadapter:4.3.28" />
-    <androidPackage spec="com.applovin.mediation:inmobi-adapter:10.8.0.0" />
+    <androidPackage spec="com.inmobi.monetization:inmobi-ads-kotlin:10.8.2" />
+    <androidPackage spec="com.unity3d.ads-mediation:inmobi-adapter:4.3.29" />
+    <androidPackage spec="com.applovin.mediation:inmobi-adapter:10.8.2.0" />
     <androidPackage spec="com.x3mads.android.xmediator.mediation:inmobi:10.8.0.0" />
-    <androidPackage spec="com.ironsource.sdk:mediationsdk:8.6.1" />
-    <androidPackage spec="com.applovin.mediation:ironsource-adapter:8.6.1.0.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:ironsource:8.6.1.0" />
-    <androidPackage spec="com.google.ads.mediation:facebook:6.18.0.0" />
-    <androidPackage spec="com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.31" />
-    <androidPackage spec="com.ironsource.adapters:mintegraladapter:4.3.35" />
-    <androidPackage spec="com.applovin.mediation:mintegral-adapter:16.9.31.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:mintegral:16.9.31.0" />
-    <androidPackage spec="com.mobilefuse.sdk:mobilefuse-sdk-core:1.8.2" />
-    <androidPackage spec="com.applovin.mediation:mobilefuse-adapter:1.8.2.1" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:mobile-fuse:1.8.2.0" />
-    <androidPackage spec="com.moloco.sdk.adapters:adapter:3.4.0" />
-    <androidPackage spec="com.applovin.mediation:moloco-adapter:3.4.0.0" />
-    <androidPackage spec="co.ogury:ogury-sdk:5.8.0" />
-    <androidPackage spec="com.ironsource.adapters:oguryadapter:4.3.1" />
-    <androidPackage spec="com.applovin.mediation:ogury-presage-adapter:5.8.0.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:ogury:5.8.0.0" />
-    <androidPackage spec="com.pangle.global:ads-sdk:6.4.0.6" />
-    <androidPackage spec="com.ironsource.adapters:pangleadapter:4.3.33" />
-    <androidPackage spec="com.applovin.mediation:bytedance-adapter:6.4.0.6.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:pangle:6.4.0.5.0" />
-    <androidPackage spec="com.tappx.sdk.android:tappx-sdk:4.0.8" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:tappx:4.0.6.3" />
-    <androidPackage spec="com.unity3d.ads:unity-ads:4.12.5" />
-    <androidPackage spec="com.ironsource.adapters:unityadsadapter:4.3.46" />
-    <androidPackage spec="com.applovin.mediation:unityads-adapter:4.12.5.0" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:unity:4.12.5.0" />
-    <androidPackage spec="com.vungle:vungle-ads:7.4.2" />
-    <androidPackage spec="com.ironsource.adapters:vungleadapter:4.3.28" />
-    <androidPackage spec="com.applovin.mediation:vungle-adapter:7.4.2.2" />
-    <androidPackage spec="com.x3mads.android.xmediator.mediation:vungle:7.4.2.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:mediation-sdk:8.8.0" />
+    <androidPackage spec="com.applovin.mediation:ironsource-adapter:8.8.0.0.1" />
+    <androidPackage spec="com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.61" />
+    <androidPackage spec="com.unity3d.ads-mediation:mintegral-adapter:4.3.40" />
+    <androidPackage spec="com.applovin.mediation:mintegral-adapter:16.9.71.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:mintegral:16.9.61.0" />
+    <androidPackage spec="com.mobilefuse.sdk:mobilefuse-sdk-core:1.9.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:mobilefuse-adapter:4.3.5" />
+    <androidPackage spec="com.applovin.mediation:mobilefuse-adapter:1.9.0.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:mobile-fuse:1.9.0.0" />
+    <androidPackage spec="com.moloco.sdk.adapters:adapter:3.9.0" />
+    <androidPackage spec="com.unity3d.ads-mediation:moloco-adapter:4.3.17" />
+    <androidPackage spec="com.applovin.mediation:moloco-adapter:3.9.0.0" />
+    <androidPackage spec="co.ogury:ogury-sdk:6.0.1" />
+    <androidPackage spec="com.unity3d.ads-mediation:ogury-adapter:4.3.2" />
+    <androidPackage spec="com.applovin.mediation:ogury-presage-adapter:6.0.1.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:ogury:6.0.1.0" />
+    <androidPackage spec="com.pangle.global:ads-sdk:6.5.0.9" />
+    <androidPackage spec="com.unity3d.ads-mediation:pangle-adapter:4.3.38" />
+    <androidPackage spec="com.applovin.mediation:bytedance-adapter:6.5.0.8.1" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:pangle:6.5.0.8.0" />
+    <androidPackage spec="io.bidmachine:ads:3.2.1" />
+    <androidPackage spec="com.unity3d.ads-mediation:bidmachine-adapter:4.3.12" />
+    <androidPackage spec="com.applovin.mediation:bidmachine-adapter:3.2.1.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:stack:3.2.1.0" />
+    <androidPackage spec="com.tappx.sdk.android:tappx-sdk:4.1.11" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:tappx:4.1.11.0" />
+    <androidPackage spec="com.unity3d.ads:unity-ads:4.14.2" />
+    <androidPackage spec="com.unity3d.ads-mediation:unityads-adapter:4.3.54" />
+    <androidPackage spec="com.applovin.mediation:unityads-adapter:4.14.2.0" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:unity:4.14.2.0" />
+    <androidPackage spec="com.vungle:vungle-ads:7.4.3" />
+    <androidPackage spec="com.unity3d.ads-mediation:vungle-adapter:4.3.29" />
+    <androidPackage spec="com.applovin.mediation:vungle-adapter:7.4.3.2" />
+    <androidPackage spec="com.x3mads.android.xmediator.mediation:vungle:7.4.3.0" />
   </androidPackages>
   <iosPods>
     <!--Mediation Libraries-->
-    <iosPod name="XMediator" version="1.87.0" />
+    <iosPod name="XMediator" version="1.104.0" />
     <iosPod name="XMediatorRenderer" version="2.1.0.8" />
-    <iosPod name="AmazonPublisherServicesSDK" version="4.10.1" />
-    <iosPod name="XMediatorAPS" version="4.10.1.0" />
-    <iosPod name="AppLovinMediationAmazonAdMarketplaceAdapter" version="4.10.1.0" />
-    <iosPod name="IronSourceAPSAdapter" version="4.3.17.0" />
-    <iosPod name="AppLovinSDK" version="13.0.1" />
-    <iosPod name="IronSourceAppLovinAdapter" version="4.3.51.0" />
-    <iosPod name="XMediatorAppLovin" version="13.0.1.4" />
-    <iosPod name="ChartboostSDK" version="9.7.0" />
-    <iosPod name="XMediatorChartboost" version="9.7.0.0" />
-    <iosPod name="IronSourceChartboostAdapter" version="4.3.19.3" />
-    <iosPod name="AppLovinMediationChartboostAdapter" version="9.7.0.2" />
-    <iosPod name="FBAudienceNetwork" version="6.15.2" />
-    <iosPod name="XMediatorFacebook" version="6.15.2.0" />
-    <iosPod name="IronSourceFacebookAdapter" version="4.3.46.1" />
-    <iosPod name="AppLovinMediationFacebookAdapter" version="6.15.2.1" />
-    <iosPod name="Fyber_Marketplace_SDK" version="8.3.2" />
-    <iosPod name="XMediatorFyber" version="8.3.2.0" />
-    <iosPod name="IronSourceFyberAdapter" version="4.3.37.0" />
-    <iosPod name="AppLovinMediationFyberAdapter" version="8.3.2.1" />
-    <iosPod name="Google-Mobile-Ads-SDK" version="11.13.0" />
-    <iosPod name="IronSourceAdMobAdapter" version="4.3.60.0" />
-    <iosPod name="XMediatorGoogleAds" version="11.13.0.0" />
-    <iosPod name="AppLovinMediationGoogleAdManagerAdapter" version="11.13.0.1" />
-    <iosPod name="AppLovinMediationGoogleAdapter" version="11.13.0.1" />
-    <iosPod name="HyprMX" version="6.4.1" />
-    <iosPod name="XMediatorHyprMX" version="6.4.1.0" />
-    <iosPod name="IronSourceHyprMXAdapter" version="4.3.8.0" />
-    <iosPod name="AppLovinMediationHyprMXAdapter" version="6.4.1.0.2" />
-    <iosPod name="InMobiSDK" version="10.8.0" />
-    <iosPod name="XMediatorInMobi" version="10.8.0.0" />
-    <iosPod name="IronSourceInMobiAdapter" version="4.3.26.0" />
-    <iosPod name="AppLovinMediationInMobiAdapter" version="10.8.0.0" />
-    <iosPod name="IronSourceSDK" version="8.5.1.0" />
-    <iosPod name="XMediatorIronSource" version="8.5.1.0.1" />
-    <iosPod name="AppLovinMediationIronSourceAdapter" version="8.5.1.0.0" />
-    <iosPod name="FBAudienceNetwork" version="6.15.2" />
-    <iosPod name="GoogleMobileAdsMediationFacebook" version="6.15.2.1" />
-    <iosPod name="MintegralAdSDK" version="7.7.3" />
-    <iosPod name="XMediatorMintegral" version="7.7.3.0" />
-    <iosPod name="IronSourceMintegralAdapter" version="4.3.29.0" />
-    <iosPod name="AppLovinMediationMintegralAdapter" version="7.7.3.0.0" />
-    <iosPod name="MobileFuseSDK" version="1.8.2" />
-    <iosPod name="IronSourceMobileFuseAdapter" version="4.3.4.0" />
-    <iosPod name="XMediatorMobileFuse" version="1.8.2.0" />
-    <iosPod name="AppLovinMediationMobileFuseAdapter" version="1.8.2.0" />
-    <iosPod name="MolocoSDKiOS" version="3.4.0" />
-    <iosPod name="AppLovinMediationMolocoAdapter" version="3.4.0.0" />
-    <iosPod name="IronSourceMolocoAdapter" version="4.3.8.0" />
-    <iosPod name="OgurySdk" version="5.0.1" />
-    <iosPod name="XMediatorOgury" version="5.0.1.0" />
-    <iosPod name="IronSourceOguryAdapter" version="4.3.2.0" />
-    <iosPod name="AppLovinMediationOguryPresageAdapter" version="5.0.1.0" />
-    <iosPod name="Ads-Global" version="6.4.1.1" />
-    <iosPod name="XMediatorPangle" version="6.4.1.1.0" />
-    <iosPod name="IronSourcePangleAdapter" version="4.3.38.0" />
-    <iosPod name="AppLovinMediationByteDanceAdapter" version="6.4.1.1.0" />
-    <iosPod name="BidMachine" version="3.1.2" />
-    <iosPod name="XMediatorStack" version="3.1.2.0" />
-    <iosPod name="IronSourceBidMachineAdapter" version="4.3.13.0" />
-    <iosPod name="AppLovinMediationBidMachineAdapter" version="3.1.2.0.0" />
-    <iosPod name="TappxFrameworkWithoutCross" version="4.0.10" />
-    <iosPod name="XMediatorTappx" version="4.0.10.3" />
-    <iosPod name="UnityAds" version="4.12.5" />
-    <iosPod name="XMediatorUnityAds" version="4.12.5.0" />
-    <iosPod name="IronSourceUnityAdsAdapter" version="4.3.45.0" />
-    <iosPod name="AppLovinMediationUnityAdsAdapter" version="4.12.5.0" />
-    <iosPod name="VungleAds" version="7.4.3" />
-    <iosPod name="XMediatorVungle" version="7.4.3.0" />
-    <iosPod name="IronSourceVungleAdapter" version="4.3.41.0" />
-    <iosPod name="AppLovinMediationVungleAdapter" version="7.4.3.0" />
+    <iosPod name="XMediatorAppLovin" version="13.2.0.0" />
+    <iosPod name="XMediatorIronSource" version="8.8.0.0.0" />
+    <iosPod name="AmazonPublisherServicesSDK" version="5.1.0" />
+    <iosPod name="XMediatorAPS" version="5.1.0.0" />
+    <iosPod name="AppLovinMediationAmazonAdMarketplaceAdapter" version="5.1.0.0" />
+    <iosPod name="IronSourceAPSAdapter" version="4.3.19.0" />
+    <iosPod name="AppLovinSDK" version="13.2.0" />
+    <iosPod name="IronSourceAppLovinAdapter" version="4.3.54.0" />
+    <iosPod name="ChartboostSDK" version="9.8.1" />
+    <iosPod name="XMediatorChartboost" version="9.8.1.1" />
+    <iosPod name="IronSourceChartboostAdapter" version="4.3.20.0" />
+    <iosPod name="AppLovinMediationChartboostAdapter" version="9.8.1.0" />
+    <iosPod name="FBAudienceNetwork" version="6.17.1" />
+    <iosPod name="XMediatorFacebook" version="6.17.1.0" />
+    <iosPod name="IronSourceFacebookAdapter" version="4.3.49.0" />
+    <iosPod name="AppLovinMediationFacebookAdapter" version="6.17.1.0" />
+    <iosPod name="Fyber_Marketplace_SDK" version="8.3.6" />
+    <iosPod name="XMediatorFyber" version="8.3.6.0" />
+    <iosPod name="IronSourceFyberAdapter" version="4.3.42.0" />
+    <iosPod name="AppLovinMediationFyberAdapter" version="8.3.6.0" />
+    <iosPod name="Google-Mobile-Ads-SDK" version="12.3.0" />
+    <iosPod name="IronSourceAdMobAdapter" version="4.3.64.0" />
+    <iosPod name="XMediatorGoogleAds" version="12.3.0.0" />
+    <iosPod name="AppLovinMediationGoogleAdManagerAdapter" version="12.3.0.0" />
+    <iosPod name="AppLovinMediationGoogleAdapter" version="12.3.0.0" />
+    <iosPod name="HyprMX" version="6.4.2" />
+    <iosPod name="XMediatorHyprMX" version="6.4.2.1" />
+    <iosPod name="IronSourceHyprMXAdapter" version="4.3.9.0" />
+    <iosPod name="AppLovinMediationHyprMXAdapter" version="6.4.2.0.0" />
+    <iosPod name="InMobiSDK" version="10.8.2" />
+    <iosPod name="XMediatorInMobi" version="10.8.2.0" />
+    <iosPod name="IronSourceInMobiAdapter" version="4.3.27.0" />
+    <iosPod name="AppLovinMediationInMobiAdapter" version="10.8.2.0" />
+    <iosPod name="IronSourceSDK" version="8.8.0.0" />
+    <iosPod name="AppLovinMediationIronSourceAdapter" version="8.8.0.0.0" />
+    <iosPod name="MintegralAdSDK" version="7.7.7" />
+    <iosPod name="XMediatorMintegral" version="7.7.7.0" />
+    <iosPod name="IronSourceMintegralAdapter" version="4.3.34.0" />
+    <iosPod name="AppLovinMediationMintegralAdapter" version="7.7.7.0.0" />
+    <iosPod name="MobileFuseSDK" version="1.9.0" />
+    <iosPod name="IronSourceMobileFuseAdapter" version="4.3.6.0" />
+    <iosPod name="XMediatorMobileFuse" version="1.9.0.0" />
+    <iosPod name="AppLovinMediationMobileFuseAdapter" version="1.9.0.0" />
+    <iosPod name="MolocoSDKiOS" version="3.8.0" />
+    <iosPod name="XMediatorMoloco" version="3.8.0.0" />
+    <iosPod name="AppLovinMediationMolocoAdapter" version="3.8.0.2" />
+    <iosPod name="IronSourceMolocoAdapter" version="4.3.15.0" />
+    <iosPod name="OgurySdk" version="5.0.2" />
+    <iosPod name="XMediatorOgury" version="5.0.2.1" />
+    <iosPod name="IronSourceOguryAdapter" version="4.3.3.0" />
+    <iosPod name="AppLovinMediationOguryPresageAdapter" version="5.0.2.0" />
+    <iosPod name="Ads-Global" version="7.1.1.0" />
+    <iosPod name="XMediatorPangle" version="7.1.1.0.0" />
+    <iosPod name="IronSourcePangleAdapter" version="4.3.43.0" />
+    <iosPod name="AppLovinMediationByteDanceAdapter" version="7.1.1.0.0" />
+    <iosPod name="BidMachine" version="3.2.1" />
+    <iosPod name="XMediatorStack" version="3.2.1.0" />
+    <iosPod name="IronSourceBidMachineAdapter" version="4.3.15.0" />
+    <iosPod name="AppLovinMediationBidMachineAdapter" version="3.2.1.0.0" />
+    <iosPod name="TappxSDK" version="4.2.1" />
+    <iosPod name="XMediatorTappx" version="4.2.1.0" />
+    <iosPod name="UnityAds" version="4.14.2" />
+    <iosPod name="XMediatorUnityAds" version="4.14.2.0" />
+    <iosPod name="IronSourceUnityAdsAdapter" version="4.3.51.0" />
+    <iosPod name="AppLovinMediationUnityAdsAdapter" version="4.14.2.0" />
+    <iosPod name="VungleAds" version="7.4.5" />
+    <iosPod name="XMediatorVungle" version="7.4.5.0" />
+    <iosPod name="IronSourceVungleAdapter" version="4.3.43.0" />
+    <iosPod name="AppLovinMediationVungleAdapter" version="7.4.5.1" />
   </iosPods>
 </dependencies>

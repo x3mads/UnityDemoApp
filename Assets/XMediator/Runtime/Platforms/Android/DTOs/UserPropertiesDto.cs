@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using UnityEngine;
 using XMediator.Api;
@@ -22,6 +23,20 @@ namespace XMediator.Android
                 userId: userProperties.UserId,
                 customProperties: CustomPropertiesDto.From(userProperties.CustomProperties)
             );
+        }
+
+        internal static UserPropertiesDto From(AndroidJavaObject userPropertiesJavaObject)
+        {
+            return new UserPropertiesDto(
+                userId: userPropertiesJavaObject.Call<string>("getUserId"),
+                customProperties: CustomPropertiesDto.From(userPropertiesJavaObject.Call<AndroidJavaObject>("getCustomProperties"))
+            );
+        }
+        
+        [CanBeNull]
+        internal static UserPropertiesDto FromNullable([CanBeNull] UserProperties userProperties)
+        {
+            return userProperties == null ? null : From(userProperties);
         }
 
         protected bool Equals(UserPropertiesDto other)
@@ -55,6 +70,14 @@ namespace XMediator.Android
                     customPropertiesJavaObject
                 );
             }
+        }
+
+        internal UserProperties ToUserProperties()
+        {
+            return new UserProperties(
+                userId: UserId,
+                customProperties: CustomProperties.ToCustomProperties()
+            );
         }
     }
 }

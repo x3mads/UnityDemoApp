@@ -10,5 +10,23 @@ namespace XMediator.Editor.Tools.MetaMediation.Entities
             Name = name;
             Version = version;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Pod other)
+            {
+                return Name == other.Name && Version == other.Version;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Name.GetHashCode() * 397) ^ Version.GetHashCode();
+            }
+        }
     }
 }

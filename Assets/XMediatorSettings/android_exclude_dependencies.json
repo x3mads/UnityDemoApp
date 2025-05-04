@@ -1,0 +1,26 @@
+{
+    "excludeDependencies": [
+        {
+            "group": "com.applovin.mediation",
+            "module": "ironsource-adapter",
+            "version": "8.8.0.0.1",
+            "excludes": [
+                {
+                    "group": "com.ironsource.sdk",
+                    "module": "mediationsdk"
+                }
+            ]
+        },
+        {
+            "group": "com.x3mads.android.xmediator.mediation",
+            "module": "ironsource",
+            "version": "8.8.0.0",
+            "excludes": [
+                {
+                    "group": "com.ironsource.sdk",
+                    "module": "mediationsdk"
+                }
+            ]
+        }
+    ]
+}

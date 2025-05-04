@@ -8,17 +8,17 @@ namespace XMediator.iOS
     [Serializable]
     internal class ConsentInformationDto
     {
-        [SerializeField] internal bool isNull;
+        [SerializeField] internal bool hasValue;
         [SerializeField] internal string hasUserConsent;
         [SerializeField] internal string doNotSell;
         [SerializeField] internal string isChildDirected;
         [SerializeField] internal string consentAutomationEnabled;
         [SerializeField] internal string cmpDebugGeography;
 
-        internal ConsentInformationDto(bool isNull, bool? hasUserConsent, bool? doNotSell, bool? isChildDirected, bool? consentAutomationEnabled,
+        private ConsentInformationDto(bool hasValue, bool? hasUserConsent, bool? doNotSell, bool? isChildDirected, bool? consentAutomationEnabled,
             CMPDebugGeography? cmpDebugGeography)
         {
-            this.isNull = isNull;
+            this.hasValue = hasValue;
             this.hasUserConsent = ToNullableBooleanString(hasUserConsent);
             this.doNotSell = ToNullableBooleanString(doNotSell);
             this.isChildDirected = ToNullableBooleanString(isChildDirected);
@@ -29,7 +29,7 @@ namespace XMediator.iOS
         internal static ConsentInformationDto FromConsentInformation([CanBeNull] ConsentInformation consentInformation)
         {
             return new ConsentInformationDto(
-                isNull: consentInformation == null,
+                hasValue: consentInformation != null,
                 hasUserConsent: consentInformation?.HasUserConsent,
                 doNotSell: consentInformation?.DoNotSell,
                 isChildDirected: consentInformation?.IsChildDirected,

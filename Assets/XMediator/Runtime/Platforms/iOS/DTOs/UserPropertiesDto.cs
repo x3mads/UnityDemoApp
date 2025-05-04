@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using XMediator.Api;
 
@@ -9,23 +10,40 @@ namespace XMediator.iOS
     [Serializable]
     internal class UserPropertiesDto
     {
+        [SerializeField] internal bool hasValue;
         [SerializeField] internal string userId;
         [SerializeField] internal CustomPropertiesDto customProperties;
 
-        private UserPropertiesDto(string userId, CustomPropertiesDto customPropertiesDto)
+        private UserPropertiesDto(bool hasValue, string userId, CustomPropertiesDto customPropertiesDto)
         {
+            this.hasValue = hasValue;
             this.userId = userId;
             customProperties = customPropertiesDto;
         }
 
-        internal static UserPropertiesDto FromUserProperties(UserProperties userProperties)
+        internal static UserPropertiesDto FromUserProperties([CanBeNull] UserProperties userProperties)
         {
-            return new UserPropertiesDto(userProperties.UserId, CustomPropertiesDto.FromCustomProperties(userProperties.CustomProperties));
+            if (userProperties == null)
+            {
+                return new UserPropertiesDto(false, null, null);
+            }
+
+            return new UserPropertiesDto(true, userProperties.UserId, CustomPropertiesDto.FromCustomProperties(userProperties.CustomProperties));
         }
         
         internal string ToJson()
         {
             return JsonUtility.ToJson(this);
+        }
+
+        public UserProperties ToUserProperties()
+        {
+            if (!hasValue)
+            {
+                return new UserProperties();
+            }
+            
+            return new UserProperties(userId, customProperties.ToCustomProperties());
         }
     }
     
@@ -82,6 +100,20 @@ namespace XMediator.iOS
         internal string ToJson()
         {
             return JsonUtility.ToJson(this);
+        }
+
+        public CustomProperties ToCustomProperties()
+        {
+            var properties = new Dictionary<string, object>();
+            
+            bools?.ForEach(p => properties[p.k] = p.v);
+            ints?.ForEach(p => properties[p.k] = p.v);
+            floats?.ForEach(p => properties[p.k] = p.v);
+            doubles?.ForEach(p => properties[p.k] = p.v);
+            strings?.ForEach(p => properties[p.k] = p.v);
+            stringLists?.ForEach(p => properties[p.k] = p.v);
+
+            return new CustomProperties(properties);
         }
     }
 

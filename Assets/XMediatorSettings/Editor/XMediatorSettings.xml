@@ -9,7 +9,11 @@
   <gmaPropertiesTagFixEnabled>True</gmaPropertiesTagFixEnabled>
   <isMetamediation>True</isMetamediation>
   <mm_mediations>X3M,MAX,LevelPlay</mm_mediations>
-  <mm_network_ids>APS,AppLovin,Chartboost,Facebook,Fyber,GoogleAds,HyprMX,InMobi,IronSource,MetaViaAdMob,Mintegral,MobileFuse,Moloco,Ogury,Pangle,Stack,Tappx,UnityAds,Vungle</mm_network_ids>
-  <mm_networks>Amazon Publisher Services,AppLovin,Chartboost,Meta Audience Network,DT Exchange,Google Ads,HyprMX,InMobi,IronSource,Meta Audience Network via AdMob,Mintegral,MobileFuse,Moloco,Ogury,Pangle,Tappx,Unity Ads,Liftoff Monetize,BidMachine</mm_networks>
+  <mm_network_ids>APS,AppLovin,Chartboost,Facebook,Fyber,GoogleAds,HyprMX,InMobi,IronSource,Mintegral,MobileFuse,Moloco,Ogury,Pangle,Stack,Tappx,UnityAds,Vungle</mm_network_ids>
+  <mm_networks>Amazon Publisher Services,AppLovin,Chartboost,Meta Audience Network,DT Exchange,Google Ads,HyprMX,InMobi,IronSource,Mintegral,MobileFuse,Moloco,Ogury,Pangle,BidMachine,Tappx,Unity Ads,Liftoff Monetize</mm_networks>
   <mm_platforms>android,ios</mm_platforms>
+  <mm_tag_ios>
+  </mm_tag_ios>
+  <mm_tag_android>
+  </mm_tag_android>
 </buildSettings>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using XMediator.Editor.Tools.MetaMediation.Entities;
@@ -7,77 +8,69 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
 {
     internal class DependenciesPreProcessor
     {
-        public ProcessedDependencies Invoke(Dependencies dependencies)
+        public ProcessedDependencies Invoke(SelectedDependencies selectableDependencies)
         {
+            var networks = selectableDependencies.Networks.ToList();
+            var mediators = selectableDependencies.Mediations.ToList();
+            
             var androidRepositories = new HashSet<string>();
             var artifacts = new HashSet<string>();
+            ProcessManifest(selectableDependencies.AndroidManifest, networks, mediators, dependencyList =>
+            {
+                AddReposAndArtifacts(dependencyList, artifacts, androidRepositories);
+            });
+            
             var pods = new HashSet<Pod>();
-            var networks = dependencies.Networks.ToList();
-            var mediators = dependencies.Mediations.ToList();
-            if (dependencies.AndroidManifest != null)
-                ProcessAndroidManifest(dependencies.AndroidManifest, networks, mediators, androidRepositories,
-                    artifacts);
-            if (dependencies.IOSManifest != null)
-                ProcessIOSManifest(dependencies.IOSManifest, networks, mediators, pods);
+            ProcessManifest(selectableDependencies.IOSManifest, networks, mediators, dependencyList =>
+            {
+                AddPodsAndVersions(dependencyList, pods);
+            });
+            
             return new ProcessedDependencies(androidRepositories, artifacts, pods);
         }
 
-        private static void ProcessAndroidManifest(AndroidManifestDto androidManifest, ICollection<string> networks,
-            ICollection<string> mediators,
-            HashSet<string> androidRepositories, HashSet<string> artifacts)
+        private static void ProcessManifest<TDependency>(ManifestDto<TDependency> manifest, ICollection<string> networks,
+            List<string> mediators, Action<List<TDependency>> addDependencies)
         {
-            if (mediators.Contains("X3M"))
+            if (manifest == null)
             {
-                AddReposAndArtifacts(androidManifest.core, artifacts, androidRepositories);
+                return;
             }
+            
+            // We always add core dependencies
+            addDependencies(manifest.core);
 
-            foreach (var standaloneAdapter in androidManifest.standalone_metamediation_adapters.Where(
+            foreach (var standaloneAdapter in manifest.standalone_metamediation_adapters.Where(
                          standaloneAdapter => mediators.Contains(standaloneAdapter.metamediation_adapter_for)))
             {
-                AddReposAndArtifacts(standaloneAdapter.dependencies, artifacts, androidRepositories);
+                addDependencies(standaloneAdapter.dependencies);
             }
-
-            foreach (var network in androidManifest.networks.Where(network => networks.Contains(network.display_name)))
+            foreach (var mediatorAdapter in SelectMediatorsBundledWithinNetworks(manifest, mediators))
             {
-                AddReposAndArtifacts(network.dependencies, artifacts, androidRepositories);
+                addDependencies(mediatorAdapter.dependencies);
+            }
+            
+            foreach (var network in manifest.networks.Where(network => networks.Contains(network.display_name)))
+            {
+                addDependencies(network.dependencies);
 
-                foreach (var networkAdapterDto in network.adapters.Where(networkAdapterDto =>
-                             mediators.Contains(networkAdapterDto.mediator)))
+                foreach (var networkAdapterDto in network.adapters.Where(adapter =>
+                             mediators.Contains(adapter.mediator)))
                 {
-                    AddReposAndArtifacts(networkAdapterDto.dependencies, artifacts, androidRepositories);
+                    addDependencies(networkAdapterDto.dependencies);
                 }
             }
         }
 
-        private static void ProcessIOSManifest(IOSManifestDto androidManifest, List<string> networks,
-            ICollection<string> mediators,
-            HashSet<Pod> pods)
+        private static IEnumerable<AdapterDto<T>> SelectMediatorsBundledWithinNetworks<T>(ManifestDto<T> manifest, ICollection<string> mediators)
         {
-            if (mediators.Contains("X3M"))
-            {
-                AddPodsAndVersions(pods, androidManifest.core);
-            }
-
-            foreach (var standaloneAdapter in androidManifest.standalone_metamediation_adapters.Where(
-                         standaloneAdapter => mediators.Contains(standaloneAdapter.metamediation_adapter_for)))
-            {
-                AddPodsAndVersions(pods, standaloneAdapter.dependencies);
-            }
-
-            foreach (var network in androidManifest.networks.Where(network => networks.Contains(network.display_name)))
-            {
-                AddPodsAndVersions(pods, network.dependencies);
-
-                foreach (var networkAdapterDto in network.adapters.Where(networkAdapterDto =>
-                             mediators.Contains(networkAdapterDto.mediator)))
-                {
-                    AddPodsAndVersions(pods, networkAdapterDto.dependencies);
-                }
-            }
+            return manifest.networks.
+                SelectMany( n => n.adapters).
+                Where(a => a.metamediation_adapter_for != null
+                           && mediators.Contains(a.metamediation_adapter_for));
         }
 
-        private static void AddPodsAndVersions(HashSet<Pod> pods,
-            List<IOSDependencyDto> dependencies)
+        private static void AddPodsAndVersions(List<IOSDependencyDto> dependencies, HashSet<Pod> pods)
         {
             foreach (var dependency in dependencies)
             {
@@ -85,7 +78,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
             }
         }
 
-        private static void AddReposAndArtifacts(List<DependencyDto> dependencies, HashSet<string> artifacts,
+        private static void AddReposAndArtifacts(List<AndroidDependencyDto> dependencies, HashSet<string> artifacts,
             HashSet<string> androidRepositories)
         {
             foreach (var dependency in dependencies)
@@ -98,7 +91,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
             }
         }
 
-        private static string ResolveArtifactName(DependencyDto dependencyDto)
+        private static string ResolveArtifactName(AndroidDependencyDto dependencyDto)
         {
             return dependencyDto.group_id + ":" + dependencyDto.artifact_name + ":" + dependencyDto.suggested_version;
         }

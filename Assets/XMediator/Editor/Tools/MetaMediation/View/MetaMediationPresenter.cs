@@ -22,7 +22,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         private const string IosCorePod = "XMediator";
         private MetaMediationManagerView View { get; }
         private GetDependencies GetDependencies { get; }
-        private Dependencies Dependencies { get; set; }
+        private SelectableDependencies SelectableDependencies { get; set; }
 
         private SettingsRepository SettingsRepository { get; set; }
         private GenerateXML GenerateXML { get; set; }
@@ -31,7 +31,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         internal HashSet<string> CurrentMediators { get; set; }
 
         internal HashSet<string> CurrentPlatforms { get; set; }
-        internal Tuple<Dictionary<MetaMediationDependencies.AndroidPackage, DependencyDto>, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto>> UpdateResults { get; private set; }
+        internal MetaMediationTags CurrentTags { get; set; }
+        internal Tuple<Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto>, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto>> UpdateResults { get; private set; }
         private bool IsDownloading { get; set; }
 
         private GetAllDependencies GetAllDependencies { get; }
@@ -39,9 +40,9 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private ResolveCoreAdapterVersion ResolveCoreAdapterVersion { get; }
         private UpdateCoreAdapter UpdateCoreAdapter { get; }
-        private RetrieveNetworksUpdates RetrieveNetworksUpdates { get; set; }
+        private RetrieveNetworksUpdates RetrieveNetworksUpdates { get; }
 
-        internal ResolveCoreAdapterVersion.Result CoreUpdateResult = null;
+        internal ResolveCoreAdapterVersion.Result CoreUpdateResult;
 
 
         internal MetaMediationPresenter(MetaMediationManagerView view)
@@ -64,17 +65,17 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         internal void Initialize()
         {
             Debug.Log("Initialized");
-            RetrieveDependencies();
             RetrieveFromSettings();
+            RetrieveDependencies();
             GenerateXML = new GenerateXML(new DependenciesPreProcessor());
             RetrieveUnityPackage();
         }
 
         internal void GenerateAndSaveDependencies()
         {
-            var dependenciesIOSManifest = CurrentPlatforms.Contains(IosPlatform) ? Dependencies.IOSManifest : null;
-            var dependenciesAndroidManifest = CurrentPlatforms.Contains(AndroidPlatform) ? Dependencies.AndroidManifest : null;
-            ResolvePlatformSemanticVersion(dependenciesIOSManifest, dependenciesAndroidManifest, out var iosCoreSemanticVersion, out var androidCoreSemanticVersion);
+            var iosManifest = GetIosManifestForMediators();
+            var androidManifest = GetAndroidManifestForMediators();
+            ResolvePlatformSemanticVersion(iosManifest, androidManifest, out var iosCoreSemanticVersion, out var androidCoreSemanticVersion);
 
             if (!CanWeProceedWithTheUpdate(iosCoreSemanticVersion, androidCoreSemanticVersion))
             {
@@ -82,21 +83,22 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             }
 
             UtilsMetaMediation.ApplyMetaMediation(false);
-            var dependencies = new Dependencies(
+            var dependencies = new SelectedDependencies(
                 networks: CurrentNetworks,
                 mediations: CurrentMediators,
-                iosManifest: dependenciesIOSManifest,
-                androidManifest: dependenciesAndroidManifest
+                iosManifest: iosManifest,
+                androidManifest: androidManifest
             );
 
-            GenerateXML.Invoke(dependencies: dependencies, onSuccess: document =>
+            GenerateXML.Invoke(selectableDependencies: dependencies, onSuccess: document =>
                 {
                     Debug.Log(document.ToString());
                     SettingsRepository.ApplyMetaMediation();
                     SettingsRepository.Save(networks: CurrentNetworks,
                         networkIds: dependencies.GetNetworkIds(),
                         mediations: CurrentMediators,
-                        platforms: CurrentPlatforms);
+                        platforms: CurrentPlatforms,
+                        tags: CurrentTags);
                     SaveXMLDependencies.SaveXMLToFile(document, "MetaMediationDependencies.xml");
                     SkAdNetworkIdsServiceFactory.CreateInstance().SynchronizeSkAdNetworkIds();
 
@@ -106,6 +108,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                          {
                              CheckAndShowUpdates();
                              View.OnGeneratedDependencies(false);
+                             ExcludeDependencyManager.ExtractAndSaveExcludeDependencies(androidManifest);
                          },
                          onError: errorMessage => { View.OnGeneratedDependencies(true, errorMessage); }
                      );
@@ -125,6 +128,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 ListToDictionary(SettingsRepository.RetrieveNetworks()),
                 SettingsRepository.RetrievePlatforms().Contains(AndroidPlatform),
                 SettingsRepository.RetrievePlatforms().Contains(IosPlatform));
+            CurrentTags = SettingsRepository.RetrieveTags();
         }
 
         private static Dictionary<string, bool> ListToDictionary(IEnumerable<string> enableList)
@@ -142,7 +146,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                     SetState(() =>
                     {
                         IsDownloading = false;
-                        Dependencies = dependencies;
+                        SelectableDependencies = dependencies;
                         CheckAndShowUpdates();
                         GetCorePackageStatusResults();
                     });
@@ -158,11 +162,28 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void CheckAndShowUpdates()
         {
-            var (androidDiff, iosDiff) = RetrieveNetworksUpdates.Invoke(Dependencies);
-
+            var androidManifest = GetAndroidManifestForMediators();
+            var iosManifest = GetIosManifestForMediators();
+            var (androidDiff, iosDiff) = RetrieveNetworksUpdates.Invoke(iosManifest, androidManifest);
             if (androidDiff == null && iosDiff == null) return;
+            
             View.OnRefreshUi();
-            UpdateResults = new Tuple<Dictionary<MetaMediationDependencies.AndroidPackage, DependencyDto>, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto>>(androidDiff, iosDiff);
+            UpdateResults = new Tuple<Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto>, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto>>(androidDiff, iosDiff);
+        }
+
+        private ManifestDto<AndroidDependencyDto> GetAndroidManifestForMediators()
+        {
+            return GetManifestForCurrentMediators(AndroidPlatform, SelectableDependencies.AndroidManifest, CurrentTags.Android);
+        }
+        
+        private ManifestDto<IOSDependencyDto> GetIosManifestForMediators()
+        {
+            return GetManifestForCurrentMediators(IosPlatform, SelectableDependencies.IOSManifest, CurrentTags.IOS);
+        }
+
+        private ManifestDto<TDependency> GetManifestForCurrentMediators<TDependency>(string platformString, FlavoredManifestDto<TDependency> manifest, string tag)
+        {
+            return !CurrentPlatforms.Contains(platformString) ? null : manifest.GetManifestForMediators(CurrentMediators.ToList(), tag);
         }
 
         private void RetrieveUnityPackage()
@@ -184,20 +205,20 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         {
             action();
 
-            View.SetViewState(new MetaMediationViewState(Dependencies, IsDownloading));
+            View.SetViewState(new MetaMediationViewState(SelectableDependencies, IsDownloading));
         }
 
         private void GetCorePackageStatusResults()
         {
-            if (Dependencies == null) return;
-            var dependenciesIOSManifest = CurrentPlatforms.Contains(IosPlatform) ? Dependencies.IOSManifest : null;
-            var dependenciesAndroidManifest = CurrentPlatforms.Contains(AndroidPlatform) ? Dependencies.AndroidManifest : null;
-            if (dependenciesAndroidManifest == null && dependenciesIOSManifest == null)
+            if (SelectableDependencies == null) return;
+            var androidManifest = GetAndroidManifestForMediators();
+            var iosManifest = GetIosManifestForMediators();
+            if (androidManifest == null && iosManifest == null)
             {
                 return;
             }
 
-            ResolvePlatformSemanticVersion(dependenciesIOSManifest, dependenciesAndroidManifest, out var iosCoreSemanticVersion, out var androidCoreSemanticVersion);
+            ResolvePlatformSemanticVersion(iosManifest, androidManifest, out var iosCoreSemanticVersion, out var androidCoreSemanticVersion);
             CoreUpdateResult ??= ResolveCoreAdapterVersion.Invoke(SdkDependency, iosCoreSemanticVersion, androidCoreSemanticVersion);
         }
 
@@ -226,8 +247,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             return View.OnConfirmationDialog("Downgrading Core SDK", $"Are you sure you want to downgrade the SDK from version {result.PreviousVersion} to {result.Version.Version}?");
         }
 
-        private static void ResolvePlatformSemanticVersion(IOSManifestDto dependenciesIOSManifest,
-            AndroidManifestDto dependenciesAndroidManifest, out SemanticVersion iosCoreSemanticVersion,
+        private static void ResolvePlatformSemanticVersion(ManifestDto<IOSDependencyDto> dependenciesIOSManifest,
+            ManifestDto<AndroidDependencyDto> dependenciesAndroidManifest, out SemanticVersion iosCoreSemanticVersion,
             out SemanticVersion androidCoreSemanticVersion)
         {
             var iosDependencyDto = dependenciesIOSManifest?.core.FirstOrDefault(it => it.pod == IosCorePod);
@@ -264,6 +285,19 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             {
                 CurrentPlatforms.Add(IosPlatform);
             }
+        }
+        
+        internal void RefreshUpdatesWithNewSelection(Dictionary<string, bool> mediatorSelection,
+            Dictionary<string, bool> adNetworkSelection, bool isAndroid, bool isIos)
+        {
+            UpdateSelection(mediatorSelection, adNetworkSelection, isAndroid, isIos);
+            CheckAndShowUpdates();
+        }
+        
+        internal void SelectIOSTag(string tag)
+        {
+            CurrentTags = CurrentTags.UpdatingIOS(tag);
+            CheckAndShowUpdates();
         }
     }
 }

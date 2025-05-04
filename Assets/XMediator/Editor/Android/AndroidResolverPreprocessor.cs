@@ -1,10 +1,13 @@
 #if UNITY_ANDROID
 
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
+using XMediator.Editor.Tools.MetaMediation.Repository;
 
 namespace XMediator.Editor.Android
 {
@@ -40,6 +43,13 @@ namespace XMediator.Editor.Android
                     "and try again."
                 );
             }
+            
+            // Exclude dependencies
+            var excludeList = ExcludeDependencyManager.LoadExcludeDependencies();
+            if (excludeList.Count <= 0) return;
+            
+            var excluder = new GradleDependencyExcluder(MainTemplatePath);
+            excluder.ApplyExclusions(excludeList);
         }
 
         private bool MainTemplateExists() => File.Exists(MainTemplatePath);

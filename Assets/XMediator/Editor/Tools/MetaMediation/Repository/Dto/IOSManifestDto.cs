@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace XMediator.Editor.Tools.MetaMediation.Repository.Dto
 {
     [Serializable]
-    public class IOSManifestDto
+    internal class IOSManifestDto: FlavoredManifestDto<IOSDependencyDto>
     {
-        public List<IOSDependencyDto> core;
-        public List<IOSStandaloneMetaMediationAdapterDto> standalone_metamediation_adapters;
-        public List<IOSNetworkDto> networks;
+        internal List<string> GetLegacySupportTags()
+        {
+            return GetAllTagsInFlavors().Where(t => t.ToLower().StartsWith("xcode_")).ToList();
+        }
     }
 }

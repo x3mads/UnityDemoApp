@@ -10,6 +10,7 @@ namespace XMediator.Android
 
         private const string INITIALIZE_METHOD_NAME = "startWith";
         private const string SET_CONSENT_METHOD_NAME = "setConsentInformation";
+        private const string GET_USER_PROPERTIES_METHOD_NAME = "getUserProperties";
         private const string SET_USER_PROPERTIES_METHOD_NAME = "setUserProperties";
         private const string OPEN_DEBUGGER_SUITE_METHOD_NAME = "openDebuggerSuite";
 
@@ -41,6 +42,11 @@ namespace XMediator.Android
                     androidJavaObject
                 );
             }
+        }
+
+        public UserProperties GetUserProperties()
+        {
+            return UserPropertiesDto.From(_xMediatorAdsProxy.CallStatic<AndroidJavaObject>(GET_USER_PROPERTIES_METHOD_NAME)).ToUserProperties();
         }
 
         public void SetUserProperties(UserProperties userProperties)

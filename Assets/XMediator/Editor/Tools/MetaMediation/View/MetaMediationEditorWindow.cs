@@ -13,19 +13,15 @@ namespace XMediator.Editor.Tools.MetaMediation.View
     {
         private MetaMediationViewState State { get; set; } = new(null, true);
 
-        private const string X3MMediatorName = "X3M";
         private const long ProgressBarEstimatedTime = 2000;
         private const int NumColumns = 3;
+        private const int BaseHeight = 520;
         internal const string DependencyManagerMenu = "XMediator/Mediators Dependency Manager";
 
         private bool _isAndroidSelected = true;
         private bool _isIosSelected = true;
 
-        private readonly Dictionary<string, bool> _mediatorSelection = new()
-        {
-            { X3MMediatorName, true }
-        };
-
+        private readonly Dictionary<string, bool> _mediatorSelection = new();
         private readonly Dictionary<string, bool> _adNetworkSelection = new();
 
         private string _adNetworkSearchTerm = "";
@@ -35,7 +31,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         private bool IsShowingProgressBar { get; set; }
         private long ProgressBarEndTime { get; set; }
 
-        [MenuItem(DependencyManagerMenu, false, 1)]
+        [MenuItem(DependencyManagerMenu, false, 0)]
         public static void ShowWindow()
         {
             GetWindow<MetaMediationEditorWindow>("Dependencies Generator");
@@ -43,13 +39,13 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void InitializeSelections()
         {
-            if (State.Dependencies == null) return;
-            foreach (var mediator in State.Dependencies.Mediations)
+            if (State.SelectableDependencies == null) return;
+            foreach (var mediator in State.SelectableDependencies.Mediations)
             {
                 _mediatorSelection.TryAdd(mediator, false);
             }
 
-            foreach (var network in State.Dependencies.Networks)
+            foreach (var network in State.SelectableDependencies.Networks)
             {
                 _adNetworkSelection.TryAdd(network, false);
             }
@@ -57,8 +53,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void CreateGUI()
         {
-            minSize = new Vector2(675, 500);
-            maxSize = new Vector2(675, 500);
+            minSize = new Vector2(675, BaseHeight);
+            maxSize = new Vector2(675, BaseHeight);
             Presenter = new MetaMediationPresenter(this);
             Presenter.Initialize();
             InitializeSelections();
@@ -66,7 +62,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void OnGUI()
         {
-            if (State.Dependencies != null)
+            if (State.SelectableDependencies != null)
             {
                 PlatformPicker();
                 MediatorsPicker();
@@ -148,13 +144,66 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             GUILayout.Space(10);
             GUILayout.Label("Platform Selection", EditorStyles.boldLabel);
 
-            GUILayout.BeginHorizontal();
+            GUILayout.BeginHorizontal("box");
 
-            _isAndroidSelected = GUILayout.Toggle(_isAndroidSelected, "Android", "Button", GUILayout.Height(25));
-            _isIosSelected = GUILayout.Toggle(_isIosSelected, "iOS", "Button", GUILayout.Height(25));
+            GUILayout.BeginVertical();
+            _isAndroidSelected = GUILayout.Toggle(_isAndroidSelected, "Android", "Button", GUILayout.Height(25), GUILayout.MaxWidth(position.width / 2));
+            GUILayout.EndVertical();
+            
+            GUILayout.BeginVertical();
+            _isIosSelected = GUILayout.Toggle(_isIosSelected, "iOS", "Button", GUILayout.Height(25), GUILayout.MaxWidth(position.width / 2));
+            if (_isIosSelected)
+            {
+                IOSLegacySupportTagsPicker();
+            }
+            GUILayout.EndVertical();
+            
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
+        }
+        
+        private void IOSLegacySupportTagsPicker()
+        {
+            var tagOptions = State.SelectableDependencies.IOSManifest.GetLegacySupportTags();
+            if (tagOptions.Count > 0)
+            {
+                tagOptions.Insert(0, "None"); // We add the "None" option to be selected as default
+                var currentIndex = Math.Max(tagOptions.IndexOf(Presenter.CurrentTags.IOS), 0);
+               
+                var newIndex = RenderIOSTags(tagOptions, currentIndex);
+                if (newIndex != currentIndex)
+                {
+                    var selectedTag = newIndex > 0 ? tagOptions[newIndex] : null; // We filter the "None" option
+                    Presenter.SelectIOSTag(selectedTag);
+                }
+            }
+        }
+
+        private int RenderIOSTags(List<string> tagOptions, int currentIndex)
+        {
+            var legacyTooltip =
+                "Select to generate dependencies that support an older Xcode version, if you can't upgrade to a newer one right now.";
+            var displayedOptions = GetDisplayedTagOptions(tagOptions, legacyTooltip);
+                
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(new GUIContent("Legacy Support:", legacyTooltip));
+            var newIndex = EditorGUILayout.Popup(selectedIndex: currentIndex, displayedOptions: displayedOptions);
+            GUILayout.EndHorizontal();
+            
+            return newIndex;
+        }
+
+        private static GUIContent[] GetDisplayedTagOptions(List<string> tagOptions, string legacyTooltip)
+        {
+            return tagOptions.Select(t => new GUIContent(MapTagToReadableString(t), legacyTooltip)).ToArray();
+        }
+        
+        private static string MapTagToReadableString(string tag)
+        {
+            return tag.Replace("xcode", "Xcode")
+                .Replace("ios", "iOS")
+                .Replace("_", " ");
         }
 
         private void NetworkPicker()
@@ -165,7 +214,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             GUILayout.Space(10);
             _adNetworkSearchTerm = EditorGUILayout.TextField("Search", _adNetworkSearchTerm, GUILayout.MaxWidth(400));
             GUILayout.Space(10);
-            var adNetworks = State.Dependencies.Networks.ToList();
+            var adNetworks = State.SelectableDependencies.Networks.ToList();
             foreach (var network in adNetworks.Where(network => !_adNetworkSelection.ContainsKey(network)))
             {
                 _adNetworkSelection.Add(network, Presenter.CurrentNetworks.Contains(network));
@@ -194,62 +243,37 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             GUILayout.EndVertical();
 
             GUILayout.Space(20);
-            UpdateSavedParams();
         }
 
         private void MediatorsPicker()
         {
             GUILayout.Label("Mediator Selection", EditorStyles.boldLabel);
             GUILayout.BeginVertical("box");
-            var mediators = new List<string>() { X3MMediatorName };
-            mediators.AddRange(State.Dependencies.Mediations.ToList());
-            foreach (var mediator in mediators)
+            
+            if (Presenter.CurrentMediators.Count == 0)
+            {
+                _mediatorSelection.TryAdd(SelectableDependencies.X3MMediationName, true);
+            }
+            foreach (var mediator in State.SelectableDependencies.Mediations.ToList())
             {
                 _mediatorSelection.TryAdd(mediator, Presenter.CurrentMediators.Contains(mediator));
             }
 
+            var dirty = false;
             foreach (var key in _mediatorSelection.Keys.ToList())
             {
-                _mediatorSelection[key] = EditorGUILayout.ToggleLeft(key, _mediatorSelection[key] || key.Equals("X3M"));
+                var previosValue = _mediatorSelection[key];
+                _mediatorSelection[key] = EditorGUILayout.ToggleLeft(key, _mediatorSelection[key]);
+                dirty = dirty || _mediatorSelection[key] != previosValue;
             }
 
             GUILayout.EndVertical();
 
             GUILayout.Space(10);
-        }
 
-        private void UpdateSavedParams()
-        {
-            if (State.SavedMediations != null)
+            if (dirty)
             {
-                foreach (var stateSavedMediation in State.SavedMediations)
-                {
-                    Debug.Log("Saved mediation: " + stateSavedMediation);
-                    _mediatorSelection.TryAdd(stateSavedMediation, true);
-                }
-            }
-
-            if (State.SavedNetworks != null)
-            {
-                foreach (var stateSavedNetwork in State.SavedNetworks)
-                {
-                    Debug.Log("Saved network: " + stateSavedNetwork);
-                    _adNetworkSelection.TryAdd(stateSavedNetwork, true);
-                }
-            }
-
-            if (State.SavedPlatforms == null) return;
-            foreach (var stateSavedPlatform in State.SavedPlatforms)
-            {
-                Debug.Log("Saved platform: " + stateSavedPlatform);
-                if (stateSavedPlatform.Contains("android"))
-                {
-                    _isAndroidSelected = true;
-                }
-                else if (stateSavedPlatform.Contains("ios"))
-                {
-                    _isIosSelected = true;
-                }
+                Presenter.RefreshUpdatesWithNewSelection(_mediatorSelection, _adNetworkSelection, _isAndroidSelected, _isIosSelected);
             }
         }
 
@@ -308,15 +332,14 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void DisplayUpdateResults()
         {
-            
             if (Presenter.UpdateResults == null && Presenter.CoreUpdateResult == null) return;
+            
             var androidDiff = Presenter.UpdateResults?.Item1;
             var iosDiff = Presenter.UpdateResults?.Item2;
 
             GUILayout.Space(8);
             int heightOffset;
-
-            if ((androidDiff != null && iosDiff != null && (androidDiff.Count > 0 || iosDiff.Count > 0)) || Presenter.CoreUpdateResult?.Status != ResolveCoreAdapterVersion.Status.NoChanges)
+            if (ShouldShowDependencyUpdates(androidDiff, iosDiff) || ShouldShowCoreUpdates())
             {
                 heightOffset = 200;
                 GUILayout.BeginHorizontal();
@@ -335,9 +358,19 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             GUILayout.EndScrollView();
         }
 
-        private void DisplayUpdateResultsScrollView(int heightOffset, Dictionary<MetaMediationDependencies.AndroidPackage, DependencyDto> androidDiff, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> iosDiff)
+        private bool ShouldShowCoreUpdates()
         {
-            if (Presenter.CoreUpdateResult != null && Presenter.CoreUpdateResult.Status != ResolveCoreAdapterVersion.Status.NoChanges)
+            return Presenter.CoreUpdateResult != null && Presenter.CoreUpdateResult.Status != ResolveCoreAdapterVersion.Status.NoChanges;
+        }
+
+        private static bool ShouldShowDependencyUpdates(Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> androidDiff, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> iosDiff)
+        {
+            return (androidDiff != null && iosDiff != null && (androidDiff.Count > 0 || iosDiff.Count > 0));
+        }
+
+        private void DisplayUpdateResultsScrollView(int heightOffset, Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> androidDiff, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> iosDiff)
+        {
+            if (ShouldShowCoreUpdates())
             {
                 var status = Presenter.CoreUpdateResult.Status.ToString();
                 GUILayout.Space(8);
@@ -350,9 +383,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 heightOffset += 50;
             }
 
-            minSize = new Vector2(675, 500 + heightOffset);
-            maxSize = new Vector2(675, 500 + heightOffset);
-
+            minSize = new Vector2(675, BaseHeight + heightOffset);
+            maxSize = new Vector2(675, BaseHeight + heightOffset);
 
             switch (androidDiff)
             {

@@ -21,7 +21,14 @@ namespace XMediator.iOS
                 InitCallbackMethod
                 );
         }
-        
+
+        public UserProperties GetUserProperties()
+        {
+            var userPropertiesString = X3MGetUserProperties();
+            
+            return JsonUtility.FromJson<UserPropertiesDto>(userPropertiesString).ToUserProperties();
+        }
+
         public void SetUserProperties(UserProperties userProperties)
         {
             var userPropertiesDto = UserPropertiesDto.FromUserProperties(userProperties);
@@ -48,6 +55,9 @@ namespace XMediator.iOS
         private static extern void X3MStartWith(string appId,
             string initSettingsDto,
             NativeInitCallback initCallback);
+        
+        [DllImport("__Internal")]
+        private static extern string X3MGetUserProperties();
         
         [DllImport("__Internal")]
         private static extern void X3MSetUserProperties(string userPropertiesDto);

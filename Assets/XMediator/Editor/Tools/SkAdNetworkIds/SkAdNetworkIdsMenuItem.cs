@@ -4,7 +4,7 @@ namespace XMediator.Editor.Tools.SkAdNetworkIds
 {
     public class SkAdNetworkIdsMenuItem : UnityEditor.Editor
     {
-        [MenuItem("XMediator/Update SkAdNetwork Ids", false, 3)]
+        [MenuItem("XMediator/Update SkAdNetwork Ids", false, 1)]
         public static void UpdateSkAdNetworkIds()
         {
             SkAdNetworkIdsServiceFactory.CreateInstance().SynchronizeSkAdNetworkIds(

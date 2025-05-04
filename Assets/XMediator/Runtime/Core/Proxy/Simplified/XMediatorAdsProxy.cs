@@ -13,7 +13,7 @@ namespace XMediator
         );
 
         void SetConsentInformation(ConsentInformation consentInformation);
-        
+        UserProperties GetUserProperties();
         void SetUserProperties(UserProperties userProperties);
         
         void SetPauseOnAdPresentation(bool shouldPause);

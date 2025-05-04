@@ -12,10 +12,17 @@ namespace XMediator.Unity
         internal static Action<ConsentInformation> OnSetConsentInformation = DefaultOnSetConsentInformation;
         internal static Action<UserProperties> OnSetUserProperties = DefaultOnSetUserProperties;
 
+        private static UserProperties _userProperties; 
+
         public void StartWith(string appKey, string unityVersion, InitSettings initSettings, Action<InitResult> initCallback)
         {
             Assert.IsNotNull(appKey, "Initialize error: appKey is null. Please provide a valid appKey.");
             Assert.IsFalse(appKey == "", "Initialize error: appKey is empty. Please provide a valid appKey.");
+            
+            if (initSettings?.UserProperties != null)
+            {
+                _userProperties = initSettings.UserProperties;
+            }
 
             var xmediatorVersion = "1.74.0"; // TODO Get XMediator Unity Version
             Debug.Log($"Running XMediator {xmediatorVersion} | AppKey: {appKey} | Client version: {initSettings.ClientVersion} | Unity version: {unityVersion}");
@@ -28,9 +35,16 @@ namespace XMediator.Unity
             OnSetConsentInformation.Invoke(consentInformation);
         }
 
+        public UserProperties GetUserProperties()
+        {
+            return _userProperties ?? new UserProperties();
+        }
+
         public void SetUserProperties(UserProperties userProperties)
         {
             Assert.IsNotNull(userProperties, "SetUserProperties error: userProperties is null. If you want to clear user properties, please provide an empty UserProperties object.");
+            
+            _userProperties = userProperties;
             OnSetUserProperties.Invoke(userProperties);
         }
 

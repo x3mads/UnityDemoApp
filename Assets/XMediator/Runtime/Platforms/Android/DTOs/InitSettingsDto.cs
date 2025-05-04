@@ -12,7 +12,7 @@ namespace XMediator.Android
         internal bool Verbose { get; }
         [CanBeNull] internal string ClientVersion { get; }
         [CanBeNull] internal string[] PlacementIds { get; }
-        internal UserPropertiesDto UserProperties { get; }
+        [CanBeNull] internal UserPropertiesDto UserProperties { get; }
         [CanBeNull] internal ConsentInformationDto ConsentInformation { get; }
 
         internal InitSettingsDto(
@@ -20,7 +20,7 @@ namespace XMediator.Android
             bool verbose,
             [CanBeNull] string clientVersion,
             [CanBeNull] string[] placementIds,
-            UserPropertiesDto userProperties,
+            [CanBeNull] UserPropertiesDto userProperties,
             [CanBeNull] ConsentInformationDto consentInformation
         )
         {
@@ -34,7 +34,7 @@ namespace XMediator.Android
 
         internal AndroidJavaObject ToAndroidJavaObject()
         {
-            using (var userPropertiesJavaObject = UserProperties.ToAndroidJavaObject())
+            using (var userPropertiesJavaObject = UserProperties?.ToAndroidJavaObject())
             {
                 using (var consentInformationJavaObject = ConsentInformation?.ToAndroidJavaObject())
                 {
@@ -95,7 +95,7 @@ namespace XMediator.Android
                 verbose: initSettings.Verbose,
                 clientVersion: initSettings.ClientVersion,
                 placementIds: initSettings.PlacementIds?.ToArray(),
-                userProperties: UserPropertiesDto.From(initSettings.UserProperties),
+                userProperties: UserPropertiesDto.FromNullable(initSettings.UserProperties),
                 consentInformation: ConsentInformationDto.FromNullable(initSettings.ConsentInformation)
             );
         }
