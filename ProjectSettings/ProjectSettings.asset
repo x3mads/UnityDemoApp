@@ -162,11 +162,11 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DefaultCompany.com.unity.template.mobile2D
-    Lumin: com.DefaultCompany.com.unity.template.mobile2D
-    Standalone: com.DefaultCompany.com.unity.template.mobile2D
-    iPhone: com.x3mads.demo.app
-    tvOS: com.DefaultCompany.com.unity.template.mobile2D
+    Android: com.x3mads.xmediator.unity.demo
+    Lumin: com.x3mads.xmediator.unity.demo
+    Standalone: com.x3mads.xmediator.unity.demo
+    iPhone: com.x3mads.demo.unity.app
+    tvOS: com.x3mads.xmediator.unity.demo
   buildNumber:
     Standalone: 0
     VisionOS: 0
