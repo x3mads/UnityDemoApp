@@ -14,7 +14,7 @@
         {
             "group": "com.x3mads.android.xmediator.mediation",
             "module": "ironsource",
-            "version": "8.8.0.0",
+            "version": "8.8.0.1",
             "excludes": [
                 {
                     "group": "com.ironsource.sdk",
