@@ -1,16 +1,16 @@
 <buildSettings>
   <skipSwiftConfiguration>False</skipSwiftConfiguration>
   <disableGoogleAdsAndroidAppId>False</disableGoogleAdsAndroidAppId>
-  <googleAdsAndroidAppId>GOOGLE_ADS_ANDROID_APP_ID_PLACEHOLDER</googleAdsAndroidAppId>
-  <googleAdsIOSAppId>GOOGLE_ADS_IOS_APP_ID_PLACEHOLDER</googleAdsIOSAppId>
+  <googleAdsAndroidAppId>ca-app-pub-0000000000000000~0000000000</googleAdsAndroidAppId>
+  <googleAdsIOSAppId>ca-app-pub-0000000000000000~0000000000</googleAdsIOSAppId>
   <dependencyManagerToken>DEPENDENCY_MANAGER_TOKEN_PLACEHOLDER</dependencyManagerToken>
   <skipSkAdNetworkIdsConfiguration>False</skipSkAdNetworkIdsConfiguration>
   <publisher>PUBLISHER_PLACEHOLDER</publisher>
   <gmaPropertiesTagFixEnabled>True</gmaPropertiesTagFixEnabled>
   <isMetamediation>True</isMetamediation>
   <mm_mediations>X3M,MAX,LevelPlay</mm_mediations>
-  <mm_network_ids>APS,AppLovin,Chartboost,Facebook,Fyber,GoogleAds,HyprMX,InMobi,IronSource,Mintegral,MobileFuse,Moloco,Ogury,Pangle,Stack,Tappx,UnityAds,Vungle</mm_network_ids>
-  <mm_networks>Amazon Publisher Services,AppLovin,Chartboost,Meta Audience Network,DT Exchange,Google Ads,HyprMX,InMobi,IronSource,Mintegral,MobileFuse,Moloco,Ogury,Pangle,BidMachine,Tappx,Unity Ads,Liftoff Monetize</mm_networks>
+  <mm_network_ids>APS,AppLovin,Chartboost,Facebook,Fyber,GoogleAds,HyprMX,InMobi,IronSource,Mintegral,MobileFuse,Moloco,Ogury,Pangle,Stack,UnityAds,Vungle</mm_network_ids>
+  <mm_networks>Amazon Publisher Services,AppLovin,Chartboost,Meta Audience Network,DT Exchange,Google Ads,HyprMX,InMobi,IronSource,Mintegral,MobileFuse,Moloco,Ogury,Pangle,BidMachine,Unity Ads,Liftoff Monetize</mm_networks>
   <mm_platforms>android,ios</mm_platforms>
   <mm_tag_ios>
   </mm_tag_ios>

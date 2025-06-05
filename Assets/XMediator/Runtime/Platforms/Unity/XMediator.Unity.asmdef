@@ -1,9 +1,9 @@
-﻿{
-	"name": "XMediator.Unity",
-	"references": [
-		"XMediator"
-	],
-	"excludePlatforms": [
-		"Android", "iOS"
-	]
+{
+    "name": "XMediator.Unity",
+    "references": [
+        "XMediator"
+    ],
+    "excludePlatforms": [
+        "Android", "iOS"
+    ]
 }

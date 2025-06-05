@@ -12,12 +12,18 @@ namespace XMediator.iOS
     {
         [SerializeField] internal bool hasValue;
         [SerializeField] internal string userId;
+        [SerializeField] internal NullableLongValue installDate;
+        [SerializeField] internal NullableObject<InAppPurchaseSummaryDto> purchaseSummary;
         [SerializeField] internal CustomPropertiesDto customProperties;
 
-        private UserPropertiesDto(bool hasValue, string userId, CustomPropertiesDto customPropertiesDto)
+        private UserPropertiesDto(bool hasValue, string userId, NullableLongValue installDate,
+            NullableObject<InAppPurchaseSummaryDto> purchaseSummary,
+            CustomPropertiesDto customPropertiesDto)
         {
             this.hasValue = hasValue;
             this.userId = userId;
+            this.installDate = installDate;
+            this.purchaseSummary = purchaseSummary;
             customProperties = customPropertiesDto;
         }
 
@@ -25,10 +31,13 @@ namespace XMediator.iOS
         {
             if (userProperties == null)
             {
-                return new UserPropertiesDto(false, null, null);
+                return new UserPropertiesDto(false, null, null, null, null);
             }
-
-            return new UserPropertiesDto(true, userProperties.UserId, CustomPropertiesDto.FromCustomProperties(userProperties.CustomProperties));
+            
+            return new UserPropertiesDto(true, userProperties.UserId,
+                new NullableLongValue(userProperties.InstallDate?.ToUnixTimeSeconds()),
+                new NullableObject<InAppPurchaseSummaryDto>(InAppPurchaseSummaryDto.FromInAppPurchaseSummary(userProperties.InAppPurchaseSummary)),
+                CustomPropertiesDto.FromCustomProperties(userProperties.CustomProperties));
         }
         
         internal string ToJson()
@@ -43,7 +52,17 @@ namespace XMediator.iOS
                 return new UserProperties();
             }
             
-            return new UserProperties(userId, customProperties.ToCustomProperties());
+            DateTimeOffset? dateTimeOffset = null;
+            if (installDate?.GetValue() is { } value)
+            {
+                dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(value);
+            }
+
+            return new UserProperties(
+                userId: userId,
+                customProperties: customProperties.ToCustomProperties(),
+                installDate: dateTimeOffset,
+                inAppPurchaseSummary: purchaseSummary?.GetValue()?.ToInAppPurchaseSummary());
         }
     }
     

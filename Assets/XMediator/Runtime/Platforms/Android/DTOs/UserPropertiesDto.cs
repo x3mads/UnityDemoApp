@@ -9,11 +9,20 @@ namespace XMediator.Android
     {
         internal const string USER_PROPERTIES_DTO_CLASSNAME = "com.etermax.android.xmediator.unityproxy.dto.UserPropertiesDto";
         [CanBeNull] internal string UserId { get; }
+        [CanBeNull] private long? InstallDate { get; }
+        [CanBeNull] private InAppPurchaseSummaryDto InAppPurchaseSummary { get; }
         [CanBeNull] internal CustomPropertiesDto CustomProperties { get; }
 
-        internal UserPropertiesDto([CanBeNull] string userId, CustomPropertiesDto customProperties)
+        internal UserPropertiesDto(
+            [CanBeNull] string userId,
+            [CanBeNull] long? installDate,
+            [CanBeNull] InAppPurchaseSummaryDto inAppPurchaseSummary,
+            [CanBeNull] CustomPropertiesDto customProperties
+        )
         {
             UserId = userId;
+            InstallDate = installDate;
+            InAppPurchaseSummary = inAppPurchaseSummary;
             CustomProperties = customProperties;
         }
 
@@ -21,6 +30,8 @@ namespace XMediator.Android
         {
             return new UserPropertiesDto(
                 userId: userProperties.UserId,
+                installDate: userProperties.InstallDate?.ToUnixTimeMilliseconds(),
+                inAppPurchaseSummary: userProperties.InAppPurchaseSummary == null ? null : InAppPurchaseSummaryDto.From(userProperties.InAppPurchaseSummary),
                 customProperties: CustomPropertiesDto.From(userProperties.CustomProperties)
             );
         }
@@ -29,10 +40,12 @@ namespace XMediator.Android
         {
             return new UserPropertiesDto(
                 userId: userPropertiesJavaObject.Call<string>("getUserId"),
+                installDate: Utils.LongFromAndroidJavaObject(userPropertiesJavaObject.Call<AndroidJavaObject>("getInstallDate")),
+                inAppPurchaseSummary: InAppPurchaseSummaryDto.From(userPropertiesJavaObject.Call<AndroidJavaObject>("getInAppPurchaseSummary")),
                 customProperties: CustomPropertiesDto.From(userPropertiesJavaObject.Call<AndroidJavaObject>("getCustomProperties"))
             );
         }
-        
+
         [CanBeNull]
         internal static UserPropertiesDto FromNullable([CanBeNull] UserProperties userProperties)
         {
@@ -49,7 +62,7 @@ namespace XMediator.Android
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((UserPropertiesDto) obj);
+            return Equals((UserPropertiesDto)obj);
         }
 
         public override int GetHashCode()
@@ -62,13 +75,18 @@ namespace XMediator.Android
 
         internal AndroidJavaObject ToAndroidJavaObject()
         {
-            using (var customPropertiesJavaObject = CustomProperties.ToAndroidJavaObject())
+            using (var customPropertiesJavaObject = CustomProperties?.ToAndroidJavaObject())
             {
-                return new AndroidJavaObject(
-                    USER_PROPERTIES_DTO_CLASSNAME,
-                    UserId,
-                    customPropertiesJavaObject
-                );
+                using (var inAppPurchaseSummaryJavaObject = InAppPurchaseSummary?.ToAndroidJavaObject())
+                {
+                    return new AndroidJavaObject(
+                        USER_PROPERTIES_DTO_CLASSNAME,
+                        UserId,
+                        Utils.ToAndroidLong(InstallDate),
+                        inAppPurchaseSummaryJavaObject,
+                        customPropertiesJavaObject
+                    );
+                }
             }
         }
 
@@ -76,8 +94,11 @@ namespace XMediator.Android
         {
             return new UserProperties(
                 userId: UserId,
-                customProperties: CustomProperties.ToCustomProperties()
+                installDate: InstallDate == null ? null : DateTimeOffset.FromUnixTimeMilliseconds(InstallDate.Value),
+                inAppPurchaseSummary: InAppPurchaseSummary?.ToInAppPurchaseSummary(),
+                customProperties: CustomProperties?.ToCustomProperties()
             );
         }
+        
     }
 }
