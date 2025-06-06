@@ -17,7 +17,7 @@ This Unity project demonstrates the integration of the X3M library, showcasing h
 
 For basic use and demonstration purposes, you'll need:
 
-- Unity 2022.3.54f1 or later
+- Unity 2022.3.50f1 or later
 - Basic knowledge of Unity development
 
 To test with production ads:
@@ -69,7 +69,7 @@ Note: For iOS, you'll need a Mac with Xcode installed. You may also need an Appl
 
 For detailed information on how to use this X3M library implementation in Unity, please refer to the official X3M Ads documentation:
 
-[X3M Ads Unity Documentation](https://docs.x3mads.com/metamediation/unity/)
+[X3M Ads Unity Documentation](https://docs.loomit.x3mads.com/docs/Loomit/SDK%20integration%20guide/unity/Prerequisites/)
 
 This documentation provides comprehensive guides and examples for integrating and utilizing the X3M library in your Unity projects.
 
