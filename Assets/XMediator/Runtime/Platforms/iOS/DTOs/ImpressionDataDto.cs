@@ -17,11 +17,12 @@ namespace XMediator.iOS
         [SerializeField] internal string adSpace;
         [SerializeField] internal string adNetwork;
         [SerializeField] internal string mediation;
+        [SerializeField] internal string id;
         
         internal ImpressionData ToImpressionData()
         {
             return new ImpressionData((decimal) revenue, (decimal) ecpm, placementId, networkName,
-                subNetworkName, creativeId, adSpace, ToLoadResult(), adNetwork, mediation);
+                subNetworkName, creativeId, adSpace, ToLoadResult(), adNetwork, mediation, id);
         }
 
         private LoadResult ToLoadResult()

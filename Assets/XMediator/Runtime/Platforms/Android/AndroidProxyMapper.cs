@@ -62,7 +62,8 @@ namespace XMediator.Android
                     adSpace: impressionData.Call<string>("getAdSpace"),
                     waterfallResult: MapLoadResult(impressionData.Call<AndroidJavaObject>("getWaterfallResult")),
                     adNetwork: impressionData.Call<string>("getAdNetwork"),
-                    mediation: impressionData.Call<string>("getMediation")
+                    mediation: impressionData.Call<string>("getMediation"),
+                    id: impressionData.Call<string>("getId")
                 );
             }
         }

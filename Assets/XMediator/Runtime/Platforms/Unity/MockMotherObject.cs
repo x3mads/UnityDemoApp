@@ -76,7 +76,8 @@ namespace XMediator.Unity
                 adSpace: adSpace,
                 SuccessfulLoadResult,
                 adNetwork: success.AdNetwork,
-                mediation: success.Mediation);
+                mediation: success.Mediation,
+                id: "impression-id");
         }
 
         public static PrebiddingResults PrebiddingResults =>
