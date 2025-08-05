@@ -9,7 +9,9 @@ namespace XMediator
         void Create(string placementId, BannerAds.Size size, BannerAds.Position position);
         
         void Load(string placementId);
-        
+
+        bool IsReady(string placementId);
+
         void SetPosition(string placementId, BannerAds.Position position);
 
         void SetAdSpace(string placementId, string adSpace);

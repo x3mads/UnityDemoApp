@@ -12,6 +12,9 @@ namespace XMediator.Api
     /// <seealso cref="XMediatorAds.Banner"/>
     /// <seealso cref="XMediatorAds.Interstitial"/>
     /// <seealso cref="XMediatorAds.Rewarded"/>
+    /// <seealso cref="XMediatorAds.AppOpen"/>
+    /// <seealso cref="XMediatorAds.CMPProvider"/>
+    /// <seealso cref="XMediatorAds.EventTracker"/>
     /// </summary>
     public static class XMediatorAds
     {
@@ -31,9 +34,21 @@ namespace XMediator.Api
         public static readonly BannerAds Banner = new BannerAds();
         
         /// <summary>
+        /// Entry point for displaying app open ads.
+        /// </summary>
+        public static readonly AppOpenAds AppOpen = new AppOpenAds();
+        
+        /// <summary>
         /// Entry point for interacting with the CMP provider.
         /// </summary>
         public static readonly CMPProviderService CMPProvider = new CMPProviderService();
+        
+        /// <summary>
+        /// Track events such as purchases for analytics and segmentation purposes.
+        /// 
+        /// - Note: The <see cref="EventTracker.Track"/>  method should only be called after the SDK is properly initialized. If [EventTracker.track] is called before SDK initialization, events will be ignored.
+        /// </summary>
+        public static readonly EventTracker EventTracker = new EventTracker();
         
         /// <summary>
         /// Initializes XMediator.
@@ -47,7 +62,7 @@ namespace XMediator.Api
             Action<InitResult> initCallback = null
         )
         {
-            XMediatorMainThreadDispatcherFactory.Create(); 
+            XMediatorMainThreadDispatcherFactory.Create();
             var xMediatorAdsProxy = ProxyFactory.CreateInstance<XMediatorAdsProxy>("XMediatorAdsProxy");
             xMediatorAdsProxy.StartWith(
                 appKey: appKey,

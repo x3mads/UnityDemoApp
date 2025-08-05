@@ -20,13 +20,14 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
                 AddReposAndArtifacts(dependencyList, artifacts, androidRepositories);
             });
             
+            var iOSSources = new HashSet<string>();
             var pods = new HashSet<Pod>();
             ProcessManifest(selectableDependencies.IOSManifest, networks, mediators, dependencyList =>
             {
-                AddPodsAndVersions(dependencyList, pods);
+                AddSourcesAndPods(dependencyList, iOSSources, pods);
             });
             
-            return new ProcessedDependencies(androidRepositories, artifacts, pods);
+            return new ProcessedDependencies(androidRepositories, artifacts, iOSSources, pods);
         }
 
         private static void ProcessManifest<TDependency>(ManifestDto<TDependency> manifest, ICollection<string> networks,
@@ -70,11 +71,15 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
                            && mediators.Contains(a.metamediation_adapter_for));
         }
 
-        private static void AddPodsAndVersions(List<IOSDependencyDto> dependencies, HashSet<Pod> pods)
+        private static void AddSourcesAndPods(List<IOSDependencyDto> dependencies, HashSet<string> iosSources, HashSet<Pod> pods)
         {
             foreach (var dependency in dependencies)
             {
                 pods.Add(new Pod(dependency.pod, dependency.suggested_version));
+                foreach (var source in dependency.repositories)
+                {
+                    iosSources.Add(source);
+                }
             }
         }
 

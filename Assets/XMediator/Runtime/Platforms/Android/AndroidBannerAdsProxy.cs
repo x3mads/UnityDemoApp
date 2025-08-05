@@ -21,6 +21,7 @@ namespace XMediator.Android
         private const string SHOW_METHOD_NAME = "show";
         private const string HIDE_METHOD_NAME = "hide";
         private const string SET_AD_SPACE_METHOD_NAME = "setAdSpace";
+        private const string IS_READY_METHOD_NAME = "isReady";
 
         private static readonly AndroidJavaClass BannerProxy = new AndroidJavaClass(PROXY_CLASSNAME);
         private BannerAdsProxyListener proxyListener;  // Retain instance to avoid losing callbacks
@@ -46,6 +47,11 @@ namespace XMediator.Android
         public void Load(string placementId)
         {
             BannerProxy.CallStatic(LOAD_METHOD_NAME, placementId);
+        }
+
+        public bool IsReady(string placementId)
+        {
+            return BannerProxy.CallStatic<bool>(IS_READY_METHOD_NAME, placementId);
         }
 
         public void SetPosition(string placementId, BannerAds.Position position)

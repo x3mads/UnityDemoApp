@@ -13,6 +13,7 @@ namespace XMediator.Editor.Android
         private const string ProjectPropertiesTemplatePath = "com.x3mads.xmediator/project.properties-TEMPLATE";
         private const string ValidateDependenciesGradleTemplatePath = "com.x3mads.xmediator/validate_dependencies-TEMPLATE.gradle";
         private const string GaidPlaceholder = "<!-- GAID_PLACEHOLDER -->";
+        private const string PackageVersionPlaceholder = "<!-- PACKAGE_VERSION_PLACEHOLDER -->";
         internal const string XMediatorPluginAndroidLibPath = "Plugins/Android/XMediatorPlugin.androidlib";
         internal const string XMediatorPluginAndroidLibMetaPath = "Plugins/Android/XMediatorPlugin.androidlib.meta";
         internal const string AndroidManifestPath = "Plugins/Android/XMediatorPlugin.androidlib/AndroidManifest.xml";
@@ -81,6 +82,8 @@ namespace XMediator.Editor.Android
                 var googleAppId = GetAndroidGaid();
                 manifestText = manifestText.Replace(placeholder, BuildGaidTag(googleAppId));
             }
+            var packageVersion = GetXMediatorPackageVersion();
+            manifestText = manifestText.Replace(PackageVersionPlaceholder, BuildPackageVersionTag(packageVersion));
 
             File.WriteAllText(manifestPath, manifestText);
         }
@@ -89,6 +92,12 @@ namespace XMediator.Editor.Android
         {
             XMediatorSettingsService.Instance.ReloadSettings();
             return XMediatorSettingsService.Instance.AndroidGoogleAdsAppId;
+        }
+        
+        private static string GetXMediatorPackageVersion()
+        {
+            XMediatorSettingsService.Instance.ReloadSettings();
+            return XMediatorSettingsService.Instance.PackageVersion;
         }
 
         private static void CreateProperties()
@@ -133,6 +142,11 @@ namespace XMediator.Editor.Android
         private static string BuildGaidTag(string gaid)
         {
             return $"<meta-data android:name=\"com.google.android.gms.ads.APPLICATION_ID\" android:value=\"{gaid}\"/>";
+        }
+        
+        private static string BuildPackageVersionTag(string packageVersion)
+        {
+            return $"<meta-data android:name=\"com.x3mads.xmediator.UNITY_PACKAGE_VERSION\" android:value=\"{packageVersion}\"/>";
         }
     }
 }

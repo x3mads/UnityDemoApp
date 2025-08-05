@@ -12,6 +12,8 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         private static string MmPlatforms => "mm_platforms";
         private static string MmTagIOS => "mm_tag_ios";
         private static string MmTagAndroid => "mm_tag_android";
+        private static string MmAndroidVersionsUrl => "mm_android_versions_url";
+        private static string MmIOSVersionsUrl => "mm_ios_versions_url";
 
         internal static void Init()
         {
@@ -60,6 +62,16 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
                 Instancies.settingRepository.GetSettingValue(MmTagIOS, "").Trim(),
                 Instancies.settingRepository.GetSettingValue(MmTagAndroid, "").Trim()
                 );
+        }
+        
+        internal string RetrieveAndroidVersionsUrl()
+        {
+            return Instancies.settingRepository.GetSettingValue(MmAndroidVersionsUrl, "");
+        }
+        
+        internal string RetrieveIOSVersionsUrl()
+        {
+            return Instancies.settingRepository.GetSettingValue(MmIOSVersionsUrl, "");
         }
 
         private static string ListToString(IEnumerable<string> setList)

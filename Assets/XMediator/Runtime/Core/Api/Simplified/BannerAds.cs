@@ -150,6 +150,16 @@ namespace XMediator.Api
         }
 
         /// <summary>
+        /// Indicates if a banner ad for the placement id is ready to be shown.
+        /// </summary>
+        /// <param name="placementId">The placement id of the ad.</param>
+        /// <returns>true if an ad is ready to be shown.</returns>
+        public bool IsReady(string placementId)
+        {
+            return _bannerAdsProxy.IsReady(placementId);
+        }
+
+        /// <summary>
         /// Sets the position of a banner.
         /// </summary>
         /// <param name="placementId">The placement id of the banner to change position.</param>

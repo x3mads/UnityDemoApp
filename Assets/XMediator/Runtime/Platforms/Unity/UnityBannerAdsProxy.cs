@@ -22,6 +22,11 @@ namespace XMediator.Unity
             ProxiedAds.Load(placementId);
         }
 
+        public bool IsReady(string placementId)
+        {
+            return ProxiedAds.IsReady(placementId);
+        }
+
         public void SetPosition(string placementId, BannerAds.Position position)
         {
             ProxiedAds.SetPosition(placementId, position);

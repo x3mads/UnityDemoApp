@@ -57,6 +57,10 @@ namespace XMediator.Editor.Tools.Settings
         [CanBeNull]
         private XmlElement GetRootElement()
         {
+            if (SettingsDocument == null)
+            {
+                ReloadFromDisk();
+            }
             var rootElement = SettingsDocument[RootElement];
 
             if (rootElement == null)

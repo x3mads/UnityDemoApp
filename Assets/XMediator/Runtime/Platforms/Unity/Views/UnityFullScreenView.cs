@@ -68,6 +68,7 @@ namespace XMediator.Unity.Views
         {
             if (type == "itt") return Resources.Load<UnityFullScreenView>("com.x3mads.xmediator/Prefabs/Interstitial");
             if (type == "rew") return Resources.Load<UnityFullScreenView>("com.x3mads.xmediator/Prefabs/RewardedVideo");
+            if (type == "apo") return Resources.Load<UnityFullScreenView>("com.x3mads.xmediator/Prefabs/AppOpen");
             return null;
         }
     }

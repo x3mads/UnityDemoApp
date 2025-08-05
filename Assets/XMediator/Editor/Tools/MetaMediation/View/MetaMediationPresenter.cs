@@ -48,7 +48,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         internal MetaMediationPresenter(MetaMediationManagerView view)
         {
             View = view;
-            GetDependencies = new GetDependencies(new DependencyRepository());
+            SettingsRepository = new SettingsRepository();
+            GetDependencies = new GetDependencies(new DependencyRepository(), SettingsRepository);
             GetAllDependencies = new GetAllDependencies(
                 Instancies.apiDependenciesRepository,
                 Instancies.installedDependenciesRepository,
@@ -122,7 +123,6 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void RetrieveFromSettings()
         {
-            SettingsRepository = new SettingsRepository();
             SettingsRepository.Init();
             UpdateSelection(ListToDictionary(SettingsRepository.RetrieveMediations()),
                 ListToDictionary(SettingsRepository.RetrieveNetworks()),

@@ -62,6 +62,14 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void OnGUI()
         {
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Current Versions Checker", GUILayout.Width(160)))
+            {
+                VersionsCheckerEditorWindow.ShowWindow();
+            }
+            GUILayout.EndHorizontal();
+
             if (State.SelectableDependencies != null)
             {
                 PlatformPicker();

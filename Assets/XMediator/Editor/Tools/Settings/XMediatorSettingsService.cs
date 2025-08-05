@@ -103,5 +103,10 @@ namespace XMediator.Editor.Tools.Settings
             get =>  bool.Parse(_settingsRepository.GetSettingValue(SettingsKeys.IsMetaMediation, "False"));
             set => _settingsRepository.SetSettingValue(SettingsKeys.IsMetaMediation, value.ToString());
         }
+        
+        public string PackageVersion
+        {
+            get => _dependenciesRepository.GetVersionValue();
+        }
     }
 }

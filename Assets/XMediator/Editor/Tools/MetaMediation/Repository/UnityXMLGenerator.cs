@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using UnityEditor;
 using XMediator.Editor.Tools.MetaMediation.Entities;
 
 namespace XMediator.Editor.Tools.MetaMediation.Repository
@@ -32,6 +33,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         {
             var androidRepositories = processedDependencies.AndroidRepositories;
             var androidArtifacts = processedDependencies.Artifacts;
+            var iOSSources = processedDependencies.IOSSources;
             var iosPods = processedDependencies.Pods;
             XElement dependencies = new XElement("dependencies");
 
@@ -59,8 +61,8 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
             }
 
             dependencies.Add(androidPackages);
-
-            var iosPodsElement = new XElement("iosPods");
+            
+            var iosPodsElement = new XElement("iosPods", GenerateIOSPodsSources(iOSSources));
 
             iosPodsElement.Add(new XComment("Mediation Libraries"));
             foreach (var iosPod in iosPods)
@@ -93,6 +95,16 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
             }
 
             return repositoriesElement;
+        }
+        
+        private static XElement GenerateIOSPodsSources(HashSet<string> iOSSources)
+        {
+            var sourcesElement = new XElement("sources");
+            foreach (var source in iOSSources)
+            {
+                sourcesElement.Add(new XElement("source", source));
+            }
+            return sourcesElement;
         }
     }
 }

@@ -32,6 +32,8 @@ namespace XMediator.iOS
 
         public void Load(string placementId) => X3MLoadBanner(placementId);
 
+        public bool IsReady(string placementId) => X3MIsReadyBannerWithPlacementId(placementId);
+
         public void SetPosition(string placementId, BannerAds.Position position)
         {
             if (position.IsCustom())
@@ -72,6 +74,9 @@ namespace XMediator.iOS
 
         [DllImport("__Internal")]
         private static extern void X3MLoadBanner(string placementId);
+
+        [DllImport("__Internal")]
+        private static extern bool X3MIsReadyBannerWithPlacementId(string placementId);
 
         [DllImport("__Internal")]
         private static extern bool X3MPresentBannerWithPosition(string placementId, int position);

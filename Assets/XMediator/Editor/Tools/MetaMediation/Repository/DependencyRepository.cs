@@ -18,7 +18,9 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         }
 
 
-        internal async void DownloadAndParseJson(Action<PlatformsDependency> onSuccess,
+        internal async void DownloadAndParseJson(
+            string iOSManifestUrl, string androidManifestUrl,
+            Action<PlatformsDependency> onSuccess,
             Action<Exception> onError)
         {
             var now = DateTime.Now.Ticks.ToString();
@@ -26,7 +28,12 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
             var platformsDependency = new PlatformsDependency();
             try
             {
-                var androidJson = await httpClient.GetStringAsync($"{AndroidManifestUrl}?{now}");
+                var androidUrl =  AndroidManifestUrl;
+                if (androidManifestUrl is { Length: > 0 })
+                {
+                    androidUrl = androidManifestUrl;
+                }
+                var androidJson = await httpClient.GetStringAsync($"{androidUrl}?{now}");
                 var androidManifest = JsonUtility.FromJson<AndroidManifestDto>(androidJson);
                 Debug.Log("Android JSON successfully downloaded and parsed.");
                 Debug.Log("Generated: " + androidManifest);
@@ -41,7 +48,12 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
 
             try
             {
-                var iosJson = await httpClient.GetStringAsync($"{IOSManifestUrl}?{now}");
+                var iosUrl = IOSManifestUrl;
+                if (iOSManifestUrl is { Length: > 0 })
+                {
+                    iosUrl = iOSManifestUrl;
+                }
+                var iosJson = await httpClient.GetStringAsync($"{iosUrl}?{now}");
                 Debug.Log("iOS JSON successfully downloaded: " + iosJson);
                 var iosManifest = JsonUtility.FromJson<IOSManifestDto>(iosJson);
                 Debug.Log("iOS JSON successfully parsed.");

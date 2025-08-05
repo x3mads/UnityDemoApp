@@ -11,15 +11,19 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
     internal class GetDependencies
     {
         private readonly DependencyRepository _repository;
+        private readonly SettingsRepository _settingsRepository; 
 
-        public GetDependencies(DependencyRepository repository)
+        public GetDependencies(DependencyRepository repository, SettingsRepository settingsRepository)
         {
             _repository = repository;
+            _settingsRepository = settingsRepository;
         }
 
         public void Invoke(Action<SelectableDependencies> onSuccess, Action<Exception> onError)
         {
             _repository.DownloadAndParseJson(
+                _settingsRepository.RetrieveIOSVersionsUrl(),
+                _settingsRepository.RetrieveAndroidVersionsUrl(),
                 onSuccess: platformsDependency => { processOnSuccess(onSuccess, onError, platformsDependency); },
                 onError: onError
             );

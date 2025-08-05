@@ -64,6 +64,11 @@ namespace XMediator.Unity
             _banners[placementId].Load(new CustomProperties.Builder().Build());
         }
 
+        public bool IsReady(string placementId)
+        {
+            return _banners.ContainsKey(placementId);
+        }
+
         public void SetPosition(string placementId, BannerAds.Position position)
         {
             if (!_banners.ContainsKey(placementId))
