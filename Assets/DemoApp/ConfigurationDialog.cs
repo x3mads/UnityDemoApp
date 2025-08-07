@@ -10,13 +10,14 @@ namespace DemoApp
 
         [SerializeField] private InputField appKeyInput;
         [SerializeField] private InputField bannerPlacementInput;
+        [SerializeField] private InputField appOpenPlacementInput;
         [SerializeField] private InputField interstitialPlacementInput;
         [SerializeField] private InputField rewardedPlacementInput;
         [SerializeField] private Button confirmButton;
         [SerializeField] private Button cancelButton;
         [SerializeField] private GameObject dialogPanel;
 
-        private Action<string, string, string, string> _onConfirm;
+        private Action<string, string, string, string, string> _onConfirm;
         private Action _onCancel;
 
         private void Awake()
@@ -39,7 +40,7 @@ namespace DemoApp
             cancelButton.onClick.AddListener(OnCancelClicked);
         }
 
-        public void Show(Action<string, string, string, string> confirmCallback, Action cancelCallback = null)
+        public void Show(Action<string, string, string, string, string> confirmCallback, Action cancelCallback = null)
         {
             _onConfirm = confirmCallback;
             _onCancel = cancelCallback;
@@ -63,7 +64,8 @@ namespace DemoApp
                 appKeyInput.text,
                 bannerPlacementInput.text,
                 interstitialPlacementInput.text,
-                rewardedPlacementInput.text
+                rewardedPlacementInput.text,
+                appOpenPlacementInput.text
             );
             gameObject.SetActive(false);
         }

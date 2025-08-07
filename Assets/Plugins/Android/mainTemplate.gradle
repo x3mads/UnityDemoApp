@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.x3mads.android.xmediator.mediation:unity:4.16.0.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:92
     implementation 'com.x3mads.android.xmediator.mediation:vungle:7.5.0.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:96
     implementation 'com.x3mads.android.xmediator:core:1.115.2' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:28
-    implementation 'com.x3mads.android.xmediator:unity-proxy:1.109.0.1' // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:11
+    implementation 'com.x3mads.android.xmediator:unity-proxy:1.117.0.0' // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:11
     implementation 'io.bidmachine:ads:3.3.0' // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:85
 // Android Resolver Dependencies End
 **DEPS**}

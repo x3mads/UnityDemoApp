@@ -10,6 +10,7 @@ namespace DemoApp
         private Toggle _automaticCmpCheckbox;
         private Toggle _fakeEeaCheckbox;
         private Button _initButton;
+        private Button _showAppOpenButton;
         private Button _showInterstitialButton;
         private Button _showRewardedButton;
         private Button _showBannerButton;
@@ -19,6 +20,8 @@ namespace DemoApp
         private GameObject _mediatorsPanel;
 
         private Button _resetButton;
+        
+        private bool _isFromShowFullScreenAd = false;
 
         // Start is called before the first frame update
         private UIControllerViewModel _viewModel;
@@ -33,11 +36,13 @@ namespace DemoApp
             _viewModel.AutomaticCmpToggled += OnAutomaticCMPChanged;
             _viewModel.FakeEeaToggled += OnFakeEEAChanged;
             _viewModel.OnInitSDK += OnInitSDK;
+            _viewModel.AppOpenLoaded += OnLoadAppOpen;
             _viewModel.InterstitialLoaded += OnLoadInterstitial;
             _viewModel.RewardedLoaded += OnLoadRewarded;
             _viewModel.BannerLoaded += OnLoadBanner;
             _viewModel.OnResumeGame += OnResumeGame;
             _viewModel.OnWarning += OnWarning;
+            _viewModel.FromShowFullScreenAd += OnFromShowFullScreenAd;
         }
 
         void Start()
@@ -47,6 +52,7 @@ namespace DemoApp
             _automaticCmpCheckbox = GameObject.Find("AutoCmpToggle").GetComponent<Toggle>();
             _fakeEeaCheckbox = GameObject.Find("FakeRegionToggle").GetComponent<Toggle>();
             _initButton = GameObject.Find("InitButton").GetComponent<Button>();
+            _showAppOpenButton = GameObject.Find("ShowApoButton").GetComponent<Button>();
             _showInterstitialButton = GameObject.Find("ShowIttButton").GetComponent<Button>();
             _showRewardedButton = GameObject.Find("ShowRewButton").GetComponent<Button>();
             _showBannerButton = GameObject.Find("ShowBannerButton").GetComponent<Button>();
@@ -61,6 +67,7 @@ namespace DemoApp
             _automaticCmpCheckbox.onValueChanged.AddListener(_viewModel.ToggleAutomaticCmp);
             _fakeEeaCheckbox.onValueChanged.AddListener(_viewModel.ToggleFakeEea);
             _initButton.onClick.AddListener(_viewModel.InitSDK);
+            _showAppOpenButton.onClick.AddListener(_viewModel.ShowAppOpen);
             _showInterstitialButton.onClick.AddListener(_viewModel.ShowInterstitial);
             _showRewardedButton.onClick.AddListener(_viewModel.ShowRewarded);
             _showBannerButton.onClick.AddListener(_viewModel.ShowBanner);
@@ -70,6 +77,7 @@ namespace DemoApp
 
             // Initialize UI states
             _fakeEeaCheckbox.interactable = _automaticCmpCheckbox.isOn; // Disable Fake EEA checkbox initially if Automatic CMP is off
+            _showAppOpenButton.interactable = false;
             _showInterstitialButton.interactable = false;
             _showRewardedButton.interactable = false;
             _showBannerButton.interactable = false;
@@ -85,9 +93,24 @@ namespace DemoApp
             _viewModel.AutomaticCmpToggled -= OnAutomaticCMPChanged;
             _viewModel.FakeEeaToggled -= OnFakeEEAChanged;
             _viewModel.OnInitSDK -= OnInitSDK;
+            _viewModel.AppOpenLoaded -= OnLoadAppOpen;
             _viewModel.InterstitialLoaded -= OnLoadInterstitial;
             _viewModel.RewardedLoaded -= OnLoadRewarded;
             _viewModel.BannerLoaded -= OnLoadBanner;
+        }
+
+        private void OnFromShowFullScreenAd()
+        {
+            _isFromShowFullScreenAd = true;
+        }
+
+        void OnApplicationPause(bool pauseStatus)
+        {
+            if (!pauseStatus && !_isFromShowFullScreenAd)
+            {
+                _viewModel.ShowAppOpen();
+            }
+            _isFromShowFullScreenAd = false;
         }
 
         private void OnResumeGame()
@@ -133,6 +156,11 @@ namespace DemoApp
             _resetButton.interactable = true;
         }
 
+        private void OnLoadAppOpen()
+        {
+            _showAppOpenButton.interactable = true;
+        }
+
         private void OnLoadInterstitial()
         {
             _showInterstitialButton.interactable = true;
@@ -152,9 +180,11 @@ namespace DemoApp
         {
             ConfigurationDialog dialog = ConfigurationDialog.Instance;
             dialog.Show(
-                (appKey, bannerPlacement, interstitialPlacement, rewardedPlacement) =>
+                (appKey, bannerPlacement, interstitialPlacement, rewardedPlacement, appOpenPlacement) =>
                 {
-                    _viewModel.ApplyCustomConfiguration(new AppConfiguration(appKey, bannerPlacement, interstitialPlacement, rewardedPlacement));
+                    _viewModel.ApplyCustomConfiguration(appOpenPlacement == ""
+                        ? new AppConfiguration(appKey, bannerPlacement, interstitialPlacement, rewardedPlacement)
+                        : new AppConfiguration(appKey, bannerPlacement, interstitialPlacement, rewardedPlacement, appOpenPlacement));
                 }, () =>
                 {
                     _mediatorDropdown.value = 0;
@@ -162,9 +192,7 @@ namespace DemoApp
                 });
         }
 
-        
-        void Update()
-        {
-        }
+
+        void Update() { }
     }
 }

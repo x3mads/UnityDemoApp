@@ -68,7 +68,7 @@
     <package>com.x3mads.android.xmediator.mediation:unity:4.16.0.0</package>
     <package>com.x3mads.android.xmediator.mediation:vungle:7.5.0.0</package>
     <package>com.x3mads.android.xmediator:core:1.115.2</package>
-    <package>com.x3mads.android.xmediator:unity-proxy:1.109.0.1</package>
+    <package>com.x3mads.android.xmediator:unity-proxy:1.117.0.0</package>
     <package>io.bidmachine:ads:3.3.0</package>
   </packages>
   <files />
