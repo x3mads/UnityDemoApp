@@ -11,11 +11,14 @@ namespace DemoApp
         public event Action<bool> AutomaticCmpToggled;
         public event Action<bool> FakeEeaToggled;
         public event Action OnInitSDK;
+        
+        public event Action AppOpenLoaded;
         public event Action InterstitialLoaded;
         public event Action RewardedLoaded;
         public event Action BannerLoaded;
         public event Action<string> OnWarning;
         public event Action OnResumeGame;
+        public event Action FromShowFullScreenAd;
 
         private bool _isAutomaticCmp;
         private bool _isFakeEea;
@@ -29,7 +32,7 @@ namespace DemoApp
             "3-181", "3-181/1153", "3-181/1154", "3-181/1155");
     
         private static readonly AppConfiguration X3MConfiguration = new(
-            "3-15", "3-15/28", "3-15/26", "3-15/27");
+            "3-15", "3-15/28", "3-15/26", "3-15/27","3-15/7399");
 
         private const string ADSpace = "MAIN-SCREEN";
 
@@ -89,7 +92,7 @@ namespace DemoApp
             XMediatorAds.StartWith(
                 appKey: _appConfiguration.AppKey,
                 initSettings: new InitSettings(
-                    verbose: true, // Enable verbose logging
+                    verbose: true, // Enable verbose logging, do not use in production  
                     test: true, // Enable test mode, do not use in production  
                     userProperties: new UserProperties(
                         userId: "test_user"
@@ -98,13 +101,14 @@ namespace DemoApp
                 ),
                 initCallback: result =>
                 {
-                    LoadBanner();
-                    LoadInterstitial();
-                    LoadRewarded();
-                    OnInitSDK?.Invoke();
                     if (result.IsSuccess)
                     {
                         Debug.Log("Initialization complete! You can start loading your placements!");
+                        LoadAppOpen();
+                        LoadBanner();
+                        LoadInterstitial();
+                        LoadRewarded();
+                        OnInitSDK?.Invoke();
                     }
                     else
                     {
@@ -118,6 +122,18 @@ namespace DemoApp
 
         public bool IsPrivacyFormAvailable() => XMediatorAds.CMPProvider.IsPrivacyFormAvailable();
 
+        public void ShowAppOpen()
+        {
+            if (_appConfiguration.AppOpenPlacementId == null)
+            {
+                Debug.Log("AppOpen placement not supported by this Mediator");
+                return;
+            }
+            if (XMediatorAds.AppOpen.IsReady(_appConfiguration.AppOpenPlacementId))
+            {
+                XMediatorAds.AppOpen.ShowFromAdSpace(_appConfiguration.AppOpenPlacementId, ADSpace);
+            }
+        }
         public void ShowInterstitial()
         {
             if (XMediatorAds.Interstitial.IsReady(_appConfiguration.InterstitialPlacementId))
@@ -205,7 +221,11 @@ namespace DemoApp
             };
 
             // Showed Callback
-            XMediatorAds.Rewarded.OnShowed += placementId => { Debug.Log($"Rewarded is being shown! placementId: {placementId}"); };
+            XMediatorAds.Rewarded.OnShowed += placementId =>
+            {
+                FromShowFullScreenAd?.Invoke();
+                Debug.Log($"Rewarded is being shown! placementId: {placementId}");
+            };
 
             // Failed to show callback
             XMediatorAds.Rewarded.OnFailedToShow += (placementId, error) =>
@@ -241,7 +261,11 @@ namespace DemoApp
             };
 
             // Showed Callback
-            XMediatorAds.Interstitial.OnShowed += placementId => { Debug.Log($"Interstitial is being shown! placementId: {placementId}"); };
+            XMediatorAds.Interstitial.OnShowed += placementId =>
+            {
+                FromShowFullScreenAd?.Invoke();
+                Debug.Log($"Interstitial is being shown! placementId: {placementId}");
+            };
 
             // Failed to show callback
             XMediatorAds.Interstitial.OnFailedToShow += (placementId, error) =>
@@ -260,6 +284,49 @@ namespace DemoApp
             };
 
             XMediatorAds.Interstitial.Load(placementId: _appConfiguration.InterstitialPlacementId);
+        }
+        
+        private void LoadAppOpen()
+        {
+            if (_appConfiguration.AppOpenPlacementId == null)
+            {
+                Debug.Log($"AppOpen placement not supported by this Mediator");
+                return;
+            }
+            
+            // Impression Callback
+            XMediatorAds.AppOpen.OnImpression += (placementId, impressionData) => { Debug.Log($"AppOpen impression! placementId: {placementId}"); };
+
+            // Click Callback
+            XMediatorAds.AppOpen.OnClicked += placementId => { Debug.Log($"AppOpen clicked! placementId: {placementId}"); };
+
+            // Load Callback
+            XMediatorAds.AppOpen.OnLoaded += (placementId, result) =>
+            {
+                AppOpenLoaded?.Invoke();
+                Debug.Log($"AppOpen loaded! placementId: {placementId}");
+            };
+
+            // Showed Callback
+            XMediatorAds.AppOpen.OnShowed += placementId => { Debug.Log($"AppOpen is being shown! placementId: {placementId}"); };
+
+            // Failed to show callback
+            XMediatorAds.AppOpen.OnFailedToShow += (placementId, error) =>
+            {
+                // If you need to resume your app's flow, make sure to do it here and in the OnDismissed callback
+                OnResumeGame?.Invoke();
+                Debug.Log($"AppOpen failed to show. placementId: {placementId}, Reason: {error.Message}");
+            };
+
+            // Dismissed callback
+            XMediatorAds.AppOpen.OnDismissed += placementId =>
+            {
+                // If you need to resume your app's flow, make sure to do it here and in the OnFailedToShow callback
+                OnResumeGame?.Invoke();
+                Debug.Log($"AppOpen dismissed! placementId: {placementId}, Resume gameplay");
+            };
+            
+            XMediatorAds.AppOpen.Load(placementId: _appConfiguration.AppOpenPlacementId);
         }
     }
 }
