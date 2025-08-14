@@ -14,7 +14,6 @@
     <package>com.applovin.mediation:inmobi-adapter:10.8.7.0</package>
     <package>com.applovin.mediation:ironsource-adapter:8.10.0.0.0</package>
     <package>com.applovin.mediation:mintegral-adapter:16.9.91.0</package>
-    <package>com.applovin.mediation:mobilefuse-adapter:1.9.2.1</package>
     <package>com.applovin.mediation:moloco-adapter:3.11.0.1</package>
     <package>com.applovin.mediation:ogury-presage-adapter:6.0.1.1</package>
     <package>com.applovin.mediation:unityads-adapter:4.16.0.0</package>
@@ -23,11 +22,22 @@
     <package>com.chartboost:chartboost-sdk:9.9.2</package>
     <package>com.facebook.android:audience-network-sdk:6.20.0</package>
     <package>com.fyber:marketplace-sdk:8.3.8</package>
+    <package>com.google.ads.mediation:applovin:13.3.1.1</package>
+    <package>com.google.ads.mediation:chartboost:9.9.2.0</package>
+    <package>com.google.ads.mediation:facebook:6.20.0.0</package>
+    <package>com.google.ads.mediation:fyber:8.3.8.0</package>
+    <package>com.google.ads.mediation:inmobi:10.8.7.0</package>
+    <package>com.google.ads.mediation:ironsource:8.10.0.0</package>
+    <package>com.google.ads.mediation:mintegral:16.9.91.0</package>
+    <package>com.google.ads.mediation:moloco:3.11.0.0</package>
+    <package>com.google.ads.mediation:pangle:7.3.0.5.0</package>
+    <package>com.google.ads.mediation:unity:4.16.0.0</package>
+    <package>com.google.ads.mediation:vungle:7.5.0.1</package>
     <package>com.google.android.gms:play-services-ads:24.5.0</package>
+    <package>com.hyprmx.android:HyprMX-AdMob:6.4.3.0</package>
     <package>com.hyprmx.android:HyprMX-SDK:6.4.3</package>
     <package>com.inmobi.monetization:inmobi-ads-kotlin:10.8.7</package>
     <package>com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.81</package>
-    <package>com.mobilefuse.sdk:mobilefuse-sdk-core:1.9.2</package>
     <package>com.moloco.sdk.adapters:adapter:3.11.0</package>
     <package>com.pangle.global:pag-sdk:7.3.0.5</package>
     <package>com.unity3d.ads:unity-ads:4.16.0</package>
@@ -42,7 +52,6 @@
     <package>com.unity3d.ads-mediation:inmobi-adapter:4.3.32</package>
     <package>com.unity3d.ads-mediation:mediation-sdk:8.10.0</package>
     <package>com.unity3d.ads-mediation:mintegral-adapter:4.3.45</package>
-    <package>com.unity3d.ads-mediation:mobilefuse-adapter:4.3.7</package>
     <package>com.unity3d.ads-mediation:moloco-adapter:4.3.19</package>
     <package>com.unity3d.ads-mediation:ogury-adapter:4.3.2</package>
     <package>com.unity3d.ads-mediation:pangle-adapter:4.3.48</package>
@@ -59,7 +68,6 @@
     <package>com.x3mads.android.xmediator.mediation:inmobi:10.8.0.0</package>
     <package>com.x3mads.android.xmediator.mediation:ironsource:8.10.0.3</package>
     <package>com.x3mads.android.xmediator.mediation:mintegral:16.9.81.0</package>
-    <package>com.x3mads.android.xmediator.mediation:mobile-fuse:1.9.2.0</package>
     <package>com.x3mads.android.xmediator.mediation:moloco:3.11.0.0</package>
     <package>com.x3mads.android.xmediator.mediation:ogury:6.0.1.0</package>
     <package>com.x3mads.android.xmediator.mediation:pangle:7.3.0.4.0</package>
@@ -84,7 +92,7 @@
     <setting name="packageDir" value="Assets/Plugins/Android" />
     <setting name="patchAndroidManifest" value="True" />
     <setting name="patchMainTemplateGradle" value="True" />
-    <setting name="projectExportEnabled" value="True" />
+    <setting name="projectExportEnabled" value="False" />
     <setting name="useFullCustomMavenRepoPathWhenExport" value="True" />
     <setting name="useFullCustomMavenRepoPathWhenNotExport" value="True" />
     <setting name="useJetifier" value="True" />

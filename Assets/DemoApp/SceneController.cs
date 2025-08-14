@@ -126,7 +126,7 @@ namespace DemoApp
         // ViewModel event handlers
         private void OnMediatorChanged(int selectedIndex)
         {
-            if (selectedIndex == 4)
+            if (selectedIndex == 5)
             {
                 ShowConfigurationDialog();
             }
