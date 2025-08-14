@@ -23,16 +23,65 @@ namespace DemoApp
         private bool _isAutomaticCmp;
         private bool _isFakeEea;
         private AppConfiguration _appConfiguration;
+#if UNITY_IOS
+        private const string X3MAppKey = "3-15";
+        private const string X3MBannerPlacementId = "3-15/28";
+        private const string X3MInterstitialPlacementId = "3-15/26";
+        private const string X3MRewardedPlacementId = "3-15/27";
+
+        private const string MaxAppKey = "V148L42DRG";
+        private const string MaxBannerPlacementId = "V142XB3LRNZCM7";
+        private const string MaxInterstitialPlacementId = "V142XBGL601BCD";
+        private const string MaxRewardedPlacementId = "V142DRKLYD2CVX";
+        private const string MaxAppOpenPlacementId = "V14JHR48HLHAQ304";
+
+        private const string AdmobAppKey = "V148L48DB9";
+        private const string AdmobBannerPlacementId = "V14JHR4VKLPYKX70";
+        private const string AdmobInterstitialPlacementId = "V14JHR4V2LCPBMMY";
+        private const string AdmobRewardedPlacementId = "V14JHR4V3L78QZQ2";
+        private const string AdmobAppOpenPlacementId = "V14JHR4VHLG8A741";
+
+        private const string LPAppKey = "V148L42DR3";
+        private const string LPBannerPlacementId = "V142YBZL36TNH7";
+        private const string LPInterstitialPlacementId = "V142YB3L1J9DKT";
+        private const string LPRewardedPlacementId = "V142YBGLYF22ST";
+#elif UNITY_ANDROID
+        private const string X3MAppKey = "3-15";
+        private const string X3MBannerPlacementId = "3-15/28";
+        private const string X3MInterstitialPlacementId = "3-15/26";
+        private const string X3MRewardedPlacementId = "3-15/27";
 
 
+        private const string MaxAppKey = "V148L42DB1";
+        private const string MaxBannerPlacementId = "V142DR9L2247MG";
+        private const string MaxInterstitialPlacementId = "V142DRJLE1G5XX";
+        private const string MaxRewardedPlacementId = "V142DR4LW2MT4B";
+        private const string MaxAppOpenPlacementId = "V14JHR4ZKL86RTC2";
+
+        private const string AdmobAppKey = "V148L48DBJ";
+        private const string AdmobBannerPlacementId = "V14JHR4Z2LKRFYNP";
+        private const string AdmobInterstitialPlacementId = "V14JHR28KLVMZGXJ";
+        private const string AdmobRewardedPlacementId = "V14JHR282L889BY3";
+        private const string AdmobAppOpenPlacementId = "V14JHR283LMV0WYT";
+
+        private const string LPAppKey = "V148L42DB8";
+        private const string LPBannerPlacementId = "V142DR2LD0QYR1";
+        private const string LPInterstitialPlacementId = "V142DR1L7WJN07";
+        private const string LPRewardedPlacementId = "V142DR8L1DP5ND";
+#endif
+        
         private static readonly AppConfiguration MaxConfiguration = new(
-            "3-180", "3-180/1150", "3-180/1151", "3-180/1152");
-    
+            MaxAppKey, MaxBannerPlacementId, MaxInterstitialPlacementId, MaxRewardedPlacementId, MaxAppOpenPlacementId);
+
         private static readonly AppConfiguration LPConfiguration = new(
-            "3-181", "3-181/1153", "3-181/1154", "3-181/1155");
-    
+            LPAppKey, LPBannerPlacementId, LPInterstitialPlacementId, LPRewardedPlacementId, null);
+
         private static readonly AppConfiguration X3MConfiguration = new(
-            "3-15", "3-15/28", "3-15/26", "3-15/27","3-15/7399");
+            X3MAppKey, X3MBannerPlacementId, X3MInterstitialPlacementId, X3MRewardedPlacementId, null);
+
+        private static readonly AppConfiguration AdmobConfiguration = new(
+            AdmobAppKey, AdmobBannerPlacementId, AdmobInterstitialPlacementId, AdmobRewardedPlacementId, AdmobAppOpenPlacementId);
+
 
         private const string ADSpace = "MAIN-SCREEN";
 
@@ -43,6 +92,7 @@ namespace DemoApp
                 1 => X3MConfiguration,
                 2 => MaxConfiguration,
                 3 => LPConfiguration,
+                4 => AdmobConfiguration,
                 _ => _appConfiguration
             };
 

@@ -6393,6 +6393,8 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: LEVEL PLAY
       m_Image: {fileID: 0}
+    - m_Text: GOOGLE ADS
+      m_Image: {fileID: 0}
     - m_Text: CUSTOM
       m_Image: {fileID: 0}
   m_OnValueChanged:
