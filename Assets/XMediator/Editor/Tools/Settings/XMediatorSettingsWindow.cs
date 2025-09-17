@@ -15,7 +15,6 @@ namespace XMediator.Editor.Tools.Settings
         private bool _isMetaMediation;
         private string _googleAdsAndroidAppId;
         private string _googleAdsIOSAppId;
-        private string _dependencyManagerToken;
         private string _publisher;
 
         private XMediatorSettingsService _settingsService = XMediatorSettingsService.Instance;
@@ -35,7 +34,6 @@ namespace XMediator.Editor.Tools.Settings
             _enableGmaPropertiesTagFix = _settingsService.IsGmaPropertiesTagFixEnabled;
             _googleAdsIOSAppId = _settingsService.IOSGoogleAdsAppId;
             _googleAdsAndroidAppId = _settingsService.AndroidGoogleAdsAppId;
-            _dependencyManagerToken = _settingsService.DependencyManagerToken;
             _publisher = _settingsService.Publisher;
             _isMetaMediation = _settingsService.IsMetaMediation;
             _settingsService.UpdateXMediatorDependenciesFile();
@@ -58,13 +56,6 @@ namespace XMediator.Editor.Tools.Settings
             });
 
             Space(16);
-
-            Label("Dependency Manager Token: ");
-            CheckChanges(_dependencyManagerToken, value => TextField(value), newValue =>
-            {
-                _settingsService.DependencyManagerToken = newValue;
-                _dependencyManagerToken = newValue;
-            });
 
             Space(16);
 

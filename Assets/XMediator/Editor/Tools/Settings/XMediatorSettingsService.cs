@@ -16,7 +16,6 @@ namespace XMediator.Editor.Tools.Settings
             internal const string DisableGoogleAdsAndroidAppId = "disableGoogleAdsAndroidAppId";
             internal const string GmaPropertiesTagFixEnabled = "gmaPropertiesTagFixEnabled";
             internal const string GoogleAdsAndroidAppId = "googleAdsAndroidAppId";
-            internal const string DependencyManagerToken = "dependencyManagerToken";
             internal const string IsMetaMediation = "isMetamediation";
             internal const string Publisher = "publisher";
         }
@@ -48,12 +47,6 @@ namespace XMediator.Editor.Tools.Settings
             {
                 _metaMediationService.AdjustXMediatorDependenciesSettings();
             }
-        }
-
-        public string DependencyManagerToken
-        {
-            get => _settingsRepository.GetSettingValue(SettingsKeys.DependencyManagerToken, "");
-            set => _settingsRepository.SetSettingValue(SettingsKeys.DependencyManagerToken, value);
         }
 
         public string AndroidGoogleAdsAppId

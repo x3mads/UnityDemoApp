@@ -3,7 +3,6 @@
   <disableGoogleAdsAndroidAppId>False</disableGoogleAdsAndroidAppId>
   <googleAdsAndroidAppId>GOOGLE_ADS_ANDROID_APP_ID_PLACEHOLDER</googleAdsAndroidAppId>
   <googleAdsIOSAppId>GOOGLE_ADS_IOS_APP_ID_PLACEHOLDER</googleAdsIOSAppId>
-  <dependencyManagerToken>DEPENDENCY_MANAGER_TOKEN_PLACEHOLDER</dependencyManagerToken>
   <skipSkAdNetworkIdsConfiguration>False</skipSkAdNetworkIdsConfiguration>
   <publisher>PUBLISHER_PLACEHOLDER</publisher>
   <isMetamediation>False</isMetamediation>
