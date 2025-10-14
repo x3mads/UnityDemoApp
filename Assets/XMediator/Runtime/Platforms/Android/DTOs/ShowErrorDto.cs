@@ -6,6 +6,7 @@ namespace XMediator.Android
 {
     internal class ShowErrorDto
     {
+        internal const int UNEXPECTED = -1;
         internal const int SHOW_ERROR_NOT_REQUESTED = 0;
         internal const int SHOW_ERROR_NO_LONGER_AVAILABLE = 1;
         internal const int SHOW_ERROR_LOADING = 2;
@@ -67,6 +68,8 @@ namespace XMediator.Android
                     return new ShowError(ShowError.ErrorType.ShowFailed, Message, AdapterCode, ErrorName);
                 case SHOW_ERROR_ALREADY_USED:
                     return new ShowError(ShowError.ErrorType.AlreadyUsed, Message);
+                case UNEXPECTED:
+                    return new ShowError(ShowError.ErrorType.Unexpected, Message);
                 default:
                     return new ShowError(ShowError.ErrorType.Unexpected, Message);
             }

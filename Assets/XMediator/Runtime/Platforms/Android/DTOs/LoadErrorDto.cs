@@ -6,6 +6,7 @@ namespace XMediator.Android
 {
     internal class LoadErrorDto
     {
+        internal const int UNEXPECTED = 0;
         internal const int REQUEST_FAILED = 1;
         internal const int NO_FILL = 2;
         internal const int ALREADY_USED = 3;
@@ -44,8 +45,10 @@ namespace XMediator.Android
                     return new LoadError(LoadError.ErrorType.NoFill, Message);
                 case ALREADY_USED:
                     return new LoadError(LoadError.ErrorType.AlreadyUsed, Message);
+                case UNEXPECTED:
+                    return new LoadError(LoadError.ErrorType.Unexpected, Message);
                 default:
-                    throw new Exception("Invalid load error type");
+                    return new LoadError(LoadError.ErrorType.Unexpected, "Unexpected error code");
             }
         }
     }

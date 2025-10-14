@@ -24,9 +24,6 @@ dependencyResolutionManagement {
             url "https://repo1.maven.org/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
         }
         maven {
-            url "https://repo.maven.apache.org/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
-        }
-        maven {
             url "https://dl.google.com/dl/android/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
         }
         maven {
@@ -37,6 +34,9 @@ dependencyResolutionManagement {
         }
         maven {
             url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
+        }
+        maven {
+            url "https://repo.maven.apache.org/maven2" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
         }
         maven {
             url "https://maven.ogury.co" // Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27

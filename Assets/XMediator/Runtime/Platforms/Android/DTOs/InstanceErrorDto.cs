@@ -111,7 +111,7 @@ namespace XMediator.Android
                 case ERROR_UNEXPECTED:
                     return InstanceError.ErrorType.Unexpected;
                 default:
-                    throw new Exception("Invalid error type.");
+                    return InstanceError.ErrorType.Unexpected;
             }
         }
     }

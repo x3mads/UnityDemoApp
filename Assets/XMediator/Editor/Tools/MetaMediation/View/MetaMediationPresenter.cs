@@ -299,5 +299,90 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             CurrentTags = CurrentTags.UpdatingIOS(tag);
             CheckAndShowUpdates();
         }
+
+        internal string GetAndroidVersionForNetwork(string networkName)
+        {
+            if (SelectableDependencies?.AndroidManifest == null) return null;
+            
+            var manifest = SelectableDependencies.AndroidManifest.GetDefaultManifest();
+            if (manifest?.networks == null) return null;
+            
+            foreach (var networkDto in manifest.networks)
+            {
+                if (networkDto.display_name.Equals(networkName, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (networkDto.dependencies != null && networkDto.dependencies.Count > 0)
+                    {
+                        return networkDto.dependencies[0].suggested_version;
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal string GetIOSVersionForNetwork(string networkName)
+        {
+            if (SelectableDependencies?.IOSManifest == null) return null;
+            
+            var manifest = SelectableDependencies.IOSManifest.GetDefaultManifest();
+            if (manifest?.networks == null) return null;
+            
+            foreach (var networkDto in manifest.networks)
+            {
+                if (networkDto.display_name.Equals(networkName, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (networkDto.dependencies != null && networkDto.dependencies.Count > 0)
+                    {
+                        return networkDto.dependencies[0].suggested_version;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        internal string GetAndroidVersionForMediator(string mediatorName)
+        {
+            if (SelectableDependencies?.AndroidManifest == null) return null;
+            
+            var manifest = SelectableDependencies.AndroidManifest.GetDefaultManifest();
+            if (manifest?.core == null) return null;
+            
+            // For mediators, we look at the core dependencies
+            foreach (var coreDto in manifest.core)
+            {
+                if (coreDto.group_id != null && coreDto.artifact_name != null)
+                {
+                    var fullName = $"{coreDto.group_id}:{coreDto.artifact_name}";
+                    if (fullName.Contains(mediatorName, StringComparison.OrdinalIgnoreCase) ||
+                        mediatorName.Contains(coreDto.artifact_name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return coreDto.suggested_version;
+                    }
+                }
+            }
+            return null;
+        }
+        
+        internal string GetIOSVersionForMediator(string mediatorName)
+        {
+            if (SelectableDependencies?.IOSManifest == null) return null;
+            
+            var manifest = SelectableDependencies.IOSManifest.GetDefaultManifest();
+            if (manifest?.core == null) return null;
+            
+            // For mediators, we look at the core dependencies
+            foreach (var coreDto in manifest.core)
+            {
+                if (coreDto.pod != null)
+                {
+                    if (coreDto.pod.Contains(mediatorName, StringComparison.OrdinalIgnoreCase) ||
+                        mediatorName.Contains(coreDto.pod, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return coreDto.suggested_version;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
