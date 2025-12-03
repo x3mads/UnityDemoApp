@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using XMediator.Api;
 
@@ -23,6 +24,10 @@ namespace DemoApp
         private bool _isAutomaticCmp;
         private bool _isFakeEea;
         private AppConfiguration _appConfiguration;
+        
+        private const int MaxRetryAttempts = 3;
+        private const float BaseRetryDelaySeconds = 2f;
+        private int _currentRetryAttempt;
 #if UNITY_IOS
         private const string X3MAppKey = "3-15";
         private const string X3MBannerPlacementId = "3-15/28";
@@ -154,6 +159,7 @@ namespace DemoApp
                     if (result.IsSuccess)
                     {
                         Debug.Log("Initialization complete! You can start loading your placements!");
+                        _currentRetryAttempt = 0;
                         LoadAppOpen();
                         LoadBanner();
                         LoadInterstitial();
@@ -164,10 +170,45 @@ namespace DemoApp
                     {
                         result.TryGetFailure(out var failure);
                         Debug.Log("Initialization failed: " + failure.ErrorDescription);
-                        OnWarning?.Invoke("Initialization failed: " + failure.ErrorDescription);
+                        
+                        if (_currentRetryAttempt < MaxRetryAttempts)
+                        {
+                            _currentRetryAttempt++;
+                            Debug.Log($"Retrying initialization (attempt {_currentRetryAttempt}/{MaxRetryAttempts})...");
+                            RetryInitializationAsync();
+                        }
+                        else
+                        {
+                            _currentRetryAttempt = 0;
+                            OnWarning?.Invoke("Initialization failed after " + MaxRetryAttempts + " retries: " + failure.ErrorDescription);
+                        }
                     }
                 }
             );
+        }
+        
+        private async void RetryInitializationAsync()
+        {
+            try
+            {
+                var delaySeconds = BaseRetryDelaySeconds * Math.Pow(2, _currentRetryAttempt - 1);
+                Debug.Log($"Waiting {delaySeconds} seconds before retry...");
+                await Task.Delay((int)(delaySeconds * 1000));
+                
+                if (XMediatorAds.IsInitialized())
+                {
+                    Debug.Log("SDK already initialized, skipping retry.");
+                    _currentRetryAttempt = 0;
+                    return;
+                }
+                
+                InitSDK();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Retry initialization failed with exception: {e.Message}");
+                _currentRetryAttempt = 0;
+            }
         }
 
         public bool IsPrivacyFormAvailable() => XMediatorAds.CMPProvider.IsPrivacyFormAvailable();
