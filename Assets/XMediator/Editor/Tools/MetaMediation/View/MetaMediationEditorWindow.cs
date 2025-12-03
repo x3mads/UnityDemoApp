@@ -15,6 +15,12 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private const long ProgressBarEstimatedTime = 2000;
         private const int BaseHeight = 520;
+        private const long VerticalSpacingHeight = 10;
+        private const long GenerateDependenciesButtonHeight = 30;
+        private const long PlatformButtonHeight = 25;
+        private const long VersionsCheckerButtonHeight = 20;
+        private const long DefaultLabelHeight = 20;
+        private const long DefaultPaddingHeight = 4;
         internal const string DependencyManagerMenu = "XMediator/Mediators Dependency Manager";
 
         private bool _isAndroidSelected = true;
@@ -22,8 +28,10 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private readonly Dictionary<string, bool> _mediatorSelection = new();
         private readonly Dictionary<string, bool> _adNetworkSelection = new();
+        private readonly Dictionary<string, bool> _toolSelection = new();
         private readonly Dictionary<string, bool> _previousAdNetworkSelection = new();
         private readonly Dictionary<string, bool> _previousMediatorSelection = new();
+        private readonly Dictionary<string, bool> _previousToolSelection = new();
 
         private string _adNetworkSearchTerm = "";
 
@@ -72,7 +80,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Current Versions Checker", GUILayout.Width(160)))
+            if (GUILayout.Button("Current Versions Checker", GUILayout.Width(160), GUILayout.Height(VersionsCheckerButtonHeight)))
             {
                 VersionsCheckerEditorWindow.ShowWindow();
             }
@@ -83,6 +91,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 PlatformPicker();
                 MediatorsPicker();
                 NetworkPicker();
+                ToolsPicker();
                 GenerateDependenciesButton();
             }
 
@@ -108,6 +117,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             // Initialize previous network and mediator selection with current state
             InitializePreviousNetworkSelection();
             InitializePreviousMediatorSelection();
+            InitializePreviousToolSelection();
         }
 
         public void OnGeneratedDependencies(bool isError, string message)
@@ -145,7 +155,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void GenerateDependenciesButton()
         {
-            if (GUILayout.Button("Generate Dependencies", GUILayout.Height(30)))
+            if (GUILayout.Button("Generate Dependencies", GUILayout.Height(GenerateDependenciesButtonHeight)))
             {
                 GenerateDependenciesAction();
             }
@@ -161,17 +171,16 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void PlatformPicker()
         {
-            GUILayout.Space(10);
             GUILayout.Label("Platform Selection", EditorStyles.boldLabel);
 
             GUILayout.BeginHorizontal("box");
 
             GUILayout.BeginVertical();
-            _isAndroidSelected = GUILayout.Toggle(_isAndroidSelected, "Android", "Button", GUILayout.Height(25), GUILayout.MaxWidth(position.width / 2));
+            _isAndroidSelected = GUILayout.Toggle(_isAndroidSelected, "Android", "Button", GUILayout.Height(PlatformButtonHeight), GUILayout.MaxWidth(position.width / 2));
             GUILayout.EndVertical();
             
             GUILayout.BeginVertical();
-            _isIosSelected = GUILayout.Toggle(_isIosSelected, "iOS", "Button", GUILayout.Height(25), GUILayout.MaxWidth(position.width / 2));
+            _isIosSelected = GUILayout.Toggle(_isIosSelected, "iOS", "Button", GUILayout.Height(PlatformButtonHeight), GUILayout.MaxWidth(position.width / 2));
             if (_isIosSelected)
             {
                 IOSLegacySupportTagsPicker();
@@ -180,7 +189,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(10);
+            GUILayout.Space(VerticalSpacingHeight);
         }
         
         private void IOSLegacySupportTagsPicker()
@@ -231,9 +240,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             GUILayout.Label("Ad Network Selection", EditorStyles.boldLabel);
             GUILayout.BeginVertical("box");
 
-            GUILayout.Space(10);
             _adNetworkSearchTerm = EditorGUILayout.TextField("Search", _adNetworkSearchTerm, GUILayout.MaxWidth(400));
-            GUILayout.Space(10);
+            GUILayout.Space(VerticalSpacingHeight);
             var adNetworks = State.SelectableDependencies.Networks.ToList();
             foreach (var network in adNetworks.Where(network => !_adNetworkSelection.ContainsKey(network)))
             {
@@ -247,8 +255,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
             // Calculate columns based on window width
             int columns = Mathf.Max(1, Mathf.FloorToInt(position.width / 225));
-            
-            bool networkChanged = false;
+
             for (var i = 0; i < sortedAdNetworks.Count; i += columns)
             {
                 GUILayout.BeginHorizontal();
@@ -257,13 +264,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                     var index = i + j;
                     if (index >= sortedAdNetworks.Count) continue;
                     var key = sortedAdNetworks[index].Key;
-                    var previousValue = _adNetworkSelection[key];
                     _adNetworkSelection[key] = EditorGUILayout.ToggleLeft(key, _adNetworkSelection[key],
                         GUILayout.MaxWidth(position.width / columns - 10));
-                    if (previousValue != _adNetworkSelection[key])
-                    {
-                        networkChanged = true;
-                    }
                 }
 
                 GUILayout.EndHorizontal();
@@ -271,7 +273,40 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
             GUILayout.EndVertical();
 
-            GUILayout.Space(20);
+            GUILayout.Space(VerticalSpacingHeight);
+        }
+
+        private void ToolsPicker()
+        {
+            // Skip if no tools are available
+            if (State.SelectableDependencies.Tools == null || State.SelectableDependencies.Tools.Count == 0)
+            {
+                return;
+            }
+
+            GUILayout.Label("Additional Tools", EditorStyles.boldLabel);
+            GUILayout.BeginVertical("box");
+
+            foreach (var toolKvp in State.SelectableDependencies.Tools.OrderBy(t => t.Value.DisplayName))
+            {
+                var toolKey = toolKvp.Key;
+                var toolInfo = toolKvp.Value;
+                
+                _toolSelection.TryAdd(toolKey, (Presenter.CurrentTools?.Contains(toolKey) ?? false) || toolInfo.PreSelected);
+                
+                var previousValue = _toolSelection[toolKey];
+                var tooltip = new GUIContent(toolInfo.DisplayName, toolInfo.Description);
+                _toolSelection[toolKey] = EditorGUILayout.ToggleLeft(tooltip, _toolSelection[toolKey]);
+                
+                if (previousValue != _toolSelection[toolKey])
+                {
+                    Presenter.RefreshUpdatesWithNewSelection(_mediatorSelection, _adNetworkSelection, _toolSelection, _isAndroidSelected, _isIosSelected);
+                }
+            }
+
+            GUILayout.EndVertical();
+
+            GUILayout.Space(VerticalSpacingHeight);
         }
 
         private void MediatorsPicker()
@@ -298,11 +333,11 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
             GUILayout.EndVertical();
 
-            GUILayout.Space(10);
+            GUILayout.Space(VerticalSpacingHeight);
 
             if (dirty)
             {
-                Presenter.RefreshUpdatesWithNewSelection(_mediatorSelection, _adNetworkSelection, _isAndroidSelected, _isIosSelected);
+                Presenter.RefreshUpdatesWithNewSelection(_mediatorSelection, _adNetworkSelection, _toolSelection, _isAndroidSelected, _isIosSelected);
             }
         }
 
@@ -314,12 +349,13 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 $"This action will remove or update the previously generated dependencies. Do you wish to proceed?",
                 "Yes", "Cancel");
             if (result != 0) return;
-            Presenter.UpdateSelection(_mediatorSelection, _adNetworkSelection, _isAndroidSelected, _isIosSelected);
+            Presenter.UpdateSelection(_mediatorSelection, _adNetworkSelection, _toolSelection, _isAndroidSelected, _isIosSelected);
             Debug.Log("Generating dependencies");
             
-            // Clear network and mediator changes after generating dependencies
+            // Clear network, mediator, and tool changes after generating dependencies
             UpdatePreviousNetworkSelection();
             UpdatePreviousMediatorSelection();
+            UpdatePreviousToolSelection();
             
             Presenter.GenerateAndSaveDependencies();
         }
@@ -366,16 +402,16 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private void DisplayUpdateResults()
         {
-            if (Presenter.UpdateResults == null && Presenter.CoreUpdateResult == null && !HasNetworkChanges() && !HasMediatorChanges()) return;
+            if (Presenter.UpdateResults == null && Presenter.CoreUpdateResult == null && !HasAdapterChanges() && !HasMediatorChanges()) return;
             
             var androidDiff = Presenter.UpdateResults?.Item1;
             var iosDiff = Presenter.UpdateResults?.Item2;
 
-            GUILayout.Space(8);
-            if (ShouldShowDependencyUpdates(androidDiff, iosDiff) || ShouldShowCoreUpdates() || HasNetworkChanges() || HasMediatorChanges())
+            GUILayout.Space(DefaultPaddingHeight * 2);
+            if (ShouldShowDependencyUpdates(androidDiff, iosDiff) || ShouldShowCoreUpdates() || HasAdapterChanges() || HasMediatorChanges())
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(EditorGUIUtility.IconContent("console.warnicon"), GUILayout.Width(20), GUILayout.Height(20));
+                GUILayout.Label(EditorGUIUtility.IconContent("console.warnicon"), GUILayout.Width(20), GUILayout.Height(DefaultLabelHeight));
                 GUILayout.Label("You have updates (Run \"Generate dependencies\" to apply them)", EditorStyles.boldLabel);
                 GUILayout.EndHorizontal();
             }
@@ -387,12 +423,12 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             // Calculate precise content height based on actual items to display
             int contentHeight = 0;
             
-            // Network changes section height
-            if (HasNetworkChanges())
+            // Adapter changes section height
+            if (HasAdapterChanges())
             {
-                var (addedNetworks, removedNetworks) = GetNetworkChanges();
+                var (addedAdapter, removedAdapter) = GetAdapterChanges();
                 contentHeight += 40; // Section header + spacing
-                contentHeight += (addedNetworks.Count + removedNetworks.Count) * 25; // Each item + spacing
+                contentHeight += (addedAdapter.Count + removedAdapter.Count) * 25; // Each item + spacing
                 contentHeight += 20; // Box padding
             }
             
@@ -429,14 +465,11 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             
             contentHeight += 30; // Additional padding for safety
             
-            // Precise calculation of available window space
-            float headerHeight = 90; // Height of UI elements above the updates section
-            int columns = Mathf.Max(1, Mathf.FloorToInt(position.width / 225)); // Number of columns for networks
-            float additionalUIHeight = 260; // Other UI elements (platform selectors, etc.)
-            float topUIHeight = headerHeight + additionalUIHeight;
+            // Dynamic calculation of UI height above the updates section
+            float topUIHeight = CalculateTopUIHeight();
             
-            // Reserve space at bottom of window - increased to ensure content doesn't overflow
-            float bottomMargin = Mathf.Max(135f,220 - (columns - 3) * 30);
+            // Reserve space at bottom of window for the Generate Dependencies margin
+            float bottomMargin = VerticalSpacingHeight + DefaultPaddingHeight;
             
             // Calculate available height
             float availableHeight = position.height - topUIHeight - bottomMargin;
@@ -464,9 +497,6 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             // Explicitly end vertical layout
             GUILayout.EndVertical();
             
-            // Add explicit bottom margin to ensure content doesn't overflow
-            GUILayout.Space(bottomMargin);
-            
             // Monitor window size changes 
             if (Event.current.type == EventType.Layout)
             {
@@ -477,6 +507,71 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                     Repaint();
                 }
             }
+        }
+
+        private float CalculateTopUIHeight()
+        {
+            float height = 0;
+            
+            // "Current Versions Checker" button at top
+            height += VersionsCheckerButtonHeight + DefaultPaddingHeight * 2; // Button height + padding
+            
+            // Platform Selection section
+            height += DefaultLabelHeight; // "Platform Selection" label
+            height += PlatformButtonHeight; // Platform toggles (Android/iOS buttons)
+            
+            // iOS Legacy Support tags (if iOS is selected and tags exist)
+            if (_isIosSelected && State.SelectableDependencies?.IOSManifest != null)
+            {
+                var tagOptions = State.SelectableDependencies.IOSManifest.GetLegacySupportTags();
+                if (tagOptions.Count > 0)
+                {
+                    height += DefaultLabelHeight; // Legacy Support dropdown
+                }
+            }
+            height += VerticalSpacingHeight; // Bottom spacing after platform section
+            
+            // Mediator Selection section
+            height += DefaultLabelHeight; // "Mediator Selection" label
+            height += DefaultPaddingHeight; // Box padding top
+            int mediatorCount = State.SelectableDependencies?.Mediations?.Count ?? 0;
+            height += mediatorCount * DefaultLabelHeight; // Each mediator toggle
+            height += DefaultPaddingHeight; // Box padding bottom
+            height += VerticalSpacingHeight; // Bottom spacing
+            
+            // Ad Network Selection section
+            height += DefaultLabelHeight; // "Ad Network Selection" label 220
+            height += DefaultPaddingHeight; // Box padding top
+            height += DefaultLabelHeight; // Search field
+            height += VerticalSpacingHeight; // Spacing after search
+            
+            // Calculate network rows based on columns
+            int columns = Mathf.Max(1, Mathf.FloorToInt(position.width / 225));
+            int networkCount = State.SelectableDependencies?.Networks?.Count ?? 0;
+            int networkRows = Mathf.CeilToInt((float)networkCount / columns);
+            height += networkRows * DefaultLabelHeight; // Each network row
+            height += DefaultPaddingHeight; // Box padding bottom
+            height += VerticalSpacingHeight; // Bottom spacing
+            
+            // Additional Tools section (if tools exist)
+            if (State.SelectableDependencies?.Tools != null && State.SelectableDependencies.Tools.Count > 0)
+            {
+                height += DefaultLabelHeight; // "Additional Tools" label
+                height += DefaultPaddingHeight; // Box padding top
+                int toolCount = State.SelectableDependencies.Tools.Count;
+                height += toolCount * DefaultLabelHeight; // Each tool toggle
+                height += DefaultPaddingHeight; // Box padding bottom
+                height += VerticalSpacingHeight; // Bottom spacing
+            }
+            
+            // "Generate Dependencies" button
+            height += GenerateDependenciesButtonHeight; // Button height
+            
+            // "You have updates" warning header
+            height += DefaultPaddingHeight * 2; // Top spacing
+            height += DefaultLabelHeight; // Warning/status message
+            
+            return height;
         }
 
         private bool ShouldShowCoreUpdates()
@@ -492,8 +587,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         private void DisplayUpdateResultsScrollView(int contentHeight, Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> androidDiff, Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> iosDiff)
         {
             
-            var filteredAndroidDiff = FilterAndroidUpdatesForRemovedNetworks(androidDiff);
-            var filteredIosDiff = FilterIOSUpdatesForRemovedNetworks(iosDiff);
+            var filteredAndroidDiff = FilterAndroidUpdatesForRemovedAdapters(androidDiff);
+            var filteredIosDiff = FilterIOSUpdatesForRemovedAdapters(iosDiff);
             
             if (HasMediatorChanges())
             {
@@ -521,25 +616,25 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 GUILayout.EndVertical();
             }
             
-            if (HasNetworkChanges())
+            if (HasAdapterChanges())
             {
-                var (addedNetworks, removedNetworks) = GetNetworkChanges();
+                var (addedAdapters, removedAdapters) = GetAdapterChanges();
                 GUILayout.Space(8);
-                GUILayout.Label("Ad Network Changes:", EditorStyles.boldLabel);
+                GUILayout.Label("Adapter Changes:", EditorStyles.boldLabel);
                 GUILayout.Space(6);
                 GUILayout.BeginVertical("box");
                 
-                foreach (var networkInfo in addedNetworks)
+                foreach (var networkInfo in addedAdapters)
                 {
                     var versionText = GetVersionDisplayText(networkInfo);
-                    GUILayout.Label($"<color=green>+ {networkInfo.NetworkName}</color> (Added){versionText}",
+                    GUILayout.Label($"<color=green>+ {networkInfo.AdapterName}</color> (Added){versionText}",
                         new GUIStyle(EditorStyles.label) { richText = true, wordWrap = true });
                     GUILayout.Space(3);
                 }
                 
-                foreach (var networkInfo in removedNetworks)
+                foreach (var networkInfo in removedAdapters)
                 {
-                    GUILayout.Label($"<color=red>- {networkInfo.NetworkName}</color> (Removed)",
+                    GUILayout.Label($"<color=red>- {networkInfo.AdapterName}</color> (Removed)",
                         new GUIStyle(EditorStyles.label) { richText = true, wordWrap = true });
                     GUILayout.Space(3);
                 }
@@ -601,83 +696,57 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private static double EaseOutQuint(float x) => 1 - Math.Pow(1 - x, 5);
 
-        private Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> FilterAndroidUpdatesForRemovedNetworks(Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> androidDiff)
+        private Dictionary<TKey, TValue> FilterUpdatesForRemovedAdapters<TKey, TValue>(
+            Dictionary<TKey, TValue> diff,
+            Func<TKey, (string name, string group)> extractIdentifiers)
         {
-            if (androidDiff == null) return null;
+            if (diff == null) return null;
             
-            var (_, removedNetworks) = GetNetworkChanges();
-            if (removedNetworks.Count == 0) return androidDiff;
+            var (_, removedAdapters) = GetAdapterChanges();
+            if (removedAdapters.Count == 0) return diff;
             
-            var filteredDiff = new Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto>();
-            
-            foreach (var kvp in androidDiff)
+            var filteredDiff = new Dictionary<TKey, TValue>();
+            foreach (var kvp in diff)
             {
-                var package = kvp.Key;
-                var dependency = kvp.Value;
-                
-                bool belongsToRemovedNetwork = false;
-                foreach (var removedNetwork in removedNetworks)
+                var (dependencyName, group) = extractIdentifiers(kvp.Key);
+                bool belongsToRemovedAdapter = false;
+                foreach (var removedAdapter in removedAdapters)
                 {
-                    if (DoesDependencyBelongToNetwork(package.Artifact, package.Group, removedNetwork.NetworkName))
+                    if (DoesDependencyBelongToAdapter(dependencyName, group, removedAdapter.AdapterName))
                     {
-                        belongsToRemovedNetwork = true;
+                        belongsToRemovedAdapter = true;
                         break;
                     }
                 }
                 
-                if (!belongsToRemovedNetwork)
+                if (!belongsToRemovedAdapter)
                 {
-                    filteredDiff[package] = dependency;
+                    filteredDiff[kvp.Key] = kvp.Value;
                 }
             }
             
             return filteredDiff;
         }
         
-        private Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> FilterIOSUpdatesForRemovedNetworks(Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> iosDiff)
+        private Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> FilterAndroidUpdatesForRemovedAdapters(Dictionary<MetaMediationDependencies.AndroidPackage, AndroidDependencyDto> androidDiff)
         {
-            if (iosDiff == null) return null;
-            
-            var (_, removedNetworks) = GetNetworkChanges();
-            if (removedNetworks.Count == 0) return iosDiff;
-            
-            var filteredDiff = new Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto>();
-            
-            foreach (var kvp in iosDiff)
-            {
-                var pod = kvp.Key;
-                var dependency = kvp.Value;
-                
-                // Check if this dependency belongs to a removed network
-                bool belongsToRemovedNetwork = false;
-                foreach (var removedNetwork in removedNetworks)
-                {
-                    if (DoesDependencyBelongToNetwork(pod.Name, null, removedNetwork.NetworkName))
-                    {
-                        belongsToRemovedNetwork = true;
-                        break;
-                    }
-                }
-                
-                
-                if (!belongsToRemovedNetwork)
-                {
-                    filteredDiff[pod] = dependency;
-                }
-            }
-            
-            return filteredDiff;
+            return FilterUpdatesForRemovedAdapters(androidDiff, package => (package.Artifact, package.Group));
         }
         
-        private bool DoesDependencyBelongToNetwork(string dependencyName, string dependencyGroup, string networkName)
+        private Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> FilterIOSUpdatesForRemovedAdapters(Dictionary<MetaMediationDependencies.IosPod, IOSDependencyDto> iosDiff)
         {
-            var lowerNetworkName = networkName.ToLower();
+            return FilterUpdatesForRemovedAdapters(iosDiff, pod => (pod.Name, null));
+        }
+        
+        private bool DoesDependencyBelongToAdapter(string dependencyName, string dependencyGroup, string adapterName)
+        {
+            var lowerAdapterName = adapterName.ToLower();
             var lowerDependencyName = dependencyName.ToLower();
             var lowerDependencyGroup = dependencyGroup?.ToLower();
             
-            return lowerDependencyName.Contains(lowerNetworkName) || 
-                   lowerNetworkName.Contains(lowerDependencyName) ||
-                   (lowerDependencyGroup != null && (lowerDependencyGroup.Contains(lowerNetworkName) || lowerNetworkName.Contains(lowerDependencyGroup)));
+            return lowerDependencyName.Contains(lowerAdapterName) || 
+                   lowerAdapterName.Contains(lowerDependencyName) ||
+                   (lowerDependencyGroup != null && (lowerDependencyGroup.Contains(lowerAdapterName) || lowerAdapterName.Contains(lowerDependencyGroup)));
         }
 
         private void UpdatePreviousNetworkSelection()
@@ -695,6 +764,15 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             foreach (var kvp in _mediatorSelection)
             {
                 _previousMediatorSelection[kvp.Key] = kvp.Value;
+            }
+        }
+        
+        private void UpdatePreviousToolSelection()
+        {
+            _previousToolSelection.Clear();
+            foreach (var kvp in _toolSelection)
+            {
+                _previousToolSelection[kvp.Key] = kvp.Value;
             }
         }
         
@@ -721,60 +799,63 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 _previousMediatorSelection[mediator] = isCurrentlySelected;
             }
         }
-
-        private (List<NetworkChangeInfo> addedNetworks, List<NetworkChangeInfo> removedNetworks) GetNetworkChanges()
+        
+        private void InitializePreviousToolSelection()
         {
-            var addedNetworks = new List<NetworkChangeInfo>();
-            var removedNetworks = new List<NetworkChangeInfo>();
-
-            foreach (var kvp in _adNetworkSelection)
+            if (State.SelectableDependencies == null || Presenter == null) return;
+            
+            _previousToolSelection.Clear();
+            foreach (var tool in State.SelectableDependencies.Tools.Keys)
             {
-                var networkName = kvp.Key;
+                var isCurrentlySelected = Presenter.CurrentTools?.Contains(tool) ?? false;
+                _previousToolSelection[tool] = isCurrentlySelected;
+            }
+        }
+
+        private (List<T> added, List<T> removed) GetChanges<T>(
+            Dictionary<string, bool> currentSelection,
+            Dictionary<string, bool> previousSelection,
+            Func<string, T> createChangeInfo)
+        {
+            var added = new List<T>();
+            var removed = new List<T>();
+
+            foreach (var kvp in currentSelection)
+            {
+                var name = kvp.Key;
                 var currentlySelected = kvp.Value;
-                var previouslySelected = _previousAdNetworkSelection.ContainsKey(networkName) && _previousAdNetworkSelection[networkName];
+                var previouslySelected = previousSelection.ContainsKey(name) && previousSelection[name];
 
                 if (currentlySelected && !previouslySelected)
                 {
-                    addedNetworks.Add(GetNetworkChangeInfo(networkName));
+                    added.Add(createChangeInfo(name));
                 }
                 else if (!currentlySelected && previouslySelected)
                 {
-                    removedNetworks.Add(GetNetworkChangeInfo(networkName));
+                    removed.Add(createChangeInfo(name));
                 }
             }
 
-            return (addedNetworks, removedNetworks);
+            return (added, removed);
+        }
+
+        private (List<AdapterChangeInfo> added, List<AdapterChangeInfo> removed) GetAdapterChanges()
+        {
+            var (added, removed) = GetChanges(_adNetworkSelection, _previousAdNetworkSelection, GetAdapterChangeInfo);
+            var (added2, removed2) = GetChanges(_toolSelection, _previousToolSelection, GetAdapterChangeInfo);
+            return (added.Concat(added2).ToList(), removed.Concat(removed2).ToList());
         }
         
         private (List<MediatorChangeInfo> addedMediators, List<MediatorChangeInfo> removedMediators) GetMediatorChanges()
         {
-            var addedMediators = new List<MediatorChangeInfo>();
-            var removedMediators = new List<MediatorChangeInfo>();
-
-            foreach (var kvp in _mediatorSelection)
-            {
-                var mediatorName = kvp.Key;
-                var currentlySelected = kvp.Value;
-                var previouslySelected = _previousMediatorSelection.ContainsKey(mediatorName) && _previousMediatorSelection[mediatorName];
-
-                if (currentlySelected && !previouslySelected)
-                {
-                    addedMediators.Add(GetMediatorChangeInfo(mediatorName));
-                }
-                else if (!currentlySelected && previouslySelected)
-                {
-                    removedMediators.Add(GetMediatorChangeInfo(mediatorName));
-                }
-            }
-
-            return (addedMediators, removedMediators);
+            return GetChanges(_mediatorSelection, _previousMediatorSelection, GetMediatorChangeInfo);
         }
 
-        private NetworkChangeInfo GetNetworkChangeInfo(string networkName)
+        private AdapterChangeInfo GetAdapterChangeInfo(string dependencyName)
         {
-            var androidVersion = Presenter.GetAndroidVersionForNetwork(networkName);
-            var iosVersion = Presenter.GetIOSVersionForNetwork(networkName);
-            return new NetworkChangeInfo(networkName, androidVersion, iosVersion);
+            var androidVersion = Presenter.GetAndroidVersionForAdapter(dependencyName);
+            var iosVersion = Presenter.GetIOSVersionForAdapter(dependencyName);
+            return new AdapterChangeInfo(dependencyName, androidVersion, iosVersion);
         }
         
         private MediatorChangeInfo GetMediatorChangeInfo(string mediatorName)
@@ -784,19 +865,18 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             return new MediatorChangeInfo(mediatorName, androidVersion, iosVersion);
         }
 
-
-        private string GetVersionDisplayText(NetworkChangeInfo networkInfo)
+        private string GetVersionDisplayText(AdapterChangeInfo adapterInfo)
         {
             var versions = new List<string>();
             
-            if (!string.IsNullOrEmpty(networkInfo.AndroidVersion))
+            if (!string.IsNullOrEmpty(adapterInfo.AndroidVersion))
             {
-                versions.Add($"Android: {networkInfo.AndroidVersion}");
+                versions.Add($"Android: {adapterInfo.AndroidVersion}");
             }
             
-            if (!string.IsNullOrEmpty(networkInfo.IOSVersion))
+            if (!string.IsNullOrEmpty(adapterInfo.IOSVersion))
             {
-                versions.Add($"iOS: {networkInfo.IOSVersion}");
+                versions.Add($"iOS: {adapterInfo.IOSVersion}");
             }
             
             return versions.Count > 0 ? $" - {string.Join(", ", versions)}" : "";
@@ -819,15 +899,15 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             return versions.Count > 0 ? $" - {string.Join(", ", versions)}" : "";
         }
 
-        private class NetworkChangeInfo
+        private class AdapterChangeInfo
         {
-            public string NetworkName { get; }
+            public string AdapterName { get; }
             public string AndroidVersion { get; }
             public string IOSVersion { get; }
 
-            public NetworkChangeInfo(string networkName, string androidVersion, string iosVersion)
+            public AdapterChangeInfo(string adapterName, string androidVersion, string iosVersion)
             {
-                NetworkName = networkName;
+                AdapterName = adapterName;
                 AndroidVersion = androidVersion;
                 IOSVersion = iosVersion;
             }
@@ -847,10 +927,10 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             }
         }
 
-        private bool HasNetworkChanges()
+        private bool HasAdapterChanges()
         {
-            var (addedNetworks, removedNetworks) = GetNetworkChanges();
-            return addedNetworks.Count > 0 || removedNetworks.Count > 0;
+            var (added, removed) = GetAdapterChanges();
+            return added.Count > 0 || removed.Count > 0;
         }
         
         private bool HasMediatorChanges()

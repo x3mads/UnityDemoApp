@@ -17,6 +17,7 @@ namespace XMediator.Android
         private const string ADD_LISTENER_METHOD_NAME = "addListener";
         private const string LOAD_METHOD_NAME = "load";
         private const string IS_READY_METHOD_NAME = "isReady";
+        private const string IS_AD_SPACE_CAPPED_METHOD_NAME = "isAdSpaceCapped";
         private const string SHOW_METHOD_NAME = "show";
         private const string SHOW_FROM_AD_SPACE_METHOD_NAME = "showFromAdSpace";
         
@@ -24,6 +25,7 @@ namespace XMediator.Android
         private InterstitialAdsProxyListener proxyListener; // Retain instance to avoid losing callbacks
         private XMediatorMultipleDebouncer<bool> isReadyDebouncer = new XMediatorMultipleDebouncer<bool>();
         private XMediatorDebouncer<bool> isAnyReadyDebouncer = new XMediatorDebouncer<bool>();
+        private XMediatorMultipleDebouncer<bool> IsAdSpaceCappedDebouncer = new XMediatorMultipleDebouncer<bool>();
 
         public void SetListener(InterstitialAdsProxyListener listener)
         {
@@ -40,6 +42,13 @@ namespace XMediator.Android
         {
             return isReadyDebouncer.Invoke(placementId,
                 () => InterstitialProxy.CallStatic<bool>(IS_READY_METHOD_NAME, placementId)
+            );
+        }
+
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return IsAdSpaceCappedDebouncer.Invoke(adSpace,
+                () => InterstitialProxy.CallStatic<bool>(IS_AD_SPACE_CAPPED_METHOD_NAME, adSpace)
             );
         }
 

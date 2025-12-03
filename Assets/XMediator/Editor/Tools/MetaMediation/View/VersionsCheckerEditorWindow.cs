@@ -46,6 +46,15 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             DrawHeader();
             RenderEntries(_presenter.BuildEntries(_presenter.Networks, _searchTerm));
 
+            // Only show Tools section if there are tools available
+            if (_presenter.Tools.Any())
+            {
+                EditorGUILayout.Space();
+                EditorGUILayout.LabelField("Additional Tools", EditorStyles.boldLabel);
+                DrawHeader();
+                RenderEntries(_presenter.BuildEntries(_presenter.Tools, _searchTerm));
+            }
+
             EditorGUILayout.EndScrollView();
 
             GUILayout.BeginHorizontal();
@@ -82,6 +91,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         {
             var mediatorEntries = _presenter.BuildEntries(_presenter.Mediators, _searchTerm).ToList();
             var networkEntries = _presenter.BuildEntries(_presenter.Networks, _searchTerm).ToList();
+            var toolEntries = _presenter.BuildEntries(_presenter.Tools, _searchTerm).ToList();
 
             var sb = new StringBuilder();
             sb.AppendLine("Mediator Versions:\n");
@@ -93,6 +103,14 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             foreach (var (name, android, ios) in networkEntries)
             {
                 sb.AppendLine($"{name} | Android: {android} | iOS: {ios}");
+            }
+            if (toolEntries.Any())
+            {
+                sb.AppendLine("\nAdditional Tools:\n");
+                foreach (var (name, android, ios) in toolEntries)
+                {
+                    sb.AppendLine($"{name} | Android: {android} | iOS: {ios}");
+                }
             }
 
             var path = EditorUtility.SaveFilePanel("Export Versions", Application.dataPath, "XMediatorVersions", "txt");

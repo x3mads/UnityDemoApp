@@ -12,6 +12,7 @@ namespace XMediator.Android
         internal const int SHOW_ERROR_LOADING = 2;
         internal const int SHOW_ERROR_SHOW_FAILED = 3;
         internal const int SHOW_ERROR_ALREADY_USED = 4;
+        internal const int SHOW_ERROR_CAPPED = 5;
 
         internal int Type { get; }
         internal string Message { get; }
@@ -70,6 +71,8 @@ namespace XMediator.Android
                     return new ShowError(ShowError.ErrorType.AlreadyUsed, Message);
                 case UNEXPECTED:
                     return new ShowError(ShowError.ErrorType.Unexpected, Message);
+                case SHOW_ERROR_CAPPED:
+                    return new ShowError(ShowError.ErrorType.Capped, Message);
                 default:
                     return new ShowError(ShowError.ErrorType.Unexpected, Message);
             }

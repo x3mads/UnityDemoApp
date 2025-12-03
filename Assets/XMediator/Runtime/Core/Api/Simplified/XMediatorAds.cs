@@ -127,5 +127,15 @@ namespace XMediator.Api
             var xMediatorAdsProxy = ProxyFactory.CreateInstance<XMediatorAdsProxy>("XMediatorAdsProxy");
             xMediatorAdsProxy.OpenDebuggerSuite();
         }
+
+        /// <summary>
+        /// Indicates whether `XMediatorSdk` has already completed its initialization sequence.
+        /// </summary>
+        /// <returns>True if the SDK finished its initialization with a successful result, `false` otherwise.</returns>
+        public static bool IsInitialized()
+        {
+            var xMediatorAdsProxy = ProxyFactory.CreateInstance<XMediatorAdsProxy>("XMediatorAdsProxy");
+            return xMediatorAdsProxy.IsInitialized();
+        }
     }
 }

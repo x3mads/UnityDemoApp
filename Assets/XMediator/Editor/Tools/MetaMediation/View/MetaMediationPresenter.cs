@@ -29,6 +29,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         internal HashSet<string> CurrentNetworks { get; set; }
         internal HashSet<string> CurrentMediators { get; set; }
+        internal HashSet<string> CurrentTools { get; set; }
 
         internal HashSet<string> CurrentPlatforms { get; set; }
         internal MetaMediationTags CurrentTags { get; set; }
@@ -87,6 +88,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             var dependencies = new SelectedDependencies(
                 networks: CurrentNetworks,
                 mediations: CurrentMediators,
+                tools: CurrentTools,
                 iosManifest: iosManifest,
                 androidManifest: androidManifest
             );
@@ -95,9 +97,11 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 {
                     Debug.Log(document.ToString());
                     SettingsRepository.ApplyMetaMediation();
+                    MarkCmpToolAsShownToUser();
                     SettingsRepository.Save(networks: CurrentNetworks,
                         networkIds: dependencies.GetNetworkIds(),
                         mediations: CurrentMediators,
+                        tools: CurrentTools,
                         platforms: CurrentPlatforms,
                         tags: CurrentTags);
                     SaveXMLDependencies.SaveXMLToFile(document, "MetaMediationDependencies.xml");
@@ -121,11 +125,20 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 });
         }
 
+        private void MarkCmpToolAsShownToUser()
+        {
+            if (SelectableDependencies.Tools.ContainsKey(SelectableDependencies.UMPName))
+            {
+                SettingsRepository.MarkCmpToolAsShownToUser();                
+            }
+        }
+
         private void RetrieveFromSettings()
         {
             SettingsRepository.Init();
             UpdateSelection(ListToDictionary(SettingsRepository.RetrieveMediations()),
                 ListToDictionary(SettingsRepository.RetrieveNetworks()),
+                ListToDictionary(SettingsRepository.RetrieveTools()),
                 SettingsRepository.RetrievePlatforms().Contains(AndroidPlatform),
                 SettingsRepository.RetrievePlatforms().Contains(IosPlatform));
             CurrentTags = SettingsRepository.RetrieveTags();
@@ -183,7 +196,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         private ManifestDto<TDependency> GetManifestForCurrentMediators<TDependency>(string platformString, FlavoredManifestDto<TDependency> manifest, string tag)
         {
-            return !CurrentPlatforms.Contains(platformString) ? null : manifest.GetManifestForMediators(CurrentMediators.ToList(), tag);
+            return !CurrentPlatforms.Contains(platformString) ? null : manifest.GetManifestForMediators(CurrentMediators.ToList(), CurrentTools?.ToList(), tag);
         }
 
         private void RetrieveUnityPackage()
@@ -269,11 +282,13 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         }
 
         public void UpdateSelection(Dictionary<string, bool> mediatorSelection,
-            Dictionary<string, bool> adNetworkSelection, bool isAndroid, bool isIos)
+            Dictionary<string, bool> adNetworkSelection, Dictionary<string, bool> toolSelection, bool isAndroid, bool isIos)
         {
             CurrentMediators = mediatorSelection.Where(pair => pair.Value).Select(keyValuePair => keyValuePair.Key)
                 .ToHashSet();
             CurrentNetworks = adNetworkSelection.Where(pair => pair.Value).Select(keyValuePair => keyValuePair.Key)
+                .ToHashSet();
+            CurrentTools = toolSelection.Where(pair => pair.Value).Select(keyValuePair => keyValuePair.Key)
                 .ToHashSet();
             CurrentPlatforms = new HashSet<string>();
             if (isAndroid)
@@ -288,9 +303,9 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         }
         
         internal void RefreshUpdatesWithNewSelection(Dictionary<string, bool> mediatorSelection,
-            Dictionary<string, bool> adNetworkSelection, bool isAndroid, bool isIos)
+            Dictionary<string, bool> adNetworkSelection, Dictionary<string, bool> toolSelection, bool isAndroid, bool isIos)
         {
-            UpdateSelection(mediatorSelection, adNetworkSelection, isAndroid, isIos);
+            UpdateSelection(mediatorSelection, adNetworkSelection, toolSelection, isAndroid, isIos);
             CheckAndShowUpdates();
         }
         
@@ -300,11 +315,26 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             CheckAndShowUpdates();
         }
 
-        internal string GetAndroidVersionForNetwork(string networkName)
+        internal string GetAndroidVersionForAdapter(string dependencyName)
         {
             if (SelectableDependencies?.AndroidManifest == null) return null;
             
-            var manifest = SelectableDependencies.AndroidManifest.GetDefaultManifest();
+            var manifest = GetAndroidManifestForMediators();
+            return VersionForNetwork(dependencyName, manifest, it => it.suggested_version) ??
+                   VersionForTool(dependencyName, manifest, it => it.suggested_version);
+        }
+        
+        internal string GetIOSVersionForAdapter(string dependencyName)
+        {
+            if (SelectableDependencies?.IOSManifest == null) return null;
+            
+            var manifest = GetIosManifestForMediators();
+            return VersionForNetwork(dependencyName, manifest, it => it.suggested_version) ??
+                VersionForTool(dependencyName, manifest, it => it.suggested_version);
+        }
+
+        private static string VersionForNetwork<T>(string networkName, ManifestDto<T> manifest, Func<T, string> getVersion)
+        {
             if (manifest?.networks == null) return null;
             
             foreach (var networkDto in manifest.networks)
@@ -313,27 +343,24 @@ namespace XMediator.Editor.Tools.MetaMediation.View
                 {
                     if (networkDto.dependencies != null && networkDto.dependencies.Count > 0)
                     {
-                        return networkDto.dependencies[0].suggested_version;
+                        return getVersion(networkDto.dependencies[0]);
                     }
                 }
             }
             return null;
         }
-
-        internal string GetIOSVersionForNetwork(string networkName)
+        
+        private static string VersionForTool<T>(string toolName, ManifestDto<T> manifest, Func<T, string> getVersion)
         {
-            if (SelectableDependencies?.IOSManifest == null) return null;
+            if (manifest?.additional_tools == null) return null;
             
-            var manifest = SelectableDependencies.IOSManifest.GetDefaultManifest();
-            if (manifest?.networks == null) return null;
-            
-            foreach (var networkDto in manifest.networks)
+            foreach (var toolDto in manifest.additional_tools)
             {
-                if (networkDto.display_name.Equals(networkName, StringComparison.OrdinalIgnoreCase))
+                if (toolDto.tool.Equals(toolName, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (networkDto.dependencies != null && networkDto.dependencies.Count > 0)
+                    if (toolDto.dependencies != null && toolDto.dependencies.Count > 0)
                     {
-                        return networkDto.dependencies[0].suggested_version;
+                        return getVersion(toolDto.dependencies[0]);
                     }
                 }
             }
@@ -344,7 +371,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         {
             if (SelectableDependencies?.AndroidManifest == null) return null;
             
-            var manifest = SelectableDependencies.AndroidManifest.GetDefaultManifest();
+            var manifest = GetAndroidManifestForMediators();
             if (manifest?.core == null) return null;
             
             // For mediators, we look at the core dependencies
@@ -367,7 +394,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         {
             if (SelectableDependencies?.IOSManifest == null) return null;
             
-            var manifest = SelectableDependencies.IOSManifest.GetDefaultManifest();
+            var manifest = GetIosManifestForMediators();
             if (manifest?.core == null) return null;
             
             // For mediators, we look at the core dependencies

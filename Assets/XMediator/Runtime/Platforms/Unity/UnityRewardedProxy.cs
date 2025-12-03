@@ -11,6 +11,7 @@ namespace XMediator.Unity
         internal static Action<UnityRewardedProxy> OnShow = DefaultOnShow;
         internal static Action<UnityRewardedProxy> OnDispose = DefaultOnDispose;
         internal static Func<UnityRewardedProxy, bool> OnIsReady = DefaultOnIsReady;
+        internal static Func<UnityRewardedProxy, string, bool> OnIsAdSpaceCapped = DefaultOnIsAdSpaceCapped;
         internal RewardedProxyListener RewardedProxyListener { get; private set; }
         
         internal RewardedProxy Mock;
@@ -33,6 +34,11 @@ namespace XMediator.Unity
         public bool IsReady()
         {
             return OnIsReady(this);
+        }
+
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return OnIsAdSpaceCapped(this, adSpace);
         }
 
         public void Show()
@@ -76,6 +82,11 @@ namespace XMediator.Unity
         private static bool DefaultOnIsReady(UnityRewardedProxy rewardedProxy)
         {
             return rewardedProxy.Mock.IsReady();
+        }
+
+        private static bool DefaultOnIsAdSpaceCapped(UnityRewardedProxy rewardedProxy, string adSpace)
+        {
+            return rewardedProxy.Mock.IsAdSpaceCapped(adSpace);
         }
     }
 }

@@ -9,11 +9,13 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         private static string MmMediations => "mm_mediations";
         private static string MmNetworkIds => "mm_network_ids";
         private static string MmNetworks => "mm_networks";
+        private static string MmTools => "mm_tools";
         private static string MmPlatforms => "mm_platforms";
         private static string MmTagIOS => "mm_tag_ios";
         private static string MmTagAndroid => "mm_tag_android";
         private static string MmAndroidVersionsUrl => "mm_android_versions_url";
         private static string MmIOSVersionsUrl => "mm_ios_versions_url";
+        private static string MmCmpToolWasShown => "mm_cmp_tool_was_shown";
 
         internal static void Init()
         {
@@ -21,11 +23,12 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         }
 
         internal static void Save(IEnumerable<string> networks, IEnumerable<string> networkIds,
-            IEnumerable<string> mediations, IEnumerable<string> platforms, MetaMediationTags tags)
+            IEnumerable<string> mediations, IEnumerable<string> tools, IEnumerable<string> platforms, MetaMediationTags tags)
         {
             Instancies.settingRepository.SetSettingValue(MmMediations, ListToString(mediations));
             Instancies.settingRepository.SetSettingValue(MmNetworkIds, ListToString(networkIds));
             Instancies.settingRepository.SetSettingValue(MmNetworks, ListToString(networks));
+            Instancies.settingRepository.SetSettingValue(MmTools, ListToString(tools));
             Instancies.settingRepository.SetSettingValue(MmPlatforms, ListToString(platforms));
             Instancies.settingRepository.SetSettingValue(MmTagIOS, tags.IOS);
             Instancies.settingRepository.SetSettingValue(MmTagAndroid, tags.Android);
@@ -34,6 +37,11 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         internal static void ApplyMetaMediation()
         {
             Instancies.settingRepository.SetSettingValue(XMediatorSettingsService.SettingsKeys.IsMetaMediation, "True");
+        }
+        
+        internal static void MarkCmpToolAsShownToUser()
+        {
+            Instancies.settingRepository.SetSettingValue(MmCmpToolWasShown, "True");
         }
 
         internal static IEnumerable<string> RetrieveMediations()
@@ -49,6 +57,11 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         internal IEnumerable<string> RetrieveNetworkIds()
         {
             return StringToList(Instancies.settingRepository.GetSettingValue(MmNetworkIds, ""));
+        }
+        
+        internal IEnumerable<string> RetrieveTools()
+        {
+            return StringToList(Instancies.settingRepository.GetSettingValue(MmTools, ""));
         }
         
         internal IEnumerable<string> RetrievePlatforms()
@@ -72,6 +85,12 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         internal string RetrieveIOSVersionsUrl()
         {
             return Instancies.settingRepository.GetSettingValue(MmIOSVersionsUrl, "");
+        }
+        
+        internal bool RetrieveCMPToolWasShown()
+        {
+            var value = Instancies.settingRepository.GetSettingValue(MmCmpToolWasShown, "False");
+            return bool.TryParse(value, out var result) && result;
         }
 
         private static string ListToString(IEnumerable<string> setList)

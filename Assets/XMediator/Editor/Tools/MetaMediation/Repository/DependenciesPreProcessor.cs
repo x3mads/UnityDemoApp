@@ -12,17 +12,18 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         {
             var networks = selectableDependencies.Networks.ToList();
             var mediators = selectableDependencies.Mediations.ToList();
+            var tools = selectableDependencies.Tools.ToList();
             
             var androidRepositories = new HashSet<string>();
             var artifacts = new HashSet<string>();
-            ProcessManifest(selectableDependencies.AndroidManifest, networks, mediators, dependencyList =>
+            ProcessManifest(selectableDependencies.AndroidManifest, networks, mediators, tools, dependencyList =>
             {
                 AddReposAndArtifacts(dependencyList, artifacts, androidRepositories);
             });
             
             var iOSSources = new HashSet<string>();
             var pods = new HashSet<Pod>();
-            ProcessManifest(selectableDependencies.IOSManifest, networks, mediators, dependencyList =>
+            ProcessManifest(selectableDependencies.IOSManifest, networks, mediators, tools, dependencyList =>
             {
                 AddSourcesAndPods(dependencyList, iOSSources, pods);
             });
@@ -31,7 +32,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
         }
 
         private static void ProcessManifest<TDependency>(ManifestDto<TDependency> manifest, ICollection<string> networks,
-            List<string> mediators, Action<List<TDependency>> addDependencies)
+            List<string> mediators, List<string> tools, Action<List<TDependency>> addDependencies)
         {
             if (manifest == null)
             {
@@ -59,6 +60,15 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository
                              mediators.Contains(adapter.mediator)))
                 {
                     addDependencies(networkAdapterDto.dependencies);
+                }
+            }
+            
+            // Add additional tools dependencies
+            if (manifest.additional_tools != null)
+            {
+                foreach (var tool in manifest.additional_tools.Where(tool => tools.Contains(tool.tool)))
+                {
+                    addDependencies(tool.dependencies);
                 }
             }
         }

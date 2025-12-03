@@ -23,6 +23,8 @@ namespace XMediator.iOS
 
         public bool IsReady(string placementId) => X3MIsReadyAppOpenWithPlacementId(placementId);
 
+        public bool IsAdSpaceCapped(string adSpace) => X3MIsAppOpenAdSpaceCapped(adSpace);
+
         public void Show() => X3MPresentAppOpen();
 
         public void Show(string placementId) => X3MPresentAppOpenWithPlacementId(placementId);
@@ -39,6 +41,9 @@ namespace XMediator.iOS
         
         [DllImport("__Internal")]
         private static extern bool X3MIsReadyAppOpenWithPlacementId(string placementId);
+        
+        [DllImport("__Internal")]
+        private static extern bool X3MIsAppOpenAdSpaceCapped(string placementId);
         
         [DllImport("__Internal")]
         private static extern void X3MPresentAppOpen();

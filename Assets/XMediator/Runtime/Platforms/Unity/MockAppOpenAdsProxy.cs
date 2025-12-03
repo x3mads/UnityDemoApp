@@ -41,6 +41,19 @@ namespace XMediator.Unity
             return Ads.ContainsKey(placementId) && Ads[placementId].IsReady();
         }
 
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            foreach (var ad in Ads.Values)
+            {
+                if (ad.IsAdSpaceCapped(adSpace))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void Show()
         {
             foreach (var ad in Ads.Values)

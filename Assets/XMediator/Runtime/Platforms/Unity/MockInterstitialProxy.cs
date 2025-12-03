@@ -22,6 +22,11 @@ namespace XMediator.Unity
             return _fullScreenAd.IsReady();
         }
 
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return _fullScreenAd.IsAdSpaceCapped(adSpace);
+        }
+
         public void Show()
         {
             _fullScreenAd.Show();

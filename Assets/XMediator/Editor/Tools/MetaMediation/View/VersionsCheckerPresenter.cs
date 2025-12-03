@@ -18,6 +18,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
         internal IEnumerable<string> Mediators => _selectableDependencies?.Mediations ?? Enumerable.Empty<string>();
         internal IEnumerable<string> Networks => _selectableDependencies?.Networks ?? Enumerable.Empty<string>();
+        internal IEnumerable<string> Tools => _selectableDependencies?.Tools?.Keys ?? Enumerable.Empty<string>();
 
         internal VersionsCheckerPresenter(Action onDataReady)
         {
@@ -81,7 +82,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
 
             var manifest = _selectableDependencies?.AndroidManifest?.GetDefaultManifest();
             var dep = manifest?.standalone_metamediation_adapters?.FirstOrDefault(m => m.mediator == dependencyName)?.dependencies?.FirstOrDefault()
-                      ?? manifest?.networks?.FirstOrDefault(n => n.network == dependencyName || n.display_name == dependencyName)?.dependencies?.FirstOrDefault();
+                      ?? manifest?.networks?.FirstOrDefault(n => n.network == dependencyName || n.display_name == dependencyName)?.dependencies?.FirstOrDefault()
+                      ?? manifest?.additional_tools?.FirstOrDefault(t => t.tool == dependencyName || t.display_name == dependencyName)?.dependencies?.FirstOrDefault();
             string version = null;
             if (dep != null)
             {
@@ -120,7 +122,8 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             }
             var manifest = _selectableDependencies?.IOSManifest?.GetDefaultManifest();
             var dep = manifest?.standalone_metamediation_adapters?.FirstOrDefault(m => m.mediator == dependencyName)?.dependencies?.FirstOrDefault()
-                      ?? manifest?.networks?.FirstOrDefault(n => n.network == dependencyName || n.display_name == dependencyName)?.dependencies?.FirstOrDefault();
+                      ?? manifest?.networks?.FirstOrDefault(n => n.network == dependencyName || n.display_name == dependencyName)?.dependencies?.FirstOrDefault()
+                      ?? manifest?.additional_tools?.FirstOrDefault(t => t.tool == dependencyName || t.display_name == dependencyName)?.dependencies?.FirstOrDefault();
             string version = null;
             if (dep != null)
             {

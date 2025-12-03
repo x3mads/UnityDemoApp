@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -10,10 +11,14 @@ namespace XMediator.Api
     /// </summary>
     public class InitSettings
     {
+        [CanBeNull] private readonly IEnumerable<string> _placementIds;
+
         public bool Test { get; }
         public bool Verbose { get; }
         [CanBeNull] public string ClientVersion { get; }
-        [CanBeNull] public IEnumerable<string> PlacementIds { get; }
+        [Obsolete("PlacementIds is deprecated and will be removed in a future release.")]
+        [CanBeNull]
+        public IEnumerable<string> PlacementIds => _placementIds;
         [CanBeNull] public UserProperties UserProperties { get; }
         [CanBeNull] public ConsentInformation ConsentInformation { get; }
 
@@ -23,7 +28,7 @@ namespace XMediator.Api
         /// <param name="test">Whether the SDK should be initialized in test mode. This is only for testing purposes, should be false on production builds.</param>
         /// <param name="verbose">Enable logging for this session. This is only for debugging purposes, should be false on production builds.</param>
         /// <param name="clientVersion">Optional. A string identifying the version of who interacts with the SDK.</param>
-        /// <param name="placementIds">Optional. A collection of placements ids that will be used during this session.</param>
+        /// <param name="placementIds">[Deprecated] Optional. A collection of placement ids used during this session. This parameter will be removed in a future release.</param>
         /// <param name="userProperties">A <see cref="UserProperties"/> object containing useful information during initialization.</param>
         /// <param name="consentInformation">A <see cref="ConsentInformation"/> object containing user consent information.</param>
         public InitSettings(
@@ -38,7 +43,7 @@ namespace XMediator.Api
             Test = test;
             Verbose = verbose;
             ClientVersion = clientVersion;
-            PlacementIds = placementIds;
+            _placementIds = placementIds;
             UserProperties = userProperties;
             ConsentInformation = consentInformation;
         }
@@ -46,7 +51,7 @@ namespace XMediator.Api
         protected bool Equals(InitSettings other)
         {
             return Test == other.Test && Verbose == other.Verbose && ClientVersion == other.ClientVersion &&
-                   PlacementIds?.SequenceEqual(other.PlacementIds ?? new string[] { }) == true &&
+                   _placementIds?.SequenceEqual(other._placementIds ?? new string[] { }) == true &&
                    Equals(UserProperties, other.UserProperties) && Equals(ConsentInformation, other.ConsentInformation);
         }
 
@@ -65,7 +70,7 @@ namespace XMediator.Api
                 var hashCode = Test.GetHashCode();
                 hashCode = (hashCode * 397) ^ Verbose.GetHashCode();
                 hashCode = (hashCode * 397) ^ (ClientVersion != null ? ClientVersion.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (PlacementIds != null ? PlacementIds.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (_placementIds != null ? _placementIds.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (UserProperties != null ? UserProperties.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (ConsentInformation != null ? ConsentInformation.GetHashCode() : 0);
                 return hashCode;
@@ -75,7 +80,7 @@ namespace XMediator.Api
         public override string ToString()
         {
             return
-                $"{nameof(Test)}: {Test}, {nameof(Verbose)}: {Verbose}, {nameof(ClientVersion)}: {ClientVersion}, {nameof(PlacementIds)}: [{string.Join(", ", PlacementIds ?? new List<string>())}], {nameof(UserProperties)}: {UserProperties}, {nameof(ConsentInformation)}: {ConsentInformation}";
+                $"{nameof(Test)}: {Test}, {nameof(Verbose)}: {Verbose}, {nameof(ClientVersion)}: {ClientVersion}, {nameof(UserProperties)}: {UserProperties}, {nameof(ConsentInformation)}: {ConsentInformation}";
         }
     }
 }

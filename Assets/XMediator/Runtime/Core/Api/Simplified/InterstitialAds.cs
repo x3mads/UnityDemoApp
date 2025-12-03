@@ -83,6 +83,16 @@ namespace XMediator.Api
         }
 
         /// <summary>
+        /// Checks whether the given ad space is currently capped by the capping rules.
+        /// </summary>
+        /// <param name="adSpace">The space in your app from where the ad would be shown (eg: dashboard, settings).</param>
+        /// <returns>true if the ad space is capped (show is not allowed by rules); false if it is allowed.</returns>
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return _interstitialAdsProxy.IsAdSpaceCapped(adSpace);
+        }
+
+        /// <summary>
         /// Shows a previously loaded interstitial ad for any placementId.
         ///
         /// If multiple ads with different placement ids were previously loaded, the sdk will try to present the best one available.

@@ -8,14 +8,16 @@ namespace XMediator.Editor.Tools.MetaMediation.Entities
     {
         public HashSet<string> Networks { get; }
         public HashSet<string> Mediations { get; }
+        public HashSet<string> Tools { get; }
         public ManifestDto<IOSDependencyDto> IOSManifest { get; }
         public ManifestDto<AndroidDependencyDto> AndroidManifest { get; }
 
-        public SelectedDependencies(HashSet<string> networks, HashSet<string> mediations, ManifestDto<IOSDependencyDto> iosManifest,
+        public SelectedDependencies(HashSet<string> networks, HashSet<string> mediations, HashSet<string> tools, ManifestDto<IOSDependencyDto> iosManifest,
             ManifestDto<AndroidDependencyDto> androidManifest)
         {
             Networks = networks;
             Mediations = mediations;
+            Tools = tools;
             IOSManifest = iosManifest;
             AndroidManifest = androidManifest;
         }

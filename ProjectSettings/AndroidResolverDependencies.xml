@@ -1,81 +1,82 @@
 <dependencies>
   <packages>
     <package>co.ogury:ogury-sdk:6.1.0</package>
-    <package>com.amazon.android:aps-sdk:11.0.4</package>
-    <package>com.applovin.mediation:amazon-tam-adapter:11.0.4.0</package>
-    <package>com.applovin.mediation:bidmachine-adapter:3.4.0.0</package>
-    <package>com.applovin.mediation:bytedance-adapter:7.5.0.4.0</package>
-    <package>com.applovin.mediation:chartboost-adapter:9.9.3.0</package>
-    <package>com.applovin.mediation:facebook-adapter:6.20.0.0</package>
-    <package>com.applovin.mediation:fyber-adapter:8.3.8.0</package>
-    <package>com.applovin.mediation:google-adapter:24.5.0.1</package>
-    <package>com.applovin.mediation:google-ad-manager-adapter:24.5.0.0</package>
+    <package>com.amazon.android:aps-sdk:11.1.1</package>
+    <package>com.applovin.mediation:amazon-tam-adapter:11.1.1.0</package>
+    <package>com.applovin.mediation:bidmachine-adapter:3.5.0.0</package>
+    <package>com.applovin.mediation:bytedance-adapter:7.7.0.2.0</package>
+    <package>com.applovin.mediation:chartboost-adapter:9.10.2.0</package>
+    <package>com.applovin.mediation:facebook-adapter:6.21.0.0</package>
+    <package>com.applovin.mediation:fyber-adapter:8.4.1.0</package>
+    <package>com.applovin.mediation:google-adapter:24.7.0.0</package>
+    <package>com.applovin.mediation:google-ad-manager-adapter:24.7.0.0</package>
     <package>com.applovin.mediation:hyprmx-adapter:6.4.2.3</package>
     <package>com.applovin.mediation:inmobi-adapter:10.8.8.0</package>
-    <package>com.applovin.mediation:ironsource-adapter:8.11.1.0.0</package>
+    <package>com.applovin.mediation:ironsource-adapter:9.1.0.0.0</package>
     <package>com.applovin.mediation:mintegral-adapter:16.9.91.0</package>
     <package>com.applovin.mediation:moloco-adapter:4.0.0.0</package>
     <package>com.applovin.mediation:ogury-presage-adapter:6.1.0.1</package>
-    <package>com.applovin.mediation:unityads-adapter:4.16.3.0</package>
-    <package>com.applovin.mediation:vungle-adapter:7.5.1.0</package>
-    <package>com.applovin:applovin-sdk:13.4.0</package>
-    <package>com.chartboost:chartboost-sdk:9.9.3</package>
-    <package>com.facebook.android:audience-network-sdk:6.20.0</package>
-    <package>com.fyber:marketplace-sdk:8.3.8</package>
-    <package>com.google.ads.mediation:applovin:13.4.0.0</package>
-    <package>com.google.ads.mediation:chartboost:9.9.3.0</package>
-    <package>com.google.ads.mediation:facebook:6.20.0.1</package>
-    <package>com.google.ads.mediation:fyber:8.3.8.0</package>
-    <package>com.google.ads.mediation:inmobi:10.8.8.0</package>
-    <package>com.google.ads.mediation:ironsource:8.11.1.0</package>
-    <package>com.google.ads.mediation:mintegral:16.9.91.1</package>
+    <package>com.applovin.mediation:unityads-adapter:4.16.4.0</package>
+    <package>com.applovin.mediation:vungle-adapter:7.6.1.0</package>
+    <package>com.applovin:applovin-sdk:13.5.1</package>
+    <package>com.chartboost:chartboost-sdk:9.10.2</package>
+    <package>com.facebook.android:audience-network-sdk:6.21.0</package>
+    <package>com.fyber:marketplace-sdk:8.4.1</package>
+    <package>com.google.ads.mediation:applovin:13.5.1.0</package>
+    <package>com.google.ads.mediation:chartboost:9.10.2.0</package>
+    <package>com.google.ads.mediation:facebook:6.21.0.0</package>
+    <package>com.google.ads.mediation:fyber:8.4.1.0</package>
+    <package>com.google.ads.mediation:inmobi:10.8.8.1</package>
+    <package>com.google.ads.mediation:ironsource:9.1.0.0</package>
+    <package>com.google.ads.mediation:mintegral:16.9.91.2</package>
     <package>com.google.ads.mediation:moloco:4.0.0.0</package>
-    <package>com.google.ads.mediation:pangle:7.5.0.4.0</package>
-    <package>com.google.ads.mediation:unity:4.16.3.0</package>
-    <package>com.google.ads.mediation:vungle:7.5.1.0</package>
-    <package>com.google.android.gms:play-services-ads:24.5.0</package>
+    <package>com.google.ads.mediation:pangle:7.7.0.2.0</package>
+    <package>com.google.ads.mediation:unity:4.16.4.0</package>
+    <package>com.google.ads.mediation:vungle:7.6.1.0</package>
+    <package>com.google.android.gms:play-services-ads:24.7.0</package>
     <package>com.hyprmx.android:HyprMX-AdMob:6.4.3.0</package>
     <package>com.hyprmx.android:HyprMX-SDK:6.4.3</package>
     <package>com.inmobi.monetization:inmobi-ads-kotlin:10.8.8</package>
     <package>com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.91</package>
     <package>com.moloco.sdk.adapters:adapter:4.0.0</package>
-    <package>com.pangle.global:pag-sdk:7.5.0.5</package>
-    <package>com.unity3d.ads:unity-ads:4.16.3</package>
-    <package>com.unity3d.ads-mediation:admob-adapter:4.3.53</package>
-    <package>com.unity3d.ads-mediation:applovin-adapter:4.3.55</package>
-    <package>com.unity3d.ads-mediation:bidmachine-adapter:4.3.16</package>
-    <package>com.unity3d.ads-mediation:chartboost-adapter:4.3.23</package>
-    <package>com.unity3d.ads-mediation:facebook-adapter:4.3.51</package>
-    <package>com.unity3d.ads-mediation:fyber-adapter:4.3.40</package>
-    <package>com.unity3d.ads-mediation:hyprmx-adapter:4.3.15</package>
-    <package>com.unity3d.ads-mediation:inmobi-adapter:4.3.32</package>
-    <package>com.unity3d.ads-mediation:mediation-sdk:8.11.1</package>
-    <package>com.unity3d.ads-mediation:mintegral-adapter:4.3.47</package>
-    <package>com.unity3d.ads-mediation:moloco-adapter:4.3.21</package>
-    <package>com.unity3d.ads-mediation:ogury-adapter:4.3.3</package>
-    <package>com.unity3d.ads-mediation:pangle-adapter:4.3.51</package>
-    <package>com.unity3d.ads-mediation:unityads-adapter:4.3.61</package>
-    <package>com.unity3d.ads-mediation:vungle-adapter:4.3.31</package>
-    <package>com.vungle:vungle-ads:7.5.1</package>
-    <package>com.x3mads.android.xmediator.mediation:applovin:13.4.0.1</package>
-    <package>com.x3mads.android.xmediator.mediation:aps:11.0.4.0</package>
-    <package>com.x3mads.android.xmediator.mediation:chartboost:9.9.3.0</package>
-    <package>com.x3mads.android.xmediator.mediation:facebook:6.20.0.0</package>
-    <package>com.x3mads.android.xmediator.mediation:fyber:8.3.7.0</package>
-    <package>com.x3mads.android.xmediator.mediation:google-ads:24.5.0.0</package>
+    <package>com.pangle.global:pag-sdk:7.7.0.3</package>
+    <package>com.unity3d.ads:unity-ads:4.16.4</package>
+    <package>com.unity3d.ads-mediation:admob-adapter:5.2.0</package>
+    <package>com.unity3d.ads-mediation:applovin-adapter:5.2.0</package>
+    <package>com.unity3d.ads-mediation:bidmachine-adapter:5.1.0</package>
+    <package>com.unity3d.ads-mediation:chartboost-adapter:5.2.0</package>
+    <package>com.unity3d.ads-mediation:facebook-adapter:5.1.0</package>
+    <package>com.unity3d.ads-mediation:fyber-adapter:5.2.0</package>
+    <package>com.unity3d.ads-mediation:hyprmx-adapter:5.0.0</package>
+    <package>com.unity3d.ads-mediation:inmobi-adapter:5.1.0</package>
+    <package>com.unity3d.ads-mediation:mediation-sdk:9.1.0</package>
+    <package>com.unity3d.ads-mediation:mintegral-adapter:5.1.0</package>
+    <package>com.unity3d.ads-mediation:moloco-adapter:5.0.0</package>
+    <package>com.unity3d.ads-mediation:ogury-adapter:5.0.0</package>
+    <package>com.unity3d.ads-mediation:pangle-adapter:5.3.0</package>
+    <package>com.unity3d.ads-mediation:unityads-adapter:5.3.0</package>
+    <package>com.unity3d.ads-mediation:vungle-adapter:5.2.0</package>
+    <package>com.vungle:vungle-ads:7.6.1</package>
+    <package>com.x3mads.android.xmediator.mediation:applovin:13.5.1.1</package>
+    <package>com.x3mads.android.xmediator.mediation:aps:11.1.1.0</package>
+    <package>com.x3mads.android.xmediator.mediation:chartboost:9.10.2.0</package>
+    <package>com.x3mads.android.xmediator.mediation:facebook:6.21.0.0</package>
+    <package>com.x3mads.android.xmediator.mediation:fyber:8.4.0.0</package>
+    <package>com.x3mads.android.xmediator.mediation:google-ads:24.7.0.1</package>
     <package>com.x3mads.android.xmediator.mediation:hyprmx:6.4.3.0</package>
     <package>com.x3mads.android.xmediator.mediation:inmobi:10.8.8.1</package>
-    <package>com.x3mads.android.xmediator.mediation:ironsource:8.11.1.1</package>
+    <package>com.x3mads.android.xmediator.mediation:ironsource:9.1.0.0</package>
     <package>com.x3mads.android.xmediator.mediation:mintegral:16.9.91.0</package>
     <package>com.x3mads.android.xmediator.mediation:moloco:4.0.0.1</package>
     <package>com.x3mads.android.xmediator.mediation:ogury:6.1.0.0</package>
-    <package>com.x3mads.android.xmediator.mediation:pangle:7.5.0.4.0</package>
-    <package>com.x3mads.android.xmediator.mediation:stack:3.4.0.0</package>
-    <package>com.x3mads.android.xmediator.mediation:unity:4.16.1.0</package>
-    <package>com.x3mads.android.xmediator.mediation:vungle:7.5.1.0</package>
-    <package>com.x3mads.android.xmediator:core:1.126.1</package>
-    <package>com.x3mads.android.xmediator:unity-proxy:1.125.0.0</package>
-    <package>io.bidmachine:ads:3.4.0</package>
+    <package>com.x3mads.android.xmediator.mediation:pangle:7.7.0.2.0</package>
+    <package>com.x3mads.android.xmediator.mediation:stack:3.5.0.0</package>
+    <package>com.x3mads.android.xmediator.mediation:unity:4.16.4.0</package>
+    <package>com.x3mads.android.xmediator.mediation:vungle:7.6.1.0</package>
+    <package>com.x3mads.android.xmediator.tools:ump:3.2.0.1</package>
+    <package>com.x3mads.android.xmediator:core:1.134.0</package>
+    <package>com.x3mads.android.xmediator:unity-proxy:1.131.0.0</package>
+    <package>io.bidmachine:ads:3.5.0</package>
   </packages>
   <files />
   <settings>

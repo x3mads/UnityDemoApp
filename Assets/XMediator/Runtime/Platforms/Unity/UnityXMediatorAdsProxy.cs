@@ -58,6 +58,12 @@ namespace XMediator.Unity
             Log("OpenDebuggingSuite called. This feature is available only on native platforms, please Build and Run the project from an Android or iOS device to open X3M's Debugging Suite.");
         }
 
+        public bool IsInitialized()
+        {
+            Log("IsInitialized called. This feature is available only on native platforms, please Build and Run the project from an Android or iOS device to check if XMediator is initialized.");
+            return true;
+        }
+
         private static async void DefaultOnInit(
             string appKey,
             InitSettings initSettings,

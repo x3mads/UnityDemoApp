@@ -1,7 +1,7 @@
 <buildSettings>
   <skipSwiftConfiguration>False</skipSwiftConfiguration>
   <disableGoogleAdsAndroidAppId>False</disableGoogleAdsAndroidAppId>
-  <googleAdsAndroidAppId>ca-app-pub-0000000000000000~0000000000</googleAdsAndroidAppId>
+  <googleAdsAndroidAppId>ca-app-pub-3940256099942544~3347511713</googleAdsAndroidAppId>
   <googleAdsIOSAppId>ca-app-pub-0000000000000000~0000000000</googleAdsIOSAppId>
   <dependencyManagerToken>DEPENDENCY_MANAGER_TOKEN_PLACEHOLDER</dependencyManagerToken>
   <skipSkAdNetworkIdsConfiguration>False</skipSkAdNetworkIdsConfiguration>
@@ -16,4 +16,6 @@
   </mm_tag_ios>
   <mm_tag_android>
   </mm_tag_android>
+  <mm_cmp_tool_was_shown>True</mm_cmp_tool_was_shown>
+  <mm_tools>UMP</mm_tools>
 </buildSettings>

@@ -24,24 +24,30 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
             _repository.DownloadAndParseJson(
                 _settingsRepository.RetrieveIOSVersionsUrl(),
                 _settingsRepository.RetrieveAndroidVersionsUrl(),
-                onSuccess: platformsDependency => { processOnSuccess(onSuccess, onError, platformsDependency); },
+                onSuccess: platformsDependency =>
+                {
+                    processOnSuccess(onSuccess, onError, platformsDependency, !_settingsRepository.RetrieveCMPToolWasShown());
+                },
                 onError: onError
             );
         }
 
         private static void processOnSuccess(Action<SelectableDependencies> onSuccess, Action<Exception> onError,
-            DependencyRepository.PlatformsDependency platformsDependency)
+            DependencyRepository.PlatformsDependency platformsDependency, bool preselectCmpTool)
         {
             var networks = new HashSet<string>();
             var mediations = new HashSet<string>();
+            var tools = new Dictionary<string, ToolInfo>();
             if (platformsDependency != null)
             {
                 var iosManifest = platformsDependency.IOSManifest;
                 ExtractMediationAndNetworks(iosManifest, mediations, networks);
+                ExtractTools(iosManifest, tools, preselectCmpTool);
                 var androidManifest = platformsDependency.AndroidManifest;
                 ExtractMediationAndNetworks(androidManifest, mediations, networks);
+                ExtractTools(androidManifest, tools, preselectCmpTool);
 
-                onSuccess.Invoke(new SelectableDependencies(networks: networks, mediations: mediations, iosManifest: iosManifest,
+                onSuccess.Invoke(new SelectableDependencies(networks: networks, mediations: mediations, tools: tools, iosManifest: iosManifest,
                     androidManifest: androidManifest
                 ));
             }
@@ -71,6 +77,28 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
                              mediationAdapter.metamediation_adapter_for != null))
                 {
                     mediations.Add(mediationAdapter.metamediation_adapter_for);
+                }
+            }
+        }
+
+        private static void ExtractTools<T>(FlavoredManifestDto<T> flavoredManifest,
+            Dictionary<string, ToolInfo> tools, bool preselectCmpTool)
+        {
+            // Only extract tools from tagless flavors
+            var taglessFlavors = flavoredManifest.flavors.Where(f => f.tags == null || !f.tags.Any());
+            
+            foreach (var flavor in taglessFlavors)
+            {
+                var manifest = flavor.versions;
+                if (manifest.additional_tools == null) continue;
+                
+                foreach (var tool in manifest.additional_tools)
+                {
+                    if (!tools.ContainsKey(tool.tool))
+                    {
+                        var preselected = tool.tool.Equals(SelectableDependencies.UMPName) && preselectCmpTool;
+                        tools[tool.tool] = new ToolInfo(tool.tool, tool.display_name, tool.description, preselected);
+                    }
                 }
             }
         }

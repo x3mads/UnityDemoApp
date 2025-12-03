@@ -10,6 +10,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository.Dto
         [SerializeField] internal string name;
         [SerializeField] internal List<string> mediators;
         [SerializeField] internal List<string> tags; // nullable
+        [SerializeField] internal List<string> additional_tools; // nullable
         [SerializeField] internal ManifestDto<TDependencyDto> versions;
     }
 }

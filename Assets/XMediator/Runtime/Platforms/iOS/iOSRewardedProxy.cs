@@ -27,6 +27,8 @@ namespace XMediator.iOS
 
         public bool IsReady() => isReadyRewarded(_identifier);
 
+        public bool IsAdSpaceCapped(string adSpace) => isRewardedAdSpaceCapped(_identifier, adSpace);
+
         public void Dispose()
         {
             DisposeNative();
@@ -54,6 +56,9 @@ namespace XMediator.iOS
         
         [DllImport("__Internal")]
         private static extern void presentRewardedWithAdSpace(string identifier, string adSpace);
+        
+        [DllImport("__Internal")]
+        private static extern bool isRewardedAdSpaceCapped(string identifier, string adSpace);
 
         [DllImport("__Internal")]
         private static extern bool isReadyRewarded(string identifier);

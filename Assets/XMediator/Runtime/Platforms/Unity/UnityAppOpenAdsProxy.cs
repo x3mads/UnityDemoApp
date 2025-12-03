@@ -19,6 +19,11 @@ namespace XMediator.Unity
             return ProxiedAds.IsReady(placementId);
         }
 
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return ProxiedAds.IsAdSpaceCapped(adSpace);
+        }
+
         public void Show(string placementId)
         {
             ProxiedAds.Show(placementId);

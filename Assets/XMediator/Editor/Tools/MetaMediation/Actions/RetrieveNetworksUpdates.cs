@@ -50,6 +50,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
                 ExtractUpdatesFromCollection(manifest.standalone_metamediation_adapters?.SelectMany(a => a.dependencies), androidPackage, androidDiff);
                 ExtractUpdatesFromCollection(manifest.networks?.SelectMany(n => n.dependencies), androidPackage, androidDiff);
                 ExtractUpdatesFromCollection(manifest.networks?.SelectMany(n => n.adapters).SelectMany(a => a.dependencies), androidPackage, androidDiff);
+                ExtractUpdatesFromCollection(manifest.additional_tools?.SelectMany(n => n.dependencies), androidPackage, androidDiff);
             }
         }
 
@@ -62,6 +63,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Actions
                 ExtractUpdatesFromCollection(manifest.standalone_metamediation_adapters.SelectMany(n => n.dependencies), iosPod, iosDiff);
                 ExtractUpdatesFromCollection(manifest.networks.SelectMany(n => n.dependencies), iosPod, iosDiff);
                 ExtractUpdatesFromCollection(manifest.networks.SelectMany(n => n.adapters).SelectMany(a => a.dependencies), iosPod, iosDiff);
+                ExtractUpdatesFromCollection(manifest.additional_tools.SelectMany(n => n.dependencies), iosPod, iosDiff);
             }
         }
 

@@ -21,6 +21,8 @@ namespace XMediator.iOS
 
         public bool IsReady(string placementId) => X3MIsReadyInterstitialWithPlacementId(placementId);
 
+        public bool IsAdSpaceCapped(string adSpace) => X3MIsInterstitialAdSpaceCapped(adSpace);
+
         public void Show(string placementId) => X3MPresentInterstitialWithPlacementId(placementId);
         
         public void ShowFromAdSpace(string adSpace) => X3MPresentInterstitialWithAdSpace(adSpace);
@@ -38,7 +40,10 @@ namespace XMediator.iOS
         private static extern bool X3MIsReadyInterstitial();        
         
         [DllImport("__Internal")]
-        private static extern bool X3MIsReadyInterstitialWithPlacementId(string placementId);       
+        private static extern bool X3MIsReadyInterstitialWithPlacementId(string placementId);
+        
+        [DllImport("__Internal")]
+        private static extern bool X3MIsInterstitialAdSpaceCapped(string placementId);
         
         [DllImport("__Internal")]
         private static extern void X3MPresentInterstitial();

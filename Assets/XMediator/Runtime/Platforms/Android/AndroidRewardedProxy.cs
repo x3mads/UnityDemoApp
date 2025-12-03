@@ -18,6 +18,7 @@ namespace XMediator.Android
         private const string LOAD_METHOD_NAME = "load";
         private const string SHOW_METHOD_NAME = "show";
         private const string IS_READY_METHOD_NAME = "isReady";
+        private const string IS_AD_SPACE_CAPPED_METHOD_NAME = "isAdSpaceCapped";
         private const string DESTROY_METHOD_NAME = "destroy";
 
         private static readonly AndroidJavaClass RewardedProxy = new AndroidJavaClass(REWARDED_PROXY_CLASSNAME);
@@ -26,6 +27,7 @@ namespace XMediator.Android
         private RewardedProxyListener _proxyListener;
         private bool _disposed;
         private XMediatorDebouncer<bool> isReadyDebouncer = new XMediatorDebouncer<bool>();
+        private XMediatorDebouncer<bool> isAdSpaceCappedDebouncer = new XMediatorDebouncer<bool>();
 
         public void Create(string placementId, RewardedProxyListener listener, bool test, bool verbose)
         {
@@ -56,6 +58,13 @@ namespace XMediator.Android
         {
             return isReadyDebouncer.Invoke(
                 () => RewardedProxy.CallStatic<bool>(IS_READY_METHOD_NAME, instanceId)
+            );
+        }
+
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return isAdSpaceCappedDebouncer.Invoke(
+                () => RewardedProxy.CallStatic<bool>(IS_AD_SPACE_CAPPED_METHOD_NAME, instanceId, adSpace)
             );
         }
 

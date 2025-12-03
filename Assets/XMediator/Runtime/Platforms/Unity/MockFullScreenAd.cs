@@ -71,6 +71,12 @@ namespace XMediator.Unity
             return _status == MockAdStatus.Loaded;
         }
 
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            Log($"Called {_adType}#IsAdSpaceCapped()");
+            return _status == MockAdStatus.Loaded;
+        }
+
         public async void Show(string adSpace = null)
         {
             var adSpaceLog = adSpace != null ? $" from adSpace {adSpace}" : "";

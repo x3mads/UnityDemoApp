@@ -27,6 +27,8 @@ namespace XMediator.iOS
                     return new ShowError(ShowError.ErrorType.ShowFailed, errorDescription, adapterCode);
                 case (int) ShowError.ErrorType.AlreadyUsed:
                     return new ShowError(ShowError.ErrorType.AlreadyUsed, errorDescription);
+                case (int) ShowError.ErrorType.Capped:
+                    return new ShowError(ShowError.ErrorType.Capped, errorDescription);
                 default:
                     return new ShowError(ShowError.ErrorType.Unexpected, "Unexpected error code");
             }

@@ -16,6 +16,7 @@ namespace XMediator.Api
             Loading = 4,
             ShowFailed = 5,
             AlreadyUsed = 6,
+            Capped = 7,
         }
 
         /// <summary>

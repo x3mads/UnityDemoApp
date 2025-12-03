@@ -27,6 +27,8 @@ namespace XMediator.iOS
 
         public bool IsReady() => isReadyInterstitial(_identifier);
 
+        public bool IsAdSpaceCapped(string adSpace) => isInterstitialAdSpaceCapped(_identifier, adSpace);
+
         public void Dispose()
         {
             DisposeNative();
@@ -57,6 +59,9 @@ namespace XMediator.iOS
         
         [DllImport("__Internal")]
         private static extern bool isReadyInterstitial(string identifier);
+
+        [DllImport("__Internal")]
+        private static extern bool isInterstitialAdSpaceCapped(string identifier, string adSpace);
 
         [DllImport("__Internal")]
         private static extern void dispose(string identifier);

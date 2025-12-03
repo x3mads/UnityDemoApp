@@ -18,5 +18,6 @@ namespace XMediator
         
         void SetPauseOnAdPresentation(bool shouldPause);
         void OpenDebuggerSuite();
+        bool IsInitialized();
     }
 }

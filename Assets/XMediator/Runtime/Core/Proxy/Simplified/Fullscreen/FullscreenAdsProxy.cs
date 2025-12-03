@@ -7,8 +7,10 @@ namespace XMediator
         void Load(string placementId);
 
         bool IsReady();
-        
+
         bool IsReady(string placementId);
+        
+        bool IsAdSpaceCapped(string adSpace);
         
         void Show();
         

@@ -11,6 +11,7 @@ namespace XMediator.Unity
         internal static Action<UnityInterstitialProxy> OnShow = DefaultOnShow;
         internal static Action<UnityInterstitialProxy> OnDispose = DefaultOnDispose;
         internal static Func<UnityInterstitialProxy, bool> OnIsReady = DefaultOnIsReady;
+        internal static Func<UnityInterstitialProxy, string, bool> OnIsAdSpaceCapped = DefaultOnIsAdSpaceCapped;
         internal InterstitialProxyListener InterstitialProxyListener;
         internal InterstitialProxy Mock;
 
@@ -32,6 +33,11 @@ namespace XMediator.Unity
         public bool IsReady()
         {
             return OnIsReady(this);
+        }
+
+        public bool IsAdSpaceCapped(string adSpace)
+        {
+            return OnIsAdSpaceCapped(this, adSpace);
         }
 
         public void Show()
@@ -74,6 +80,11 @@ namespace XMediator.Unity
         private static bool DefaultOnIsReady(UnityInterstitialProxy interstitialProxy)
         {
             return interstitialProxy.Mock.IsReady();
+        }
+
+        private static bool DefaultOnIsAdSpaceCapped(UnityInterstitialProxy interstitialProxy, string adSpace)
+        {
+            return interstitialProxy.Mock.IsAdSpaceCapped(adSpace);
         }
     }
 }

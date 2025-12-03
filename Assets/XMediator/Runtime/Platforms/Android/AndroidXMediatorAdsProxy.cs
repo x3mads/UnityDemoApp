@@ -13,6 +13,7 @@ namespace XMediator.Android
         private const string GET_USER_PROPERTIES_METHOD_NAME = "getUserProperties";
         private const string SET_USER_PROPERTIES_METHOD_NAME = "setUserProperties";
         private const string OPEN_DEBUGGER_SUITE_METHOD_NAME = "openDebuggerSuite";
+        private const string IS_INITIALIZED_METHOD_NAME = "isInitialized";
 
         private AndroidJavaClass _xMediatorAdsProxy = new AndroidJavaClass(XMEDIATOR_ADS_PROXY_CLASSNAME);
 
@@ -72,6 +73,11 @@ namespace XMediator.Android
                 OPEN_DEBUGGER_SUITE_METHOD_NAME,
                 AndroidUtils.GetUnityActivity()
             );
+        }
+
+        public bool IsInitialized()
+        {
+            return _xMediatorAdsProxy.CallStatic<bool>(IS_INITIALIZED_METHOD_NAME);
         }
     }
 }

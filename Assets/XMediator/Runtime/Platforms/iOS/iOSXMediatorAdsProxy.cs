@@ -51,6 +51,14 @@ namespace XMediator.iOS
             X3MShowMediationDebugger();
         }
 
+        public bool IsInitialized()
+        {
+            return X3MIsInitialized();
+        }
+
+        [DllImport("__Internal")]
+        private static extern bool X3MIsInitialized();
+
         [DllImport("__Internal")]
         private static extern void X3MStartWith(string appId,
             string initSettingsDto,
