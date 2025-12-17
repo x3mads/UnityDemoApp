@@ -17,7 +17,7 @@ This Unity project demonstrates the integration of the X3M library, showcasing h
 
 For basic use and demonstration purposes, you'll need:
 
-- Unity 2022.3.50f1 or later
+- Unity 2022.3.62f2 or later
 - Basic knowledge of Unity development
 
 To test with production ads:
