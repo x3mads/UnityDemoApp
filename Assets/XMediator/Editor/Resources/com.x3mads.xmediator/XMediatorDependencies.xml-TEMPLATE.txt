@@ -1,20 +1,20 @@
 <dependencies>
   <details>
     <name>XMediator</name>
-    <version>1.62.0</version>
+    <version>1.63.0</version>
     <description>XMediator for Unity.</description>
     <installedAt>63780175598331</installedAt>
-    <androidVersion>1.131.0.0</androidVersion>
-    <iOSVersion>1.131.0.2</iOSVersion>
+    <androidVersion>1.136.0.0</androidVersion>
+    <iOSVersion>1.136.0.0</iOSVersion>
   </details>
   <androidPackages>
-    <androidPackage spec="com.x3mads.android.xmediator:unity-proxy:1.131.0.0"/>
+    <androidPackage spec="com.x3mads.android.xmediator:unity-proxy:1.136.0.0"/>
     <repositories>
       <repository>https://android-artifact-registry.x3mads.com/maven</repository>
     </repositories>
   </androidPackages>
   <iosPods>
-    <iosPod name="XMediatorUnityProxy" version="1.131.0.2"/>
+    <iosPod name="XMediatorUnityProxy" version="1.136.0.0"/>
     <sources>
       <source>https://github.com/x3mads/podspecs.git</source>
       <source>https://cdn.cocoapods.org/</source>

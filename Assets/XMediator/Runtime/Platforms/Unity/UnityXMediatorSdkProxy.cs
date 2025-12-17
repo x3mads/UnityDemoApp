@@ -23,7 +23,7 @@ namespace XMediator.Unity
             Assert.IsNotNull(appKey, "Initialize error: appKey is null. Please provide a valid appKey.");
             Assert.IsFalse(appKey == "", "Initialize error: appKey is empty. Please provide a valid appKey.");
             
-            var xmediatorVersion = "1.62.0"; // TODO Get XMediator Unity Version
+            var xmediatorVersion = "1.63.0"; // TODO Get XMediator Unity Version
             Log($"Running XMediator {xmediatorVersion} | AppKey: {appKey} | Client version: {initSettings.ClientVersion} | Unity version: {unityVersion}");
             OnInit.Invoke(appKey, initSettings, initCallback, mediationCallback);
         }
