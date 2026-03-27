@@ -7,6 +7,7 @@ namespace XMediator.iOS
 {
     internal class iOSBannerAdsProxy : BannerAdsProxy
     {
+        private const int NoMaxWidth = -1;
         private delegate void Callback(string placementId, string eventName, string resultJsonString);
 
         private static iOSNativeBannerAdsListener _iOSNativeBannerAdsListener;
@@ -20,7 +21,19 @@ namespace XMediator.iOS
 
         public void Create(string placementId, BannerAds.Size size, BannerAds.Position position)
         {
-            if (position.IsCustom())
+            if (size.Identifier == BannerAds.Size.AdaptiveIdentifier)
+            {
+                var maxWidth = ResolveAdaptiveMaxWidth(size.MaxWidth);
+                if (position.IsCustom())
+                {
+                    X3MCreateAdaptiveBannerWithCustomPosition(placementId, maxWidth, position.X, position.Y);
+                }
+                else
+                {
+                    X3MCreateAdaptiveBanner(placementId, maxWidth, position.Identifier);
+                }
+            }
+            else if (position.IsCustom())
             {
                 X3MCreateBannerWithCustomPosition(placementId, size.Identifier, position.X, position.Y);
             }
@@ -28,6 +41,13 @@ namespace XMediator.iOS
             {
                 X3MCreateBanner(placementId, size.Identifier, position.Identifier);
             }
+        }
+
+        public BannerAds.Size CreateAdaptiveSize(int? maxWidth)
+        {
+            var resolvedMaxWidth = ResolveAdaptiveMaxWidth(maxWidth);
+            X3MGetAdaptiveBannerSize(resolvedMaxWidth, out var width, out var height);
+            return BannerAds.Size.MakeAdaptive(width, height, maxWidth);
         }
 
         public void Load(string placementId) => X3MLoadBanner(placementId);
@@ -73,6 +93,17 @@ namespace XMediator.iOS
             int size, int x, int y);
 
         [DllImport("__Internal")]
+        private static extern void X3MCreateAdaptiveBanner(string placementId,
+            int maxWidth, int position);
+
+        [DllImport("__Internal")]
+        private static extern void X3MCreateAdaptiveBannerWithCustomPosition(string placementId,
+            int maxWidth, int x, int y);
+
+        [DllImport("__Internal")]
+        private static extern void X3MGetAdaptiveBannerSize(int maxWidth, out int width, out int height);
+
+        [DllImport("__Internal")]
         private static extern void X3MLoadBanner(string placementId);
 
         [DllImport("__Internal")]
@@ -101,6 +132,11 @@ namespace XMediator.iOS
 
         [DllImport("__Internal")]
         private static extern void X3MBannerAdsSetCallback(Callback callback);
+
+        private static int ResolveAdaptiveMaxWidth(int? maxWidth)
+        {
+            return maxWidth ?? NoMaxWidth;
+        }
 
         [MonoPInvokeCallback(typeof(Callback))]
         private static void ExecuteCallback(string placementId, string eventName, string resultJsonString)

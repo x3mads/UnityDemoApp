@@ -40,12 +40,22 @@ namespace XMediator.Android
                     ? MapToInstanceResults(loadResult.Call<AndroidJavaObject[]>("getInstances"))
                     : new List<InstanceResult>();
 
+                var extras = loadResult != null
+                ? MapToExtras(loadResult.Call<AndroidJavaObject>("getExtras"))
+                : new Dictionary<string, object>();
+
                 return new LoadResult(
                     waterfallId: loadResult?.Call<string>("getWaterfallId") ?? "",
                     lifecycleId: loadResult?.Call<string>("getLifecycleId") ?? "",
-                    results
+                    results,
+                    extras
                 );
             }
+        }
+
+        private static IDictionary<string, object> MapToExtras(AndroidJavaObject extrasJavaObject)
+        {
+            return PropertiesMapDto.From(extrasJavaObject).ToDictionary();
         }
 
         internal static ImpressionData MapImpressionData(AndroidJavaObject impressionData)

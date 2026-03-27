@@ -33,7 +33,7 @@ namespace XMediator.Api
         /// </summary>
         public event Action<string> OnClicked;
 
-        private readonly BannerAdsProxy _bannerAdsProxy;
+        private static readonly BannerAdsProxy _bannerAdsProxy = ProxyFactory.CreateInstance<BannerAdsProxy>("BannerAdsProxy");
 
         /// <summary>
         /// Class representing the available sizes that a banner can be created with.
@@ -43,12 +43,15 @@ namespace XMediator.Api
             private const int PhoneIdentifier = 0;
             private const int TabletIdentifier = 1;
             private const int MrecIdentifier = 2;
+            internal const int AdaptiveIdentifier = 3;
 
             internal int Identifier { get; private set; }
 
             public int Width { get; private set; }
 
             public int Height { get; private set; }
+
+            internal int? MaxWidth { get; private set; }
 
             /// <summary>
             /// Phone size for banners, typically 320x50
@@ -65,11 +68,27 @@ namespace XMediator.Api
             /// </summary>
             public static readonly Size Mrec = new Size(MrecIdentifier, 300, 250);
 
+            /// <summary>
+            /// Creates an adaptive banner size. Width and height are computed by the native platform
+            /// based on the available screen width.
+            /// </summary>
+            /// <param name="maxWidth">Optional maximum width in dp. If not specified, the current screen width is used.</param>
+            /// <returns>A <see cref="Size"/> with the resolved width and height.</returns>
+            public static Size CreateAdaptive(int? maxWidth = null)
+            {
+                return _bannerAdsProxy.CreateAdaptiveSize(maxWidth);
+            }
+
             private Size(int identifier, int width, int height)
             {
                 Identifier = identifier;
                 Width = width;
                 Height = height;
+            }
+
+            internal static Size MakeAdaptive(int width, int height, int? maxWidth)
+            {
+                return new Size(AdaptiveIdentifier, width, height) { MaxWidth = maxWidth };
             }
         }
 
@@ -122,7 +141,6 @@ namespace XMediator.Api
 
         internal BannerAds()
         {
-            _bannerAdsProxy = ProxyFactory.CreateInstance<BannerAdsProxy>("BannerAdsProxy");
             _bannerAdsProxy.SetListener(new DefaultBannerAdsProxyListener(this));
         }
 

@@ -16,12 +16,16 @@ namespace XMediator.Android
         
         private const string ADD_LISTENER_METHOD_NAME = "addListener";
         private const string CREATE_METHOD_NAME = "create";
+        private const string CREATE_ADAPTIVE_METHOD_NAME = "createAdaptive";
+        private const string CREATE_ADAPTIVE_SIZE_METHOD_NAME = "createAdaptiveSize";
         private const string LOAD_METHOD_NAME = "load";
         private const string SET_POSITION_METHOD_NAME = "setPosition";
         private const string SHOW_METHOD_NAME = "show";
         private const string HIDE_METHOD_NAME = "hide";
         private const string SET_AD_SPACE_METHOD_NAME = "setAdSpace";
         private const string IS_READY_METHOD_NAME = "isReady";
+        
+        private const int NoMaxWidth = -1;
 
         private static readonly AndroidJavaClass BannerProxy = new AndroidJavaClass(PROXY_CLASSNAME);
         private BannerAdsProxyListener proxyListener;  // Retain instance to avoid losing callbacks
@@ -34,7 +38,19 @@ namespace XMediator.Android
 
         public void Create(string placementId, BannerAds.Size size, BannerAds.Position position)
         {
-            if (position.IsCustom())
+            if (size.Identifier == BannerAds.Size.AdaptiveIdentifier)
+            {
+                var width = size.MaxWidth ?? NoMaxWidth;
+                if (position.IsCustom())
+                {
+                    BannerProxy.CallStatic(CREATE_ADAPTIVE_METHOD_NAME, AndroidUtils.GetUnityActivity(), placementId, width, position.X, position.Y);
+                }
+                else
+                {
+                    BannerProxy.CallStatic(CREATE_ADAPTIVE_METHOD_NAME, AndroidUtils.GetUnityActivity(), placementId, width, position.Identifier);
+                }
+            }
+            else if (position.IsCustom())
             {
                 BannerProxy.CallStatic(CREATE_METHOD_NAME, AndroidUtils.GetUnityActivity(), placementId, size.Identifier, position.X, position.Y);
             }
@@ -42,6 +58,14 @@ namespace XMediator.Android
             {
                 BannerProxy.CallStatic(CREATE_METHOD_NAME, AndroidUtils.GetUnityActivity(), placementId, size.Identifier, position.Identifier);
             }
+        }
+
+        public BannerAds.Size CreateAdaptiveSize(int? maxWidth)
+        {
+            var androidBannerSize = BannerProxy.CallStatic<AndroidJavaObject>(CREATE_ADAPTIVE_SIZE_METHOD_NAME, AndroidUtils.GetUnityActivity(), maxWidth ?? NoMaxWidth);
+            var width = androidBannerSize.Call<int>("getWidth");
+            var height = androidBannerSize.Call<int>("getHeight");
+            return BannerAds.Size.MakeAdaptive(width, height, maxWidth);
         }
 
         public void Load(string placementId)

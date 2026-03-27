@@ -232,7 +232,14 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             }
 
             ResolvePlatformSemanticVersion(iosManifest, androidManifest, out var iosCoreSemanticVersion, out var androidCoreSemanticVersion);
-            CoreUpdateResult ??= ResolveCoreAdapterVersion.Invoke(SdkDependency, iosCoreSemanticVersion, androidCoreSemanticVersion);
+            try
+            {
+                CoreUpdateResult = ResolveCoreAdapterVersion.Invoke(SdkDependency, iosCoreSemanticVersion, androidCoreSemanticVersion);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("Error resolving core adapter version. With the current selection the core update will most likely fail. " + exception);
+            }
         }
 
         private bool CanWeProceedWithTheUpdate(SemanticVersion iosCoreSemanticVersion,

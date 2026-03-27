@@ -23,11 +23,21 @@ namespace XMediator.Api
         /// </summary>
         public IEnumerable<InstanceResult> Instances { get; }
 
-        public LoadResult(string waterfallId, string lifecycleId, IEnumerable<InstanceResult> instances)
+        /// <summary>
+        /// A dictionary containing any extra values.
+        /// </summary>
+        public IDictionary<string, object> Extras { get; }
+
+        internal LoadResult(
+            string waterfallId,
+            string lifecycleId,
+            IEnumerable<InstanceResult> instances,
+            IDictionary<string, object> extras)
         {
             WaterfallId = waterfallId;
             LifecycleId = lifecycleId;
             Instances = instances;
+            Extras = extras;
         }
         
         /// <summary>

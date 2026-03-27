@@ -51,6 +51,7 @@ namespace XMediator.Unity
             }
 
             _banners[placementId] = banner;
+            Load(placementId);
         }
 
         public void Load(string placementId)
@@ -179,6 +180,12 @@ namespace XMediator.Unity
             }
 
             return Banner.Size.Phone;
+        }
+
+        public BannerAds.Size CreateAdaptiveSize(int? maxWidth)
+        {
+            var resolvedWidth = maxWidth ?? 600;
+            return BannerAds.Size.MakeAdaptive(resolvedWidth, 100, maxWidth);
         }
 
         private void Log(string message)

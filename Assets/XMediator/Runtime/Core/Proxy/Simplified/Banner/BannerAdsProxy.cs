@@ -22,5 +22,7 @@ namespace XMediator
         
         void Hide(string placementId);
 
+        BannerAds.Size CreateAdaptiveSize(int? maxWidth);
+
     }
 }

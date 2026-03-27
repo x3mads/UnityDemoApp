@@ -12,11 +12,17 @@ namespace XMediator.iOS
         [SerializeField] internal string waterfallId;
         [SerializeField] internal string lifecycleId;
         [SerializeField] internal List<InstanceResultDto> instanceResults;
+        [SerializeField] internal PropertiesMapDto? extras;
 
         internal LoadResult ToLoadResult()
         {
             var instanceResultsList = this.instanceResults?.Select(dto => dto.ToInstanceResult()).ToList();
-            return new LoadResult(waterfallId ?? "", lifecycleId ?? "", instanceResultsList ?? new List<InstanceResult>());
+            return new LoadResult(
+                waterfallId ?? "",
+                lifecycleId ?? "",
+                instanceResultsList ?? new List<InstanceResult>(),
+                extras?.ToDictionary() ?? new Dictionary<string, object>()
+            );
         }
     }
 }

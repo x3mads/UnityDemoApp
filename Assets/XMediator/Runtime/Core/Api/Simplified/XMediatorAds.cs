@@ -51,6 +51,11 @@ namespace XMediator.Api
         public static readonly EventTracker EventTracker = new EventTracker();
         
         /// <summary>
+        /// Provides utility methods, such as obtaining the native screen density.
+        /// </summary>
+        public static readonly Utils Utils = new Utils();
+        
+        /// <summary>
         /// Initializes XMediator.
         /// </summary>
         /// <param name="appKey">Your app or game app key. This is mandatory and cannot be null.</param>

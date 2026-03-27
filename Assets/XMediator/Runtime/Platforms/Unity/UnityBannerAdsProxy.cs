@@ -52,5 +52,10 @@ namespace XMediator.Unity
             ProxiedAds.Hide(placementId);
         }
 
+        public BannerAds.Size CreateAdaptiveSize(int? maxWidth)
+        {
+            return ProxiedAds.CreateAdaptiveSize(maxWidth);
+        }
+
     }
 }

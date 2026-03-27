@@ -33,13 +33,16 @@ namespace XMediator.Unity
                             classname: "network-classname",
                             ecpm: 1M
                         ))
-                });
+                },
+                extras: new Dictionary<string, object>() { { "key", "value" } }
+            );
 
         public static LoadResult EmptyLoadResult =>
             new LoadResult(
                 "waterfall-id",
                 "lifecycle-id",
-                new List<InstanceResult>()
+                new List<InstanceResult>(),
+                new Dictionary<string, object>()
             );
 
         private static InstanceResult.Success SuccessInstance
