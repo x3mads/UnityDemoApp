@@ -232,6 +232,7 @@ namespace XMediator.Editor.Tools.MetaMediation.View
         {
             return tag.Replace("xcode", "Xcode")
                 .Replace("ios", "iOS")
+                .Replace("legacy_", "")
                 .Replace("_", " ");
         }
 

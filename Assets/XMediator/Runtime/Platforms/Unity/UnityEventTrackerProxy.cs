@@ -15,6 +15,11 @@ namespace XMediator.Unity
         {
             Debug.Log("[XMed] Track ad opportunity event: " + adOpportunity);
         }
+
+        public void Track(AppEvent appEvent)
+        {
+            Debug.Log("[XMed] Track app event: " + appEvent);
+        }
     }
 
 

@@ -6,5 +6,6 @@ namespace XMediator
     {
         void Track(PurchaseEvent purchaseEvent);
         void Track(AdOpportunityEvent adOpportunity);
+        void Track(AppEvent appEvent);
     }
 }

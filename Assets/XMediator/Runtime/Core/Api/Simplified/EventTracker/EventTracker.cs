@@ -50,6 +50,28 @@ namespace XMediator.Api
         {
             _eventTracker.Track(adOpportunity);
         }
+
+        /// <summary>
+        /// Tracks an app event for analytics, segmentation, and ad network targeting.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// App events capture meaningful user actions (e.g., completing a level, making a purchase)
+        /// and are forwarded to all registered mediation adapters that support app event tracking.
+        /// </para>
+        /// <para>
+        /// Use <see cref="AppEvent.Standard"/> for well-known events defined in <see cref="AppEventName"/>,
+        /// or <see cref="AppEvent.Custom"/> for app-specific event names not covered by the standard catalog.
+        /// </para>
+        /// <para>
+        /// <strong>Important:</strong> This method should only be called after the SDK has been initialized. If called before initialization, events will be ignored.
+        /// </para>
+        /// </remarks>
+        /// <param name="appEvent">The app event to track.</param>
+        public void Track(AppEvent appEvent)
+        {
+            _eventTracker.Track(appEvent);
+        }
     }
 
 }

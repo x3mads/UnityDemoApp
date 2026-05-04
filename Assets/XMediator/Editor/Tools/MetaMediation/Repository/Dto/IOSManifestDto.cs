@@ -9,7 +9,7 @@ namespace XMediator.Editor.Tools.MetaMediation.Repository.Dto
     {
         internal List<string> GetLegacySupportTags()
         {
-            return GetAllTagsInFlavors().Where(t => t.ToLower().StartsWith("xcode_")).ToList();
+            return GetAllTagsInFlavors().Where(t => t.ToLower().StartsWith("legacy_")).Distinct().ToList();
         }
     }
 }

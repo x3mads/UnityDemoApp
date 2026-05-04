@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using XMediator.Core.Util;
 
 namespace DemoApp
 {
@@ -158,22 +159,30 @@ namespace DemoApp
 
         private void OnLoadAppOpen()
         {
-            _showAppOpenButton.interactable = true;
+            XMediatorMainThreadDispatcher.Enqueue(() => 
+                    _showAppOpenButton.interactable = true
+            );
         }
 
         private void OnLoadInterstitial()
         {
-            _showInterstitialButton.interactable = true;
+            XMediatorMainThreadDispatcher.Enqueue(() => 
+                    _showInterstitialButton.interactable = true
+            );
         }
 
         private void OnLoadRewarded()
         {
-            _showRewardedButton.interactable = true;
+            XMediatorMainThreadDispatcher.Enqueue(() => 
+                    _showRewardedButton.interactable = true
+            );
         }
 
         private void OnLoadBanner()
         {
-            _showBannerButton.interactable = true;
+            XMediatorMainThreadDispatcher.Enqueue(() => 
+                    _showBannerButton.interactable = true
+            );
         }
 
         private void ShowConfigurationDialog()

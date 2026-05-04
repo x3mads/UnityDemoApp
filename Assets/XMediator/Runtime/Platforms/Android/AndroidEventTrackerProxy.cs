@@ -9,6 +9,7 @@ namespace XMediator.Android
         private const string TRACK_PURCHASE_METHOD_NAME = "trackPurchase";
 
         private const string TRACK_OPPORTUNITY_EVENT_NAME = "trackAdOpportunity";
+        private const string TRACK_APP_EVENT_METHOD_NAME = "trackAppEvent";
 
         private static readonly AndroidJavaClass eventTrackerJavaClass = new AndroidJavaClass(EVENT_TRACKER_CLASS_NAME);
 
@@ -25,6 +26,14 @@ namespace XMediator.Android
             eventTrackerJavaClass.CallStatic(
                 TRACK_OPPORTUNITY_EVENT_NAME,
                 AdOpportunityEventDto.From(adOpportunity)
+            );
+        }
+
+        public void Track(AppEvent appEvent)
+        {
+            eventTrackerJavaClass.CallStatic(
+                TRACK_APP_EVENT_METHOD_NAME,
+                AppEventDto.From(appEvent)
             );
         }
 

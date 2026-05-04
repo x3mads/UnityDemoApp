@@ -17,6 +17,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
 // Android Resolver Repos Start
+        def unityProjectPath = $/file:///**DIR_UNITYPROJECT**/$.replace("\\", "/")
         maven {
             url "https://android-artifact-registry.x3mads.com/maven" // Assets/XMediatorSettings/Editor/Main/XMediatorDependencies.xml:14, Assets/XMediatorSettings/Editor/MetaMediationDependencies.xml:27
         }

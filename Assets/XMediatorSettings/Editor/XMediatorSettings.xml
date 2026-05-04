@@ -14,8 +14,7 @@
   <mm_platforms>android,ios</mm_platforms>
   <mm_tag_ios>
   </mm_tag_ios>
-  <mm_tag_android>
-  </mm_tag_android>
+  <mm_tag_android>unity_2022_agp_compat</mm_tag_android>
   <mm_cmp_tool_was_shown>True</mm_cmp_tool_was_shown>
   <mm_tools>UMP</mm_tools>
 </buildSettings>

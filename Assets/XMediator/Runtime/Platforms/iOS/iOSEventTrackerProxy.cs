@@ -30,10 +30,16 @@ namespace XMediator.iOS
                     break;
             }
         }
+
+        public void Track(AppEvent appEvent)
+        {
+            var appEventDto = AppEventDto.FromAppEvent(appEvent);
+            X3MTrackAppEvent(appEventDto.ToJson());
+        }
         
         [DllImport("__Internal")]
         private static extern void X3MTrackPurchase(string purchase);
-        
+
         [DllImport("__Internal")]
         private static extern void X3MTrackInterstitialAdOpportunity([CanBeNull] string adSpace);
         
@@ -42,5 +48,8 @@ namespace XMediator.iOS
         
         [DllImport("__Internal")]
         private static extern void X3MTrackAppOpenAdOpportunity([CanBeNull] string adSpace);
+
+        [DllImport("__Internal")]
+        private static extern void X3MTrackAppEvent(string appEventJson);
     }
 }
