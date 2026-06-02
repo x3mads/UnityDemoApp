@@ -127,6 +127,12 @@ namespace DemoApp
                 return;
             }
 
+            if (XMediatorAds.IsInitialized())
+            {
+                Debug.Log("SDK already initialized");
+                return;
+            }
+
             Debug.Log("Initializing SDK...");
             CMPDebugSettings cmpDebugSettings = null;
             if (_isFakeEea)
