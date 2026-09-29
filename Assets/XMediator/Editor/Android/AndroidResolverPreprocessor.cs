@@ -46,10 +46,27 @@ namespace XMediator.Editor.Android
             
             // Exclude dependencies
             var excludeList = ExcludeDependencyManager.LoadExcludeDependencies();
-            if (excludeList.Count <= 0) return;
-            
-            var excluder = new GradleDependencyExcluder(MainTemplatePath);
-            excluder.ApplyExclusions(excludeList);
+            if (excludeList.Count > 0)
+            {
+                var excluder = new GradleDependencyExcluder(MainTemplatePath);
+                excluder.ApplyExclusions(excludeList);
+            }
+
+            ApplyGoogleAdsNextGenExclusions();
+        }
+
+        private void ApplyGoogleAdsNextGenExclusions()
+        {
+            try
+            {
+                var dependencies = new MetaMediationDependenciesRepository().Invoke();
+                var requiresExclusions = GoogleAdsNextGenGradleExclusions.RequiresExclusions(dependencies?.AndroidPackages);
+                new GoogleAdsNextGenGradleExclusions(MainTemplatePath).Apply(requiresExclusions);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"[XMediator] Could not update Google Mobile Ads Next-Gen exclusions: {exception.Message}");
+            }
         }
 
         private bool MainTemplateExists() => File.Exists(MainTemplatePath);

@@ -14,7 +14,8 @@ namespace XMediator.Android
                 purchaseEvent.Amount,
                 purchaseEvent.Currency,
                 purchaseEvent.Sku,
-                purchaseEvent.Name
+                purchaseEvent.Name,
+                purchaseEvent.TransactionId
             );
         }
     }

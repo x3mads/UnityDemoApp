@@ -13,13 +13,16 @@ namespace XMediator.iOS
         [SerializeField] internal string currency;
         [SerializeField] internal NullableObject<string> sku;
         [SerializeField] internal NullableObject<string> name;
+        [SerializeField] internal NullableObject<string> transactionId;
 
-        internal PurchaseEventDto(double amount, string currency, NullableObject<string> sku, NullableObject<string> name)
+        internal PurchaseEventDto(double amount, string currency, NullableObject<string> sku,
+            NullableObject<string> name, NullableObject<string> transactionId)
         {
             this.amount = amount;
             this.currency = currency;
             this.sku = sku;
             this.name = name;
+            this.transactionId = transactionId;
         }
 
         internal static PurchaseEventDto FromPurchaseEvent(PurchaseEvent purchaseEvent)
@@ -28,7 +31,8 @@ namespace XMediator.iOS
                 purchaseEvent.Amount,
                 purchaseEvent.Currency,
                 new NullableObject<string>(purchaseEvent.Sku),
-                new NullableObject<string>(purchaseEvent.Name)
+                new NullableObject<string>(purchaseEvent.Name),
+                new NullableObject<string>(purchaseEvent.TransactionId)
             );
         }
         

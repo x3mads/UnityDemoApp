@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Assertions;
 using XMediator.Api;
@@ -48,6 +50,62 @@ namespace XMediator.Unity
             OnSetUserProperties.Invoke(userProperties);
         }
 
+        public void SetUserId([CanBeNull] string userId)
+        {
+            ReplaceUserProperties(userId: userId, keepUserId: false);
+        }
+
+        public void SetInstallDate(DateTimeOffset? installDate)
+        {
+            ReplaceUserProperties(installDate: installDate, keepInstallDate: false);
+        }
+
+        public void SetPurchaseSummary([CanBeNull] InAppPurchaseSummary purchaseSummary)
+        {
+            ReplaceUserProperties(inAppPurchaseSummary: purchaseSummary, keepPurchaseSummary: false);
+        }
+
+        public void SetCustomProperty(string key, bool value)
+        {
+            UpdateCustomProperties(builder => builder.AddBoolean(key, value));
+        }
+
+        public void SetCustomProperty(string key, int value)
+        {
+            UpdateCustomProperties(builder => builder.AddInt(key, value));
+        }
+
+        public void SetCustomProperty(string key, double value)
+        {
+            UpdateCustomProperties(builder => builder.AddDouble(key, value));
+        }
+
+        public void SetCustomProperty(string key, string value)
+        {
+            UpdateCustomProperties(builder => builder.AddString(key, value));
+        }
+
+        public void SetCustomProperty(string key, IEnumerable<string> value)
+        {
+            UpdateCustomProperties(builder => builder.AddStringSet(key, value));
+        }
+
+        public void RemoveCustomProperty(string key)
+        {
+            UpdateCustomProperties(builder => builder.Remove(key));
+        }
+
+        public void ClearCustomProperties()
+        {
+            ReplaceUserProperties(customProperties: new CustomProperties.Builder().Build(), keepCustomProperties: false);
+        }
+
+        public void ClearUserProperties()
+        {
+            _userProperties = new UserProperties();
+            OnSetUserProperties.Invoke(_userProperties);
+        }
+
         public void SetPauseOnAdPresentation(bool shouldPause)
         {
             // Do nothing, only needed for iOS
@@ -83,6 +141,34 @@ namespace XMediator.Unity
         private static void DefaultOnSetUserProperties(UserProperties userProperties)
         {
             Log($"Setting User Properties: {userProperties}");
+        }
+
+        private void UpdateCustomProperties(Action<CustomProperties.Builder> editAction)
+        {
+            var current = GetUserProperties();
+            var builder = current.CustomProperties.NewBuilder();
+            editAction(builder);
+            ReplaceUserProperties(customProperties: builder.Build(), keepCustomProperties: false);
+        }
+
+        private void ReplaceUserProperties(
+            [CanBeNull] string userId = null,
+            bool keepUserId = true,
+            DateTimeOffset? installDate = null,
+            bool keepInstallDate = true,
+            [CanBeNull] InAppPurchaseSummary inAppPurchaseSummary = null,
+            bool keepPurchaseSummary = true,
+            [CanBeNull] CustomProperties customProperties = null,
+            bool keepCustomProperties = true)
+        {
+            var current = GetUserProperties();
+            _userProperties = new UserProperties(
+                userId: keepUserId ? current.UserId : userId,
+                customProperties: keepCustomProperties ? current.CustomProperties : customProperties,
+                installDate: keepInstallDate ? current.InstallDate : installDate,
+                inAppPurchaseSummary: keepPurchaseSummary ? current.InAppPurchaseSummary : inAppPurchaseSummary
+            );
+            OnSetUserProperties.Invoke(_userProperties);
         }
 
         private static void Log(string message)

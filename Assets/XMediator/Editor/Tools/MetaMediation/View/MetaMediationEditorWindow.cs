@@ -315,10 +315,6 @@ namespace XMediator.Editor.Tools.MetaMediation.View
             GUILayout.Label("Mediator Selection", EditorStyles.boldLabel);
             GUILayout.BeginVertical("box");
             
-            if (Presenter.CurrentMediators.Count == 0)
-            {
-                _mediatorSelection.TryAdd(SelectableDependencies.X3MMediationName, true);
-            }
             foreach (var mediator in State.SelectableDependencies.Mediations.ToList())
             {
                 _mediatorSelection.TryAdd(mediator, Presenter.CurrentMediators.Contains(mediator));

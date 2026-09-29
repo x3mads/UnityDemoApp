@@ -15,6 +15,7 @@ namespace XMediator.Api
     /// <seealso cref="XMediatorAds.AppOpen"/>
     /// <seealso cref="XMediatorAds.CMPProvider"/>
     /// <seealso cref="XMediatorAds.EventTracker"/>
+    /// <seealso cref="XMediatorAds.UserProperties"/>
     /// </summary>
     public static class XMediatorAds
     {
@@ -54,6 +55,11 @@ namespace XMediator.Api
         /// Provides utility methods, such as obtaining the native screen density.
         /// </summary>
         public static readonly Utils Utils = new Utils();
+        
+        /// <summary>
+        /// Entry point for managing user properties.
+        /// </summary>
+        public static readonly UserPropertiesService UserProperties = new UserPropertiesService();
         
         /// <summary>
         /// Initializes XMediator.

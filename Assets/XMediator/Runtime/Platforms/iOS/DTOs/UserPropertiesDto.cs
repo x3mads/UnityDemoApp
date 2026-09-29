@@ -147,6 +147,11 @@ namespace XMediator.iOS
             this.k = key;
             this.v = value;
         }
+
+        internal string ToJson()
+        {
+            return JsonUtility.ToJson(this);
+        }
     }
     
     [Serializable]
