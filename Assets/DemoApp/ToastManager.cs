@@ -3,6 +3,7 @@ namespace DemoApp
     using UnityEngine;
     using UnityEngine.UI;
     using System.Collections;
+    using XMediator.Core.Util;
 
     public class ToastManager : MonoBehaviour
     {
@@ -28,14 +29,18 @@ namespace DemoApp
 
         public void ShowToast(string message)
         {
-            StopAllCoroutines();
-            StartCoroutine(ShowToastCoroutine(message));
+            XMediatorMainThreadDispatcher.Enqueue(() =>
+            {
+                StopAllCoroutines();
+                StartCoroutine(ShowToastCoroutine(message));
+            });
         }
 
         private IEnumerator ShowToastCoroutine(string message)
         {
             toastText.text = message;
             toastPanel.SetActive(true);
+            FitPanelToText();
 
             // Fade in
             yield return FadePanel(0, 1);
@@ -47,6 +52,16 @@ namespace DemoApp
             yield return FadePanel(1, 0);
 
             toastPanel.SetActive(false);
+        }
+
+        private void FitPanelToText()
+        {
+            var layout = toastPanel.GetComponent<LayoutElement>();
+            if (layout == null) layout = toastPanel.AddComponent<LayoutElement>();
+            var group = toastPanel.GetComponent<LayoutGroup>();
+            var verticalPadding = group != null ? group.padding.vertical : 0;
+            layout.preferredHeight = toastText.preferredHeight + verticalPadding;
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)toastPanel.transform);
         }
 
         private IEnumerator FadePanel(float start, float end)

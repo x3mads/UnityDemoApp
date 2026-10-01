@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using XMediator.Api;
@@ -28,6 +31,8 @@ namespace DemoApp
         private const int MaxRetryAttempts = 3;
         private const float BaseRetryDelaySeconds = 2f;
         private int _currentRetryAttempt;
+        private static readonly TimeSpan AppOpenResumePacing = TimeSpan.FromSeconds(60);
+        private DateTime _lastAppOpenShownAt = DateTime.MinValue;
 #if UNITY_IOS
         private const string X3MAppKey = "3-15";
         private const string X3MBannerPlacementId = "3-15/28";
@@ -94,10 +99,10 @@ namespace DemoApp
         {
             _appConfiguration = selectedIndex switch
             {
-                1 => X3MConfiguration,
-                2 => MaxConfiguration,
+                1 => MaxConfiguration,
+                2 => AdmobConfiguration,
                 3 => LPConfiguration,
-                4 => AdmobConfiguration,
+                4 => X3MConfiguration,
                 _ => _appConfiguration
             };
 
@@ -221,6 +226,11 @@ namespace DemoApp
 
         public void ShowAppOpen()
         {
+            if (_appConfiguration == null || !XMediatorAds.IsInitialized())
+            {
+                Debug.Log("AppOpen skipped: SDK not initialized");
+                return;
+            }
             if (_appConfiguration.AppOpenPlacementId == null)
             {
                 Debug.Log("AppOpen placement not supported by this Mediator");
@@ -228,8 +238,20 @@ namespace DemoApp
             }
             if (XMediatorAds.AppOpen.IsReady(_appConfiguration.AppOpenPlacementId))
             {
+                _lastAppOpenShownAt = DateTime.UtcNow;
                 XMediatorAds.AppOpen.ShowFromAdSpace(_appConfiguration.AppOpenPlacementId, ADSpace);
             }
+        }
+
+        public void ShowAppOpenOnResume()
+        {
+            var elapsed = DateTime.UtcNow - _lastAppOpenShownAt;
+            if (elapsed < AppOpenResumePacing)
+            {
+                Debug.Log($"AppOpen on resume skipped by pacing ({elapsed.TotalSeconds:F0}s < {AppOpenResumePacing.TotalSeconds:F0}s)");
+                return;
+            }
+            ShowAppOpen();
         }
         public void ShowInterstitial()
         {
@@ -280,6 +302,130 @@ namespace DemoApp
         public void ApplyCustomConfiguration(AppConfiguration appConfiguration)
         {
             _appConfiguration = appConfiguration;
+        }
+
+        public bool SetUserId(string userId)
+        {
+            var trimmed = userId?.Trim() ?? "";
+            if (trimmed.Length == 0)
+            {
+                Debug.LogWarning("[UserProperties] User ID cannot be empty");
+                return false;
+            }
+            return RunSdkAction("[UserProperties]", $"User ID set to {trimmed}", () => XMediatorAds.UserProperties.SetUserId(trimmed));
+        }
+
+        public bool SetInstallDateNow()
+        {
+            var now = DateTimeOffset.Now;
+            return RunSdkAction("[UserProperties]", $"Install date set to {now}", () => XMediatorAds.UserProperties.SetInstallDate(now));
+        }
+
+        public bool SetSamplePurchaseSummary()
+        {
+            return RunSdkAction("[UserProperties]", "Purchase summary set ($49.99 USD, 5 purchases)",
+                () => XMediatorAds.UserProperties.SetPurchaseSummary(new InAppPurchaseSummary(49.99m, "USD", 5)));
+        }
+
+        public bool SetSampleCustomProperties()
+        {
+            return RunSdkAction("[UserProperties]", "Sample custom properties set", () =>
+            {
+                XMediatorAds.UserProperties.SetCustomProperty("level", 5);
+                XMediatorAds.UserProperties.SetCustomProperty("is_premium", true);
+                XMediatorAds.UserProperties.SetCustomProperty("score", 12.5);
+                XMediatorAds.UserProperties.SetCustomProperty("name", "John");
+                XMediatorAds.UserProperties.SetCustomProperty("favorite_categories", new[] { "games", "puzzle" });
+            });
+        }
+
+        public bool RemoveSampleCustomProperty()
+        {
+            return RunSdkAction("[UserProperties]", "Removed custom property \"old_key\"", () => XMediatorAds.UserProperties.RemoveCustomProperty("old_key"));
+        }
+
+        public bool ClearCustomProperties()
+        {
+            return RunSdkAction("[UserProperties]", "Custom properties cleared", () => XMediatorAds.UserProperties.ClearCustomProperties());
+        }
+
+        public bool ClearUserProperties()
+        {
+            return RunSdkAction("[UserProperties]", "User properties cleared", () => XMediatorAds.UserProperties.Clear());
+        }
+
+        public bool TrackTestPurchase()
+        {
+            return TrackEvent("Test purchase tracked", () => XMediatorAds.EventTracker.Track(
+                new PurchaseEvent(amount: 0.99, currency: "USD", sku: "test_sku_001", name: "Test Purchase")));
+        }
+
+        public bool TrackTestAppEvent()
+        {
+            return TrackEvent("Test app event tracked", () => XMediatorAds.EventTracker.Track(
+                AppEvent.Standard(AppEventName.GameStart, new CustomProperties.Builder()
+                    .AddInt("level", 1)
+                    .AddString("game_mode", "test")
+                    .Build())));
+        }
+
+        private static bool TrackEvent(string successMessage, Action track)
+        {
+            if (!XMediatorAds.IsInitialized())
+            {
+                Debug.LogWarning("[Tracking] Cannot track event: SDK not initialized");
+                return false;
+            }
+            return RunSdkAction("[Tracking]", successMessage, track);
+        }
+
+        private static bool RunSdkAction(string tag, string successMessage, Action action)
+        {
+            try
+            {
+                action();
+                Debug.Log($"{tag} {successMessage}");
+                return true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                return false;
+            }
+        }
+
+        public string GetUserPropertiesText()
+        {
+            try
+            {
+                var properties = XMediatorAds.UserProperties.Get();
+                var sb = new StringBuilder();
+                sb.AppendLine($"userId: {properties.UserId ?? "-"}");
+                sb.AppendLine($"installDate: {(properties.InstallDate.HasValue ? properties.InstallDate.Value.ToString("yyyy-MM-dd HH:mm:ss zzz") : "-")}");
+                var summary = properties.InAppPurchaseSummary;
+                sb.AppendLine($"purchaseSummary: {(summary != null ? $"{summary.TotalAmountSpent} {summary.CurrencyCode} x{summary.NumberOfPurchases}" : "-")}");
+                sb.AppendLine("customProperties:");
+                var custom = properties.CustomProperties?.GetAll();
+                if (custom == null || custom.Count == 0)
+                {
+                    sb.Append("  (none)");
+                }
+                else
+                {
+                    foreach (var entry in custom.OrderBy(e => e.Key))
+                    {
+                        var value = entry.Value is IEnumerable<string> list && !(entry.Value is string)
+                            ? "[" + string.Join(", ", list) + "]"
+                            : entry.Value?.ToString();
+                        sb.AppendLine($"  {entry.Key} = {value}");
+                    }
+                }
+                return sb.ToString().TrimEnd();
+            }
+            catch (Exception e)
+            {
+                return "Error: " + e.Message;
+            }
         }
 
         private void LoadBanner()
